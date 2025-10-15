@@ -28,6 +28,7 @@ class Player: #player properties
     def newcard(self, card): #putting card in hand
 
     def resethand(self): #reset hand
+        self.hand = []
 
     def handtotal(self): #total value of cards + will handle ace shenanigans
     
@@ -49,3 +50,4 @@ class Dealer: #dealer properties
     def dealer_value(self): #dealer total value, will handle aces
 
     def check(self): #see if anyone busts or wins or ties
+
