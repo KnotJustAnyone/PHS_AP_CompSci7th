@@ -15,8 +15,17 @@ class Sudoku4x4:
         pass
 
     def print_board(self):
-        # This would print the board to the screen in a nice way
         # Could use this for testing or when playing in the console
+        for character in range(len(self.board[0]) * 4 + 1): # Horizontal line at the top
+                print('—',end='')
+        for row in self.board:
+            toPrint = '\n| ' # Starts a new line
+            for value in row: # Adds a vertical line between each value
+                toPrint += str(value)
+                toPrint += ' | ' 
+            print(toPrint)
+            for character in range(len(row) * 4 + 1): # Adds a horizontal line across each row
+                print('—',end='')
         pass
 
     def check_move(self, row, col, num):
@@ -46,7 +55,6 @@ class Sudoku4x4:
     def auto_solve(self):
         # Tries to solve the puzzle on its own (probably using backtracking)
         pass
-
 
 #Emiri outlined the code and found the general aspects of what to put
 #Angelleen wrote it all out on the program and definied all the variables
