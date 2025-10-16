@@ -47,12 +47,11 @@ class Dealer: #dealer properties
         self.pot = 0 #money in the pot
 
     def deal1(self): #first deal for all players
-        random.shuffle(self.deck)
         for player in self.players:
-            player.newcard(self.deck.deal())
-            player.newcard(self.deck.deal())
-        self.dealerhand = [self.deck.deal(), self.deck.deal()]
-        #idk how we can reveal the payer's cards without revealing it to the other players. Maybe discuss later?
+            player.newcard(2)
+        self.dealerhand = deck.deal(2)
+        #print(player.hand) will print for tests 
+        #idk how we can reveal the player's cards without revealing it to the other players. Maybe discuss later?
 
     def dealershow(self): #dealer shows one card
         pass
@@ -114,6 +113,7 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
 
 
 
