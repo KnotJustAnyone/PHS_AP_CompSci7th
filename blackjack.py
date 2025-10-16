@@ -8,6 +8,16 @@ class Card: #card properties
         self.rank = rank #rank
         self.value = value #value
 
+def card_value(card): #handle 2-card code to get the value
+    if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
+        return 10
+    elif card[1] == "1":
+        return 11
+    elif card[1] in [str(n) for n in range(2,10)]:
+        return int(card[1])
+    else:
+        raise ValueError("Value must be a valid card code. Make sure your card rank is a single digit, or 'j', 'q', or 'k'.")
+
 # Start deck, will need to fix to have value
 deck = Deck(False, True, True)
 deck.shuffle()
@@ -28,10 +38,10 @@ class Player: #player properties
     def handtotal(self): #total value of cards + will handle ace shenanigans
         total = 0
         for card in self.hand:
-            total += card.value
+            total += card_value(card)
         if total > 21: # Lowers the value of aces to 1 if the total is over 21
             for card in self.hand:
-                if card.value == 11:
+                if card_value(card) == 11: # Needs fixing
                     card.value = 1
                     total -= 10
                     if total <= 21:
@@ -109,5 +119,6 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
 
 
