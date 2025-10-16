@@ -1,110 +1,108 @@
-# c=clubs, h=hearts, d=diamonds, s=spades
-# j=jack, q=queen, k=king
+# When dealing with codes on:
+# c=clubs, h=hearts, d=diamonds, s=spades 
+# j=jack, q=queen, k=king 
 # 0s are 10s, 1s are aces
-# You will need to pre-shuffle before playing
 
 import random
 
-deck_full = [s+str(n) for s in ["c","h","d","s"] for n in list(range(10))+["j","q","k"]]
-suits = {"c":"Clubs","h":"Hearts","d":"Diamonds","s":"Spades"}
+class Deck:
+    suits = {"c": "Clubs", "h": "Hearts", "d": "Diamonds", "s": "Spades"}
 
+    def __init__(self, jokers=True, codes=False, return_not_print=False):
+        self.jokers = jokers
+        self.codes = codes
+        self.return_not_print = return_not_print
 
+        # Build full deck
+        self.deck_full = [s + str(n) for s in ["c", "h", "d", "s"] for n in list(range(10)) + ["j", "q", "k"]]
+        if self.jokers:
+            self.deck_full += ["jo", "jo"]
 
-jokers = True # Change to True in order to play with jokers
-codes = False # Change to True in order to only print 2 character codes
-return_not_print = False # Change to True in order to have deal function return instead of printing
-# i.e., only print "c5" instead of "5 of Clubs"
+        # Start with a fresh, unshuffled deck
+        self.deck_current = self.deck_full.copy()
+        self.deck_dealt = []
 
-if jokers:
-    deck_full += ["jo","jo"]
+    def identify_card(self, card): # Turn a 2-character code into a full name, e.g. 'c5' -> '5 of Clubs'
+        if card == "jo": # Case: Joker
+            return "Joker"
+
+        if len(card) != 2: # Case: Not a valid input
+            return None
     
-deck_current = deck_full.copy()
-deck_dealt = []
+        rank = card[1].lower()
 
-def identify_card(card): # Only used if codes is false, this turns "c5" into "5 of Clubs"
-    full = " of "
-    if card[1] in [str(n) for n in list(range(2,10))]:
-        full = str(card[1]) + full
-    elif card[1] == "0":
-        full = "10" + full
-    elif card[1] == "1":
-        full = "Ace" + full
-    elif card[1] == "j":
-        full = "Jack" + full
-    elif card[1] == "q":
-        full = "Queen" + full
-    else:
-        full = "King" + full
-    try:
-        full += f"{suits[card[0]]}"
-    except:
-        pass
-    if card == "jo":
-        full = "Joker"
-    return full
-    
+        if rank in [str(n) for n in range(2, 10)]:
+            full = rank + " of "
+        elif rank == "0":
+            full = "10 of "
+        elif rank == "1":
+            full = "Ace of "
+        elif rank == "j":
+            full = "Jack of "
+        elif rank == "q":
+            full = "Queen of "
+        elif rank == "k":
+            full = "King of "
+        else:
+            return None
 
-def deal(cards = 1, deck_current = None, deck_dealt = None): # 2nd and 3rd parameters in order to use own deck
-    global codes, return_not_print
-    if deck_current == None:
-        deck_current = globals()["deck_current"]
-    if deck_dealt == None:
-        deck_dealt = globals()["deck_dealt"]
-    dealt = []
-    for i in range(cards):
-        if len(deck_current) == 0:
-            print("Out of Cards, please reshuffle.")
-            dealt.append(None)
-            break
-        deck_dealt.append(deck_current.pop())
-        card = deck_dealt[-1]
-        if codes:
-            if return_not_print:
-                dealt.append(card)
+        try:
+            full += self.suits.get(card[0].lower(), "")
+        except:
+            return None
+        return full
+
+    def deal(self, cards=1): # Deal a number of cards from the top of the deck
+        dealt = []
+
+        for _ in range(cards):
+            if len(self.deck_current) == 0:
+                print("Out of cards, please reshuffle.")
+                dealt.append(None)
+                break
+
+            card = self.deck_current.pop()
+            self.deck_dealt.append(card)
+
+            if self.codes:
+                output = card
             else:
-                print(card)
-        else:
-            if return_not_print:
-                dealt.append(identify_card(card))
+                output = self.identify_card(card)
+
+            if self.return_not_print:
+                dealt.append(output)
             else:
-                print(identify_card(card))
-    if return_not_print:
-        return dealt
+                print(output)
 
-def shuffle(undealt_only = False, deck_current = None, deck_dealt = None, deck_full = None): # Shuffle
-    
-    #Check if we're using our own deck or the user's
-    if deck_current == None:
-        deck_current = globals()["deck_current"]
-    if deck_dealt == None:
-        deck_dealt = globals()["deck_dealt"]
-    if deck_full == None:
-        deck_full = globals()["deck_full"]
-        
-    if not undealt_only:
-        deck_current[:] = deck_full.copy()
-        deck_dealt.clear()
-    random.shuffle(deck_current)
+        if self.return_not_print:
+            return dealt
 
+    def shuffle(self, undealt_only=False): #Shuffle the deck. If undealt_only=False, reshuffle the full deck
+        if not undealt_only:
+            self.deck_current = self.deck_full.copy()
+            self.deck_dealt.clear()
 
-def peek(cards = 1, deck_current = None): # Look at top cards
-    if deck_current == None:
-        deck_current = globals()["deck_current"]
-    if cards >= len(deck_current):
-        cards = len(deck_current)
-    if codes:
-        if return_not_print:
-            # Returns an array, not a string
-            return list(reversed(deck_current[-1*cards:]))
+        random.shuffle(self.deck_current)
+
+    def peek(self, cards=1): # Look at the top few cards without removing them
+        if cards >= len(self.deck_current):
+            cards = len(self.deck_current)
+
+        top_cards = list(reversed(self.deck_current[-cards:]))
+
+        if self.codes:
+            output = top_cards
         else:
-            for c in list(reversed(deck_current[-1*cards:])):
-                print(c)
-    else:
-        #Build list of seen cards
-        seen = []
-        for i in range(cards):
-            seen.append(identify_card(deck_current[-i-1]))
-        if return_not_print:
-            return seen
+            output = [self.identify_card(c) for c in top_cards]
+
+        if self.return_not_print:
+            return output
         else:
-            print(seen)
+            print(output)
+
+    def remaining(self): # Return the number of undealt cards
+        return len(self.deck_current)
+
+    def reset(self): # Reset to a full, unshuffled deck
+        self.deck_current = self.deck_full.copy()
+        self.deck_dealt.clear()
