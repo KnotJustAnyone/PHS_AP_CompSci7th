@@ -36,6 +36,8 @@ class Player: #player properties
                     total -= 10
                     if total <= 21:
                         break
+        return total
+
     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
@@ -107,4 +109,5 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
 
