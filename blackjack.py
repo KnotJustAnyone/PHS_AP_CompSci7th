@@ -1,4 +1,5 @@
 import random #for shuffling
+from deck_of_cards import Deck
 players = [] #players
 
 class Card: #card properties
@@ -7,16 +8,10 @@ class Card: #card properties
         self.rank = rank #rank
         self.value = value #value
 
-class Deck: #deck properties
-    def __init__(self): #creating Deck
-        suits = [] #
-        ranks = {} #sets ranks to number value (K - 10, A - 11, etc)
-        self.cards = [] #will create deck by giving each rank 14 cards
+# Start deck, will need to fix to have value
+deck = Deck(False, True, True)
+deck.shuffle()
 
-    def shuffle(self): #shuffle Deck
-        pass
-    def deal(self): #dealing cards
-        pass
 class Player: #player properties
     def __init__(self,name,money=1500): #creating player, give money
         self.name = name #player name, may not use because they'll see each other's cards?
@@ -24,10 +19,12 @@ class Player: #player properties
         self.money = money #money amount
         self.bet = 0 #bet amount
     
-    def newcard(self, card): #putting card in hand
-        pass
+    def newcard(self, count): #putting card in hand
+        self.hand += deck.deal(count)
+    
     def resethand(self): #reset hand
         self.hand = []
+
     def handtotal(self): #total value of cards + will handle ace shenanigans
         total = 0
         for card in self.hand:
@@ -40,6 +37,7 @@ class Player: #player properties
                     if total <= 21:
                         break
         return total
+
     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
@@ -50,14 +48,19 @@ class Dealer: #dealer properties
 
     def deal1(self): #first deal for all players
         pass
+
     def dealershow(self): #dealer shows one card
         pass
+    
     def round(self): #player: hit or stand, if over 21, bust
         pass
+
     def dealerturn(self): #dealer play, if under 17, will play, if not, will stand
         pass
+
     def dealer_value(self): #dealer total value, will handle aces
         pass
+
     def check(self): #see if anyone busts or wins or ties
         pass
 
@@ -106,3 +109,5 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
+
