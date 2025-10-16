@@ -46,5 +46,48 @@ class Dealer: #dealer properties
 
     def check(self): #see if anyone busts or wins or ties
 
+#Tests: -------------------------------------------------------------------------------------
+def resethand_checker():
+    testclass = Player("L Bozo Code")
+    if testclass.hand == []:
+        testclass.hand = [random.randint(0,100000000),1,2,3,4,5,6,7,8,9,"aa"]
+        print(testclass.hand)
+        print("Hand was given 11 values")
+    if testclass.hand != []:
+        testclass.resethand()
+        print(testclass.hand)
+        print("Ran resethand. Hand should be gone.")
 
-
+def test_hand_total():
+    normalTests = [
+        [[Card('Hearts','8',8)],8],
+        [[Card('Diamonds','Ace',11),Card('Diamonds','Ace',11)],12],
+        [[Card('Diamonds','Ace',11),Card('Hearts','9',9),Card('Hearts','9',9)],19],
+        [[Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11)],18],
+        [[Card('Diamonds','King',10),Card('Spades','Ace',11)],21],
+        [[Card('Diamonds','King',10),Card('Diamonds','King',10),Card('Spades','Ace',11)],21],
+    ]
+    unexpectedTests = [
+        [[],None or 0],
+        [[Card('Awesome','Card','Awesome')],None or 0],
+        [[[[]]],None or 0],
+        [[['A'],['B'],['C'],['D']],None or 0],
+    ]
+    plr = Player('Tester')
+    def evaluateTest(test):
+        try:
+            plr.hand = test[0]
+            result = plr.handtotal()
+            expectedResult = test[1]
+            if result == expectedResult:
+                print("O - Test passed")
+            else:
+                print(f"X - Test failed, expected {expectedResult} but got {result}")
+        except Exception as e:
+            print(f"X - Test failed, function returned exception: {e}")
+    print("Normal Tests ----- THESE SHOULD ALWAYS PASS")
+    for test in normalTests:
+        evaluateTest(test)
+    print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
+    for test in unexpectedTests:
+        evaluateTest(test)
