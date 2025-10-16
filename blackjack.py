@@ -50,4 +50,14 @@ class Dealer: #dealer properties
 
     def check(self): #see if anyone busts or wins or ties
 
-
+#Tests: -------------------------------------------------------------------------------------
+def resethand_checker():
+    testclass = Player("L Bozo Code")
+    if testclass.hand == []:
+        testclass.hand = [random.randint(0,100000000),1,2,3,4,5,6,7,8,9,"aa"]
+        print(testclass.hand)
+        print("Hand was given 11 values")
+    if testclass.hand != []:
+        testclass.resethand()
+        print(testclass.hand)
+        print("Ran resethand. Hand should be gone.")
