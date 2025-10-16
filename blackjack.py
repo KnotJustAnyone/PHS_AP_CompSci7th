@@ -14,9 +14,9 @@ class Deck: #deck properties
         self.cards = [] #will create deck by giving each rank 14 cards
 
     def shuffle(self): #shuffle Deck
-    
+        pass
     def deal(self): #dealing cards
-
+        pass
 class Player: #player properties
     def __init__(self,name,money=1500): #creating player, give money
         self.name = name #player name, may not use because they'll see each other's cards?
@@ -25,11 +25,21 @@ class Player: #player properties
         self.bet = 0 #bet amount
     
     def newcard(self, card): #putting card in hand
-
+        pass
     def resethand(self): #reset hand
         self.hand = []
-
     def handtotal(self): #total value of cards + will handle ace shenanigans
+        total = 0
+        for card in self.hand:
+            total += card.value
+        if total > 21: # Lowers the value of aces to 1 if the total is over 21
+            for card in self.hand:
+                if card.value == 11:
+                    card.value = 1
+                    total -= 10
+                    if total <= 21:
+                        break
+        return total
     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
@@ -39,17 +49,29 @@ class Dealer: #dealer properties
         self.pot = 0 #money in the pot
 
     def deal1(self): #first deal for all players
-
+        pass
     def dealershow(self): #dealer shows one card
-    
+        pass
     def round(self): #player: hit or stand, if over 21, bust
-
+        pass
     def dealerturn(self): #dealer play, if under 17, will play, if not, will stand
-
+        pass
     def dealer_value(self): #dealer total value, will handle aces
-
+        pass
     def check(self): #see if anyone busts or wins or ties
+        pass
 
+#Tests: -------------------------------------------------------------------------------------
+def resethand_checker():
+    testclass = Player("L Bozo Code")
+    if testclass.hand == []:
+        testclass.hand = [random.randint(0,100000000),1,2,3,4,5,6,7,8,9,"aa"]
+        print(testclass.hand)
+        print("Hand was given 11 values")
+    if testclass.hand != []:
+        testclass.resethand()
+        print(testclass.hand)
+        print("Ran resethand. Hand should be gone.")
 
 def test_hand_total():
     normalTests = [
