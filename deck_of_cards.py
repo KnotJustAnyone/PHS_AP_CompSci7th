@@ -85,6 +85,8 @@ class Deck:
         random.shuffle(self.deck_current)
 
     def peek(self, cards=1): # Look at the top few cards without removing them
+    # This will show the cards in the order they will next be played. 
+    # It takes it from the back of deck_current, which is where the deal function pulls cards from
         if cards >= len(self.deck_current):
             cards = len(self.deck_current)
 
@@ -106,3 +108,23 @@ class Deck:
     def reset(self): # Reset to a full, unshuffled deck
         self.deck_current = self.deck_full.copy()
         self.deck_dealt.clear()
+
+
+deck = Deck(True,True,True)
+deck.shuffle()
+print(deck.peek(3))
+print(deck.deck_current[-3:][::-1])
+print(deck.deck_current)
+
+# Testing Area ------------------------------------------------------------------------------------------------------------------
+def test_peek(test_numb): #0 < Numb < 55, number of tests
+    deck = Deck(True,True,True)
+    for i in range(test_numb+1):
+        if i < 1:
+            continue
+        deck.shuffle()
+        if deck.deck_current[-i:][::-1] != deck.peek(i):
+            print(f"Test failed at peek({i})")
+        else:
+            print(f"Test passed at peek({i})")
+test_peek(10)
