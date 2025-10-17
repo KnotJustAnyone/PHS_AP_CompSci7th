@@ -5,6 +5,21 @@ playlist = []
 def add_song(song):
     playlist.append(song)
 
+def add_song_test():
+    add_song("orion")
+    if playlist[-1] == "orion":
+        print("test works")
+
+    else:
+        print("test failed")
+
+    add_song("mango")
+    if playlist[-1] == "mango" and playlist[-2] == "orion":
+        print("test works")
+
+    else:
+        print("test failed")
+
 #delete song from playlist
 def delete_song(song):
     if song in playlist:
