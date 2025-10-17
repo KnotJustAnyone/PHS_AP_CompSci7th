@@ -57,7 +57,11 @@ class Dealer: #dealer properties
         self.pot = 0 #money in the pot
 
     def deal1(self): #first deal for all players
-        pass
+        for player in self.players:
+            player.newcard(2)
+        self.dealerhand = deck.deal(2)
+        #print(player.hand) will print for tests 
+        #idk how we can reveal the player's cards without revealing it to the other players. Maybe discuss later?
 
     def dealershow(self): #dealer shows one card
         pass
