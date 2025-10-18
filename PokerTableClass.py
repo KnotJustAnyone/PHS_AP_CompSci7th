@@ -17,7 +17,12 @@ class poker_table:
         return None
 
     def deal_table(self): #Adds cards to the table as needed
-        return None
+        card = self.deck[0]
+        self.table_cards = card + self.table_cards
+        self.deck = self.deck[0:]
+        return card
+        
+
 
     #Identifies the best hand which can be made with the set of cards
     def best_hand(self,cards):
