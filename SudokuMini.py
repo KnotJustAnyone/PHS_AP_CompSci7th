@@ -56,5 +56,33 @@ class Sudoku4x4:
         # Tries to solve the puzzle on its own (probably using backtracking)
         pass
 
+    def test_reset_board():
+    game = Sudoku4x4()
+    # Load a puzzle 
+    puzzle = [
+        [1, 0, 0, 4],
+        [0, 0, 2, 0],
+        [0, 3, 0, 0],
+        [2, 0, 0, 1]
+    ]
+    game.load_puzzle(puzzle)
+
+    # Verify the board is not all zeros
+    assert any(cell != 0 for row in game.board for cell in row)
+
+    # Call reset_board
+    game.reset_board()
+
+    # Verify that the board is now all zeros
+    all_zero = all(cell == 0 for row in game.board for cell in row)
+    assert all_zero
+
+    print("✅ test_reset_board passed!")
+
+
+# Run the test
+test_reset_board()
+
+
 #Emiri outlined the code and found the general aspects of what to put
 #Angelleen wrote it all out on the program and definied all the variables
