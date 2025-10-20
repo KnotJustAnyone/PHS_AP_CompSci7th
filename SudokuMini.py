@@ -37,7 +37,14 @@ class Sudoku4x4:
         # Actually puts the number on the board if the move is okay
         # Might return True or False depending on if it worked
         pass
-
+    def test_place_number(spot):
+        #Checks if move is valid, returns True/False Boolean for valid/invalid respectively
+        for num1 in len.board():
+            for num2 in len.board[num1]:
+                if self.board[num2] = self.board[num2 - 1] or self.board[num2] = self.board[num2 + 1]:
+                    return False
+        return True
+    
     def check_win(self):
         # Checks if the whole board is filled out correctly
         # Returns True if the puzzle is solved
