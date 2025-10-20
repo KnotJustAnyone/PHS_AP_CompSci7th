@@ -33,4 +33,6 @@ def move_song(song, new_position):
 
 #prints the playlist with song name and artist
 def display_playlist():
+     for index, song in enumerate(playlist, start=1):
+        print(f"{index}. {song}")
     #Megan Vuong suggested album cover jpeg displayed too
