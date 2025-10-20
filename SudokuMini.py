@@ -55,6 +55,43 @@ class Sudoku4x4:
     def auto_solve(self):
         # Tries to solve the puzzle on its own (probably using backtracking)
         pass
+    
+    def test_check_move():
+    game = Sudoku4x4()
+
+    # Load a partially filled board
+    puzzle = [
+        [1, 0, 0, 4],
+        [0, 0, 2, 0],
+        [0, 3, 0, 0],
+        [2, 0, 0, 1]
+    ]
+    game.load_puzzle(puzzle)
+
+    # --- Valid move test ---
+    # (0,1) is empty. Placing 2 there should be valid.
+    assert game.check_move(0, 1, 2) == True
+    # --- Row conflict test ---
+    # Row 0 already has a 1; placing another 1 should be invalid
+    assert game.check_move(0, 2, 1) == False
+
+    # --- Column conflict test ---
+    # Column 0 already has 1 and 2; placing another 2 in that column should be invalid
+    assert game.check_move(1, 0, 2) == False
+
+    # --- Box conflict test ---
+    # Top-left 2x2 box has a 1; placing another 1 inside that box should be invalid
+    assert game.check_move(1, 1, 1) == False
+    # --- Edge valid move ---
+    # (2,2) is empty, placing 4 should be fine
+    assert game.check_move(2, 2, 4) == True
+
+    print("✅ test_check_move passed!")
+
+
+# Run the test
+test_check_move()
+
 
 #Emiri outlined the code and found the general aspects of what to put
 #Angelleen wrote it all out on the program and definied all the variables
