@@ -53,8 +53,19 @@ class Sudoku4x4:
         pass
 
     def auto_solve(self):
-        # Tries to solve the puzzle on its own (probably using backtracking)
-        pass
+        # Backtracking algorithm
+        empty = self.find_empty()
+        if not empty:
+            return True  # solved
+        row, col = empty
+
+        for num in range(1, 5):
+            if self.check_move(row, col, num):
+                self.board[row][col] = num
+                if self.auto_solve():
+                    return True
+                self.board[row][col] = 0  # backtrack
+
 
 #Emiri outlined the code and found the general aspects of what to put
 #Angelleen wrote it all out on the program and definied all the variables
