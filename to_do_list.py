@@ -11,8 +11,11 @@ class to_do_list:
         return None
 
     def check_tasks(self,task_name): #checks off completed tasks
+        if self[task_name] = "complete":
         #returns True or False boolean
-        return None
+            return True
+        else: 
+            return False
 
     def repeated_tasks(self,task_name): #allows user to choose tasks to repeat
                                 
