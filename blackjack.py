@@ -41,9 +41,8 @@ class Player: #player properties
             total += card_value(card)
         if total > 21: # Lowers the value of aces to 1 if the total is over 21
             for card in self.hand:
-                if card_value(card) == 11: # Needs fixing
-                    card.value = 1
-                    total -= 10
+                if card_value(card) == 11:
+                    total -= 10 #Should just redo total every time it checks... inefficient, but will work
                     if total <= 21:
                         break
         return total
@@ -119,6 +118,7 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
 
 
 
