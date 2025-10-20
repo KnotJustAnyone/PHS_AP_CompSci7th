@@ -56,10 +56,14 @@ class Dealer: #dealer properties
         self.pot = 0 #money in the pot
 
     def deal1(self): #first deal for all players
-        pass
+        for player in self.players:
+            player.newcard(2)
+        self.dealerhand = deck.deal(2)
+        #print(player.hand) will print for tests 
+        #idk how we can reveal the player's cards without revealing it to the other players. Maybe discuss later?
 
     def dealershow(self): #dealer shows one card
-        pass
+        print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
     
     def round(self): #player: hit or stand, if over 21, bust
         pass
@@ -118,7 +122,3 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
-
-
-
-
