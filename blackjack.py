@@ -72,7 +72,23 @@ class Dealer: #dealer properties
         pass
 
     def dealer_value(self): #dealer total value, will handle aces
-        pass
+    value = 0
+    aces = 0
+        for card in cards:
+    if card in ['J', 'Q', 'K']:
+    value += 10
+    elif card == 'A':
+    aces += 1
+    else:
+    value += int(card)
+    for _ in range(aces):
+    if value + 11 <= 21:
+    value += 11
+    else:
+    value += 1
+    return value
+
+
 
     def check(self): #see if anyone busts or wins or ties
         pass
@@ -122,3 +138,4 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
