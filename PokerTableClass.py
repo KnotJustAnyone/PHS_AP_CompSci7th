@@ -27,6 +27,22 @@ class poker_table:
     def add_player(self): #adds a new player at the table
         return None
 
+     def add_player_test():
+        add_player("Jacob")
+        if players[-1] == "Jacob":
+        print("test works")
+
+    else:
+        print("test failed")
+
+    add_song("Emily")
+    if playlist[-1] == "Emily" and playlist[-2] == "Jacob":
+        print("test works")
+
+    else:
+        print("test failed")
+
+
     def remove_player(self): #removes a player
         return None
 
@@ -73,3 +89,4 @@ def test_best_hand():
     print(f"Identifies three of a kind beats pair: {table.best_hand(hands[4]) > table.best_hand(hands[6])}")
     print(f"Identifies better three of a kind: {table.best_hand(hands[4]) < table.best_hand(hands[9])}")
     print(f"Identifies four of a kind beats three of a kind: {table.best_hand(hands[8]) > table.best_hand(hands[9])}")
+
