@@ -56,7 +56,7 @@ class Player: #player properties
         if self.hand[0] == self.hand[1]:
             while True:
                 ifsplit = input(f"Would {self.name} like to split your hand? (y or n)?").strip()
-                if ifsplit == "" or ifsplit.isdigit():
+                if ifsplit != "y" and ifsplit != "n":
                     print("y or n please")
                 else:
                     break
@@ -145,5 +145,6 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
 
 
