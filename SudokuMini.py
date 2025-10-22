@@ -45,7 +45,17 @@ class Sudoku4x4:
 
     def reset_board(self):
         # Clears the board or maybe resets it to the original puzzle
-        pass
+        action = input("Do you want to reset the board? yes or no: ")
+
+        if action() == "yes":
+            for row_num in range(4):  # it goes through the 4 rows in the board
+                for col_num in range(4):  # it goes through the 4 columns in the board
+                    if self.starting_board[row_num][col_num] == 0: #if it was already 0 / didnt have any inputs from the player
+                    self.board[row_num][col_num] = 0 #resets all of the player inputs, but keeps the numbers the game give you
+            print("board has reset")
+        else:
+            print("board will not reset")
+
 
     def get_hints(self, row, col):
         # This would give possible numbers that can go in a spot
