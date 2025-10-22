@@ -60,15 +60,15 @@ class Player: #player properties
                     print("y or n please")
                 else:
                     break
-                if ifsplit = "y":
-                    self.hand.pop(0)
-                    self.splithand() = self.hand
-                    self.newcard()
-                    self.newsplitcard()
-                    self.splitbet = self.bet
-                    return True
-                elif ifsplit = "n":
-                    return False                
+            if ifsplit = "y":
+                self.hand.pop(0)
+                self.splithand() = self.hand
+                self.newcard() 
+                self.newsplitcard()
+                self.splitbet = self.bet
+                return True
+            elif ifsplit = "n":
+                return False                
                 
     
 class Dealer: #dealer properties
@@ -145,4 +145,5 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
 
