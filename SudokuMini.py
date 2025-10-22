@@ -58,3 +58,10 @@ class Sudoku4x4:
 
 #Emiri outlined the code and found the general aspects of what to put
 #Angelleen wrote it all out on the program and definied all the variables
+def check_todo_list(todo_list):
+    is_empty = len(todo_list) == 0
+    all_done = all(task.get('done', False) for task in todo_list) if not is_empty else False
+    return {
+        "is_empty": is_empty,
+        "all_done": all_done
+    }
