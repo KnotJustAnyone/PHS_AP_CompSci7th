@@ -26,10 +26,8 @@ class Player: #player properties
     def __init__(self,name,money=1500): #creating player, give money
         self.name = name #player name, may not use because they'll see each other's cards?
         self.hand = [] #hand of cards
-        self.splithand = []  #if they split
         self.money = money #money amount
         self.bet = 0 #bet amount
-        self.splitbet = 0 #split bet amount
     
     def newcard(self, count): #putting card in hand
         self.hand += deck.deal(count)
@@ -53,32 +51,30 @@ class Player: #player properties
         return total
 
     def splitting(self): #if player splits
-        if self.hand[0] == self.hand[1]:
-            while True:
-                ifsplit = input(f"Would {self.name} like to split your hand? (y or n)?").strip()
-                if ifsplit != "y" and ifsplit != "n":
-                    print("y or n please")
+        for player in players:
+            if self.hand[0] == self.hand[1]:
+                while True:
+                    ifsplit = input(f"Would {self.name} like to split your hand? (y or n)?").strip()
+                    if ifsplit != "y" and ifsplit != "n":
+                        print("y or n please")
+                    else:
+                        break
+                if ifsplit = "y":
+                    splitcard = self.hand[0]
+                    self.hand.pop(0)
+                    self.newcard(1)
+                    players.append(f"{self.name Split")
+                    searchfor = f"{self.name} Split"
+                    for index, word in enumerate(players):
+                        if word == searchfor:
+                            self.hand.append(splitcard)
+                            self.newcard(1)
+                            break
+                    return True
                 else:
-                    break
-            if ifsplit = "y":
-                self.hand.pop(0)
-                self.splithand() = self.hand
-                self.newcard() 
-                self.newsplitcard()
-                self.splitbet = self.bet
-                return True
-            elif ifsplit = "n":
+                    return False
+            else:
                 return False
-        #or
-        if self.hand[0] == self.hand[1]:
-            while True:
-                ifsplit = input(f"Would {self.name} like to split your hand? (y or n)?").strip()
-                if ifsplit != "y" and ifsplit != "n":
-                    print("y or n please")
-                else:
-                    break
-            if ifsplit = "y":
-                players.append(f"{self.name Split")
                 
     
 class Dealer: #dealer properties
@@ -156,6 +152,14 @@ def test_hand_total():
     for test in unexpectedTests:
         evaluateTest(test)
 
+def splitcheck():
+    dealer = Dealer()
+    player = Player()
+    dealer.deal1()
+    player.splitting()
+    for playa in players:
+        print(f"Player {playa}: {playa.hand}")
+    
 
 
 
