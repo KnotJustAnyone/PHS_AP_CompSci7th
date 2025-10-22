@@ -68,7 +68,17 @@ class Player: #player properties
                 self.splitbet = self.bet
                 return True
             elif ifsplit = "n":
-                return False                
+                return False
+        #or
+        if self.hand[0] == self.hand[1]:
+            while True:
+                ifsplit = input(f"Would {self.name} like to split your hand? (y or n)?").strip()
+                if ifsplit != "y" and ifsplit != "n":
+                    print("y or n please")
+                else:
+                    break
+            if ifsplit = "y":
+                players.append(f"{self.name Split")
                 
     
 class Dealer: #dealer properties
@@ -145,6 +155,7 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
 
 
 
