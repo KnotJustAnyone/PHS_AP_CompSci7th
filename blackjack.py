@@ -63,7 +63,7 @@ class Player: #player properties
                     splitcard = self.hand[0]
                     self.hand.pop(0)
                     self.newcard(1)
-                    players.append(f"{self.name Split")
+                    players.append(f"{self.name} Split")
                     searchfor = f"{self.name} Split"
                     for index, word in enumerate(players):
                         if word == searchfor:
@@ -160,6 +160,7 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     
+
 
 
 
