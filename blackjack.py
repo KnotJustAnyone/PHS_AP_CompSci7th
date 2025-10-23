@@ -31,7 +31,7 @@ class Player: #player properties
     
     def newcard(self, count): #putting card in hand
         self.hand += deck.deal(count)
-    
+        
     def resethand(self): #reset hand
         self.hand = []
 
@@ -47,6 +47,25 @@ class Player: #player properties
                         break
         return total
 
+    def splitting(self):
+        if len(self.hand) == 2 and self.hand[0].rank == self.hand[1].rank:
+            while True:
+                ifsplit = input(f"Would {self.name} like to split your hand? (y or n)? ").strip().lower()
+                if ifsplit in ("y", "n"):
+                    break
+                print("y or n please")
+            if ifsplit == "y":
+                splitcard = self.hand.pop() 
+                self.newcard(1)  
+                splitplayer = Player(f"{self.name} Split", self.money)
+                splitplayer.hand = [splitcard]
+                splitplayer.newcard(1)
+                players.append(splitplayer)
+                print(f"{self.name} has 2 hands.")
+                return True
+        return False
+
+                
     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
@@ -122,3 +141,19 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
+def splitcheck():
+    dealer = Dealer()
+    player = Player("tester")
+    dealer.deal1()
+    player.splitting()
+    for playa in players:
+        print(f"Player {playa}: {playa.hand}")
+    
+
+
+
+
+
+
+
