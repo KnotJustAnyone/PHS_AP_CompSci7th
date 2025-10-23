@@ -31,9 +31,6 @@ class Player: #player properties
     
     def newcard(self, count): #putting card in hand
         self.hand += deck.deal(count)
-
-    def newsplitcard(self, count): #card in split hand
-        self.splithand += deck.deal(count)
         
     def resethand(self): #reset hand
         self.hand = []
@@ -160,6 +157,7 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     
+
 
 
 
