@@ -144,12 +144,13 @@ def test_hand_total():
 
 def splitcheck():
     dealer = Dealer()
-    player = Player()
+    player = Player("tester")
     dealer.deal1()
     player.splitting()
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     
+
 
 
 
