@@ -47,31 +47,24 @@ class Player: #player properties
                         break
         return total
 
-    def splitting(self): #if player splits
-        for player in players:
-            if self.hand[0] == self.hand[1]:
-                while True:
-                    ifsplit = input(f"Would {self.name} like to split your hand? (y or n)?").strip()
-                    if ifsplit != "y" and ifsplit != "n":
-                        print("y or n please")
-                    else:
-                        break
-                if ifsplit = "y":
-                    splitcard = self.hand[0]
-                    self.hand.pop(0)
-                    self.newcard(1)
-                    players.append(f"{self.name} Split")
-                    searchfor = f"{self.name} Split"
-                    for index, word in enumerate(players):
-                        if word == searchfor:
-                            self.hand.append(splitcard)
-                            self.newcard(1)
-                            break
-                    return True
-                else:
-                    return False
-            else:
-                return False
+    def splitting(self):
+        if len(self.hand) == 2 and self.hand[0].rank == self.hand[1].rank:
+            while True:
+                ifsplit = input(f"Would {self.name} like to split your hand? (y or n)? ").strip().lower()
+                if ifsplit in ("y", "n"):
+                    break
+                print("y or n please")
+            if ifsplit == "y":
+                splitcard = self.hand.pop() 
+                self.newcard(1)  
+                splitplayer = Player(f"{self.name} Split", self.money)
+                splitplayer.hand = [splitcard]
+                splitplayer.newcard(1)
+                players.append(splitplayer)
+                print(f"{self.name} has 2 hands.")
+                return True
+        return False
+
                 
     
 class Dealer: #dealer properties
@@ -157,6 +150,7 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     
+
 
 
 
