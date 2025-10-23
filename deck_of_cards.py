@@ -8,20 +8,27 @@ import random
 class Deck:
     suits = {"c": "Clubs", "h": "Hearts", "d": "Diamonds", "s": "Spades"}
 
-    def __init__(self, jokers=True, codes=False, return_not_print=False):
+    def __init__(self,jokers=True,codes=False,return_not_print=False,deck_count=1):
         self.jokers = jokers
         self.codes = codes
         self.return_not_print = return_not_print
+        self.deck_count = deck_count
 
         # Build full deck
         self.deck_full = [s + str(n) for s in ["c", "h", "d", "s"] for n in list(range(10)) + ["j", "q", "k"]]
         if self.jokers:
             self.deck_full += ["jo", "jo"]
 
+        if self.deck_count > 1:
+            self.deck_full *= self.deck_count
+            
         # Start with a fresh, unshuffled deck
         self.deck_current = self.deck_full.copy()
         self.deck_dealt = []
 
+    def deck_count(self): # How many decks are in use? (should be common sense, but you never know...)
+        return self.deck_count
+    
     def identify_card(self, card): # Turn a 2-character code into a full name, e.g. 'c5' -> '5 of Clubs'
         if card == "jo": # Case: Joker
             return "Joker"
@@ -110,12 +117,6 @@ class Deck:
         self.deck_dealt.clear()
 
 
-deck = Deck(True,True,True)
-deck.shuffle()
-print(deck.peek(3))
-print(deck.deck_current[-3:][::-1])
-print(deck.deck_current)
-
 # Testing Area ------------------------------------------------------------------------------------------------------------------
 def test_peek(test_numb): #0 < Numb < 55, number of tests
     deck = Deck(True,True,True)
@@ -127,4 +128,4 @@ def test_peek(test_numb): #0 < Numb < 55, number of tests
             print(f"Test failed at peek({i})")
         else:
             print(f"Test passed at peek({i})")
-test_peek(10)
+# test_peek(10)

@@ -19,7 +19,7 @@ def card_value(card): #handle 2-card code to get the value
         raise ValueError("Value must be a valid card code. Make sure your card rank is a single digit, or 'j', 'q', or 'k'.")
 
 # Start deck, will need to fix to have value
-deck = Deck(False, True, True)
+deck = Deck(False, True, True, 6)
 deck.shuffle()
 
 class Player: #player properties
@@ -122,3 +122,4 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
