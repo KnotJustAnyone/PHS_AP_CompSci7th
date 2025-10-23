@@ -20,12 +20,36 @@ class WordGuessingGame:
         # Noah: Boolean value to track if the game is still active
         self.game_over = False
 
-    def choose_word(self):
-        
-        #Aldo: Picks a random word from the word list and sets it as the secret word.
-        #Aldo: Also sets up the blank display word.
-        
-        return None
+import random
+
+def choose_word(self):
+
+     #Aldo: Picks a random word from the word list and sets it as the secret word.
+     #Aldo: Also sets up the blank display word.
+    
+    # pick a random word from the list
+    self.secret_word = random.choice(self.word_list)
+    # make the display word with blanks
+    self.display_word = ""
+    for letter in self.secret_word:
+        self.display_word = self.display_word + "_"
+    print("Word has been chosen!")
+
+def test_guess_letter():
+    # make a new game
+    game = WordGuessingGame()
+    game.word_list = ["apple"]
+    game.choose_word()
+
+    # guess a correct letter
+    game.guess_letter("a")
+    print("After guessing 'a':", game.display_word)
+
+    # guess a wrong letter
+    game.guess_letter("z")
+    print("Guessed letters:", game.guessed_letters)
+
+    print("Test finished.")
 
     def guess_letter(self, letter):
         
@@ -61,3 +85,4 @@ class WordGuessingGame:
         return None
 
 # End of WordGuessingGame class
+
