@@ -120,5 +120,16 @@ def test_hand_total():
     for test in normalTests:
         evaluateTest(test)
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
+
+    import sys
+import time
+
+print("This is the line to be replaced.", end="", flush=True)
+time.sleep(1)
+
+sys.stdout.write("\rThis is the new line.     \n")
+sys.stdout.flush()
+
     for test in unexpectedTests:
         evaluateTest(test)
+
