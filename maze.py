@@ -50,3 +50,12 @@ while True:
         print_maze()
         print("You reached the goal! You win!")
         break
+
+# Move Counter
+
+moves_count=0
+...
+if maze[ny][nx]!='#':player_x,player_y=nx,ny;moves_count+=1
+...
+if maze[player_y][player_x]=='G':print(f"You win in {moves_count} moves!");break
+
