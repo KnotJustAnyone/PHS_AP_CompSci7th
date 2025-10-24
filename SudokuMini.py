@@ -50,6 +50,34 @@ class Sudoku4x4:
     def get_hints(self, row, col):
         # This would give possible numbers that can go in a spot
         # Might help a player who is stuck
+        def get_hints(self, row, col):
+    # If the cell is already filled, there are no hints
+    if self.board[row][col] != 0:
+        return set()
+
+    # All possible numbers
+    possible = set(range(1, 10))
+
+    # Remove numbers already in the same row
+    for c in range(9):
+        if self.board[row][c] in possible:
+            possible.remove(self.board[row][c])
+
+    # Remove numbers already in the same column
+    for r in range(9):
+        if self.board[r][col] in possible:
+            possible.remove(self.board[r][col])
+
+    # Remove numbers already in the same 3x3 box
+    start_row = (row // 3) * 3
+    start_col = (col // 3) * 3
+    for r in range(start_row, start_row + 3):
+        for c in range(start_col, start_col + 3):
+            if self.board[r][c] in possible:
+                possible.remove(self.board[r][c])
+
+    return possible
+
         pass
 
     def auto_solve(self):
