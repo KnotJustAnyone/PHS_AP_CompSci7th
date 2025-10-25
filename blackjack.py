@@ -1,4 +1,6 @@
 import random #for shuffling
+import sys, time #for deleting lines
+countdown = 10
 from deck_of_cards import Deck
 players = [] #players
 
@@ -50,7 +52,7 @@ class Player: #player properties
     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
-        self.deck = Deck() #taking deck
+        self.deck = Deck(False, True, True) #taking deck
         self.players = players #taking players
         self.dealerhand = [] #dealer's hand of cards
         self.pot = 0 #money in the pot
@@ -58,9 +60,18 @@ class Dealer: #dealer properties
     def deal1(self): #first deal for all players
         for player in self.players:
             player.newcard(2)
-        self.dealerhand = deck.deal(2)
-        #print(player.hand) will print for tests 
-        #idk how we can reveal the player's cards without revealing it to the other players. Maybe discuss later?
+            print(f"Player {player.name}'s cards are: {player.hand[0]} and {player.hand[1]}")
+        self.dealerhand = self.deck.deal(2)
+        for i in range(countdown, 0, -1):
+            sys.stdout.write(f"\rWrite down the cards, they will be deleted off the terminal in: {i}   ")
+            sys.stdout.flush()
+            time.sleep(1)
+
+        sys.stdout.write("\033[F")  # move up 1 line
+        sys.stdout.write("\033[K")  # clear line
+        sys.stdout.write("\033[E")  # move down 1 line
+        sys.stdout.write("\033[K")  # clear line
+        sys.stdout.flush()
 
     def dealershow(self): #dealer shows one card
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
@@ -122,3 +133,11 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
+def test_card_deletion():
+    playa = Player("testname")
+    players = [playa]
+    deala = Dealer(players)
+    deala.deal1()
+
+
