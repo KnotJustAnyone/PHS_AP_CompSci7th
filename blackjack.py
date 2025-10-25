@@ -1,4 +1,6 @@
 import random #for shuffling
+import sys, time #for deleting lines
+countdown = 10
 from deck_of_cards import Deck
 players = [] #players
 
@@ -59,8 +61,17 @@ class Dealer: #dealer properties
         for player in self.players:
             player.newcard(2)
         self.dealerhand = deck.deal(2)
-        #print(player.hand) will print for tests 
-        #idk how we can reveal the player's cards without revealing it to the other players. Maybe discuss later?
+        print(f"Player {player.name}'s cards are: {player.hand[0]} and {player.hand[1]}")
+        for i in range(countdown, 0, -1):
+            sys.stdout.write(f"\rWrite down the cards, they will be deleted off the terminal in: {i}   ")
+            sys.stdout.flush()
+            time.sleep(1)
+
+        sys.stdout.write("\033[F")  # move up 1 line
+        sys.stdout.write("\033[K")  # clear line
+        sys.stdout.write("\033[E")  # move down 1 line
+        sys.stdout.write("\033[K")  # clear line
+        sys.stdout.flush()
 
     def dealershow(self): #dealer shows one card
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
@@ -132,4 +143,5 @@ sys.stdout.flush()
 
     for test in unexpectedTests:
         evaluateTest(test)
+
 
