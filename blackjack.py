@@ -90,7 +90,7 @@ class Dealer: #dealer properties
 
 #Tests: -------------------------------------------------------------------------------------
 def resethand_checker():
-    testclass = Player("L Bozo Code")
+    testclass = Player("test")
     if testclass.hand == []:
         testclass.hand = [random.randint(0,100000000),1,2,3,4,5,6,7,8,9,"aa"]
         print(testclass.hand)
@@ -139,5 +139,6 @@ def test_card_deletion():
     players = [playa]
     deala = Dealer(players)
     deala.deal1()
+
 
 
