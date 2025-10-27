@@ -48,7 +48,7 @@ class Player: #player properties
         return total
 
     def splitting(self):
-        if len(self.hand) == 2 and self.hand[0].rank == self.hand[1].rank:
+        if len(self.hand) == 2 and self.hand[0][1] == self.hand[1][1]:
             while True:
                 ifsplit = input(f"Would {self.name} like to split your hand? (y or n)? ").strip().lower()
                 if ifsplit in ("y", "n"):
@@ -150,6 +150,7 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     
+
 
 
 
