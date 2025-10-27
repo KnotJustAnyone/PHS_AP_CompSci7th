@@ -61,8 +61,7 @@ class Dealer: #dealer properties
     def deal1(self): #first deal for all players
         for player in self.players:
             player.newcard(2)
-            print(f"Player {player.name}'s cards are: {player.hand[0]} and {player.hand[1]}")
-            #Lucas, if you can, can you make it use the "full" function from the deck_of_cards? Idrk how it works as of now 
+            print(f"Player {player.name} cards:{deck.identify_card(player.hand[0]}, {deck.identify_card(player.hand[1]}")
         self.dealerhand = self.deck.deal(2)
         for i in range(countdown, 0, -1):
             sys.stdout.write(f"\rWrite down the cards, they will be deleted off the terminal in: {i}   ")
@@ -141,6 +140,7 @@ def test_card_deletion():
     players = [playa]
     deala = Dealer(players)
     deala.deal1()
+
 
 
 
