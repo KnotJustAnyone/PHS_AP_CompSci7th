@@ -58,3 +58,7 @@ class Sudoku4x4:
 
 #Emiri outlined the code and found the general aspects of what to put
 #Angelleen wrote it all out on the program and definied all the variables
+def is_square_open(board, row, col):
+    if not (0 <= row < 4 and 0 <= col < 4):
+        raise ValueError("Row and column must be between 0 and 3")
+    return board[row][col] in (0, None)
