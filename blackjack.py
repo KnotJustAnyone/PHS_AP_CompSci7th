@@ -53,6 +53,7 @@ class Player: #player properties
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
         self.deck = Deck(False, True, True) #taking deck
+        #is it just self.deck = deck?
         self.players = players #taking players
         self.dealerhand = [] #dealer's hand of cards
         self.pot = 0 #money in the pot
@@ -139,6 +140,7 @@ def test_card_deletion():
     players = [playa]
     deala = Dealer(players)
     deala.deal1()
+
 
 
 
