@@ -61,7 +61,7 @@ class Deck:
                 dealt.append(None)
                 break
 
-            card = self.deck_current.pop()
+            card = self.deck_current.pop(0)
             self.deck_dealt.append(card)
 
             if self.codes:
@@ -75,7 +75,7 @@ class Deck:
                 print(output)
 
         if self.return_not_print:
-            return dealt
+            return dealt # If more than one, ordered (left-right) in order of deal
 
     def shuffle(self, undealt_only=False): #Shuffle the deck. If undealt_only=False, reshuffle the full deck
         if not undealt_only:
@@ -90,7 +90,7 @@ class Deck:
         if cards >= len(self.deck_current):
             cards = len(self.deck_current)
 
-        top_cards = list(reversed(self.deck_current[-cards:]))
+        top_cards = list(deck_current[:cards])
 
         if self.codes:
             output = top_cards
@@ -123,7 +123,7 @@ def test_peek(test_numb): #0 < Numb < 55, number of tests
         if i < 1:
             continue
         deck.shuffle()
-        if deck.deck_current[-i:][::-1] != deck.peek(i):
+        if deck.[:i] != deck.peek(i):
             print(f"Test failed at peek({i})")
         else:
             print(f"Test passed at peek({i})")
