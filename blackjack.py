@@ -93,8 +93,23 @@ class Dealer: #dealer properties
     def dealershow(self): #dealer shows one card
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
     
-    def round(self): #player: hit or stand, if over 21, bust
-        pass
+    def round(self):  # Player: hit or stand, if over 21, bust
+    for player in self.players:
+        print(f"\n{player.name}'s turn:")
+        total = player.handtotal()
+        while total <= 21:
+            print(f"Hand: {player.hand} (Total: {total})")
+            choice = input("Hit or Stand? (h/s): ")
+            if choice == 'h':
+                player.newcard(1)
+                total = player.handtotal()
+            elif choice == 's':
+                break
+            else:
+                print("input (h/s).")
+        if total > 21:
+            print("bust!!")
+
 
     def dealerturn(self): #dealer play, if under 17, will play, if not, will stand
         pass
@@ -169,6 +184,7 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
+
 
 
 
