@@ -1,5 +1,7 @@
 #Texas Hold Em Specific
 from deck_of_cards import Deck
+from collections import Counter
+
 class poker_table:
 
     hand_values = {} #A dictionary identifying the name of numerically ordered hands
@@ -19,12 +21,10 @@ class poker_table:
     def deal_table(self): #Adds cards to the table as needed
         return None
 
-    #Identifies the best hand which can be made with the set of cards
+    #Identifies the best hand that can be made with the set of cards
     def best_hand(self,cards):
         hand_value = 0
         return hand_value #A number identifying the strength of the hand
-
-    from collections import Counter
 
     def evaluate_hand(hand_str):
         # Parse hand: e.g. "AS KS QS JS TS" -> [('A','S'), ('K','S'), ...]
@@ -129,6 +129,7 @@ def test_best_hand():
     print(f"Identifies three of a kind beats pair: {table.best_hand(hands[4]) > table.best_hand(hands[6])}")
     print(f"Identifies better three of a kind: {table.best_hand(hands[4]) < table.best_hand(hands[9])}")
     print(f"Identifies four of a kind beats three of a kind: {table.best_hand(hands[8]) > table.best_hand(hands[9])}")
+
 
 
 
