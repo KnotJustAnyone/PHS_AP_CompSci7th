@@ -143,13 +143,17 @@ def test_hand_total():
         evaluateTest(test)
 
 def splitcheck():
+    print("type y to actually test")
     dealer = Dealer()
     player = Player("tester")
     player.hand = ["h2", "d2"]
     player.splitting()
+    print('If "tester has 2 hands." is printed, it should be good. \nPrinting hands now.')
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
-    
+    print("Ideally, both players should have one card of the same rank, and another random card.") 
+
+
 
 
 
