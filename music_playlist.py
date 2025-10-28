@@ -33,4 +33,13 @@ def move_song(song, new_position):
 
 #prints the playlist with song name and artist
 def display_playlist():
+    if not playlist:
+        print("playlist empty")
+        return
+
+    print("Playlist:")
+    for i, song in enumerate(playlist, start=1):
+        title = song.get("title", "Unknown Title")
+        artist = song.get("artist", "Unknown Artist")
+        print(f"{i}. {title} — {artist}")
     #Megan Vuong suggested album cover jpeg displayed too
