@@ -61,10 +61,10 @@ class Dealer: #dealer properties
     def deal1(self): #first deal for all players
         for player in self.players:
             player.newcard(2)
-            print(f"Player {player.name} cards:{deck.identify_card(player.hand[0]}, {deck.identify_card(player.hand[1]}")
+            print(f"Player {player.name} cards: {deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}")
         self.dealerhand = self.deck.deal(2)
         for i in range(countdown, 0, -1):
-            print(f"\rCountdown: {i}   ", end="", flush=True)
+            print(f"\rWrite these cards down, they will be deleted in {i}   ", end="", flush=True)
             time.sleep(1)
         print("\033[F\033[K\033[E\033[K", end="", flush=True)
         # F = move cursor up 1 line
@@ -137,6 +137,7 @@ def test_card_deletion():
     players = [playa]
     deala = Dealer(players)
     deala.deal1()
+
 
 
 
