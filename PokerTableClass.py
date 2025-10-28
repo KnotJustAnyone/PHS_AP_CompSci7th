@@ -14,7 +14,16 @@ class poker_table:
         self.button_player = None
 
     def deal_hands(self): #Gives each player their initial two pocket cards
-        return None
+        try:
+            p_count = int(len(self.players))
+            i=0
+            for i < p_count:
+                curr_player = self.players[i]
+                curr_player.hand = [self.deck[0],self.deck[1]]
+                del self.deck[:1]
+                i+=1
+        except ValueError as err:
+            raise ValueError("Custom message with traceback and original message\n" + format_tb(err.__traceback__)[0] + err.args[0] + "\nEnd of error message.") from None
 
     def deal_table(self): #Adds cards to the table as needed
         return None
