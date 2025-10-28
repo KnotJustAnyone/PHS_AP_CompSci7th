@@ -1,4 +1,6 @@
 import random #for shuffling
+import time #for deleting lines
+countdown = 10
 from deck_of_cards import Deck
 players = [] #players
 
@@ -69,7 +71,8 @@ class Player: #player properties
     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
-        self.deck = Deck() #taking deck
+        self.deck = Deck(False, True, True) #taking deck
+        #is it just self.deck = deck?
         self.players = players #taking players
         self.dealerhand = [] #dealer's hand of cards
         self.pot = 0 #money in the pot
@@ -77,9 +80,15 @@ class Dealer: #dealer properties
     def deal1(self): #first deal for all players
         for player in self.players:
             player.newcard(2)
-        self.dealerhand = deck.deal(2)
-        #print(player.hand) will print for tests 
-        #idk how we can reveal the player's cards without revealing it to the other players. Maybe discuss later?
+            print(f"Player {player.name} cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
+        self.dealerhand = self.deck.deal(2)
+        for i in range(countdown, 0, -1):
+            print(f"\r\033[4mWrite these cards down, they will be deleted in {i}\033[0m{' ' * 10}", end="", flush=True)
+            time.sleep(1)
+        print("\033[F\033[K\033[E\033[K", end="", flush=True)
+        # F = move cursor up 1 line
+        # K = clear to end of line
+        # E = move cursor down 1 line (next line)
 
     def dealershow(self): #dealer shows one card
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
@@ -98,7 +107,7 @@ class Dealer: #dealer properties
 
 #Tests: -------------------------------------------------------------------------------------
 def resethand_checker():
-    testclass = Player("L Bozo Code")
+    testclass = Player("test")
     if testclass.hand == []:
         testclass.hand = [random.randint(0,100000000),1,2,3,4,5,6,7,8,9,"aa"]
         print(testclass.hand)
@@ -141,6 +150,14 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+    
+def test_card_deletion():
+    playa = Player("testname")
+    players = [playa]
+    deala = Dealer(players)
+    deala.deal1()
+    print("If cards or countdown are not gone, this did not work. If so, yay...")
+
 
 def splitcheck():
     print("type y to actually test")
