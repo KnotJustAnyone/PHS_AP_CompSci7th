@@ -75,7 +75,60 @@ class Dealer: #dealer properties
         pass
 
     def check(self): #see if anyone busts or wins or ties
-        pass
+        dealer_total = 0
+        # calculate dealer total safely
+        try:
+            dealer_total = 0
+            for card in self.dealerhand:
+                dealer_total += card_value(card)
+            # handle Aces for dealer
+            if dealer_total > 21:
+                for card in self.dealerhand:
+                    if card_value(card) == 11:
+                        dealer_total -= 10
+                        if dealer_total <= 21:
+                            break
+        except Exception as e:
+            print(f"Error calculating dealer total: {e}")
+            return
+
+        print(f"\nDealer's final hand: {self.dealerhand} (Total: {dealer_total})")
+
+        for player in self.players:
+            player_total = player.handtotal()
+
+            print(f"\n{player.name}'s hand: {player.hand} (Total: {player_total})")
+
+            # --- BLACKJACK CHECKS ---
+            if player_total == 21 and len(player.hand) == 2 and dealer_total != 21:
+                print(f"{player.name} has Blackjack! They win 1.5x their bet.")
+                player.money += int(player.bet * 1.5)
+            elif dealer_total == 21 and len(self.dealerhand) == 2 and player_total != 21:
+                print(f"Dealer has Blackjack! {player.name} loses their bet.")
+                player.money -= player.bet
+
+            # --- BUST CHECKS ---
+            elif player_total > 21:
+                print(f"{player.name} busts with {player_total}! Loses bet of {player.bet}.")
+                player.money -= player.bet
+            elif dealer_total > 21:
+                print(f"Dealer busts! {player.name} wins {player.bet}.")
+                player.money += player.bet
+
+            # --- TOTAL COMPARISON ---
+            else:
+                if player_total > dealer_total:
+                    print(f"{player.name} wins! Gains {player.bet}.")
+                    player.money += player.bet
+                elif player_total < dealer_total:
+                    print(f"{player.name} loses. Dealer wins.")
+                    player.money -= player.bet
+                else:
+                    print(f"{player.name} ties with the dealer. Bet returned.")
+
+        print("\n--- ROUND COMPLETE ---")
+        for player in self.players:
+            print(f"{player.name} now has ${player.money}.")
 
 #Tests: -------------------------------------------------------------------------------------
 def resethand_checker():
@@ -122,3 +175,4 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+
