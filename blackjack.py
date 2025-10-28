@@ -1,5 +1,5 @@
 import random #for shuffling
-import sys, time #for deleting lines
+import time #for deleting lines
 countdown = 10
 from deck_of_cards import Deck
 players = [] #players
@@ -64,15 +64,12 @@ class Dealer: #dealer properties
             print(f"Player {player.name} cards:{deck.identify_card(player.hand[0]}, {deck.identify_card(player.hand[1]}")
         self.dealerhand = self.deck.deal(2)
         for i in range(countdown, 0, -1):
-            sys.stdout.write(f"\rWrite down the cards, they will be deleted off the terminal in: {i}   ")
-            sys.stdout.flush()
+            print(f"\rCountdown: {i}   ", end="", flush=True)
             time.sleep(1)
-
-        sys.stdout.write("\033[F")  # move up 1 line
-        sys.stdout.write("\033[K")  # clear line
-        sys.stdout.write("\033[E")  # move down 1 line
-        sys.stdout.write("\033[K")  # clear line
-        sys.stdout.flush()
+        print("\033[F\033[K\033[E\033[K", end="", flush=True)
+        # F = move cursor up 1 line
+        # K = clear to end of line
+        # E = move cursor down 1 line (next line)
 
     def dealershow(self): #dealer shows one card
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
@@ -140,6 +137,7 @@ def test_card_deletion():
     players = [playa]
     deala = Dealer(players)
     deala.deal1()
+
 
 
 
