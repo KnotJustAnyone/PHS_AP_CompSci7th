@@ -137,6 +137,8 @@ def test_card_deletion():
     players = [playa]
     deala = Dealer(players)
     deala.deal1()
+    print("If cards or countdown are not gone, this did not work. If so, yay...")
+
 
 
 
