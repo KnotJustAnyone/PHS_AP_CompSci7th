@@ -21,7 +21,7 @@ class Card: #card properties
             raise ValueError("Value must be a valid card code. Make sure your card rank is a single digit, or 'j', 'q', or 'k'.")
 
 # Start deck, will need to fix to have value
-deck = Deck(False, True, True)
+deck = Deck(False, True, True, 6)
 deck.shuffle()
 
 class Player: #player properties
