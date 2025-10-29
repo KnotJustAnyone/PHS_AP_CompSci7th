@@ -5,14 +5,40 @@ class poker_table:
 
     hand_values = {} #A dictionary identifying the name of numerically ordered hands
 
-    def __init__(self):
-        self.players = [] #List of players, need a player class
+    def __init__(self, players=None, small_blind=1, big_blind=2, ante=0,
+                 button_index=0, max_players=9, starting_stack=None,
+                 jokers=False, codes=True, return_not_print=True, deck_count=1):
+        # Players and seating
+        self.players = list(players) if players else [] #List of players, need a player class
+        self.max_players = max_players
+
+        # Stakes
+        self.small_blind = small_blind
+        self.big_blind = big_blind if big_blind >= small_blind else small_blind * 2
+        self.ante = ante
+
+        # Pots and betting
         self.pot = 0
         self.bets = []
-        self.deck = Deck(False,True,True)
+
+        # Deck options
+        self.deck = Deck(jokers, codes, return_not_print, deck_count)
+
+        # Table and position
         self.table_cards = []
-        self.current_player = None
-        self.button_player = None
+        if self.players:
+            button_index = button_index % len(self.players)
+            self.button_player = self.players[button_index]
+            self.current_player = self.players[(button_index + 1) % len(self.players)]
+        else:
+            self.button_player = None
+            self.current_player = None
+
+        # Chip stacks (rudimentary: equal starting stack for each player if provided)
+        self.stacks = {}
+        if starting_stack is not None and self.players:
+            for p in self.players:
+                self.stacks[p] = starting_stack
 
     def deal_hands(self): #Gives each player their initial two pocket cards
         return None
