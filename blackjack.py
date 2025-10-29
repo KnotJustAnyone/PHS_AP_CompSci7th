@@ -24,6 +24,34 @@ class Player: #player properties
         self.hand = [] #hand of cards
         self.money = money #money amount
         self.bet = 0 #bet amount
+
+    def test_player_init():
+        p1 = Player("Jason", [h2,s7,d5], 2000, 50)
+
+        print(p1.name)
+        print(p1.hand)
+        print(p1.money)
+        print(p1.bet)
+
+        if p1.name = "Jason"
+            print("test passed")
+        else:
+            print("test failed")
+
+        if p1.money = "2000"
+            print("test passed")
+        else:
+            print("test failed")
+
+        if p1.hand = [h2,s7,d5]
+            print("test passed")
+        else:
+            print("test failed")
+
+        if p1.bet = 50
+            print("test passed")
+        else:
+            print("test failed")
     
     def newcard(self, count): #putting card in hand
         self.hand += deck.deal(count)
@@ -156,3 +184,4 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
+
