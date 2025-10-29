@@ -71,7 +71,7 @@ class Player: #player properties
                 currenttot += i
             if currenttot == 9 or currenttot == 10 or currenttot == 11:
                 while True:
-                ifdouble = input(f"Would {self.name} like to double down? (y or n)? ").strip().lower()
+                    ifdouble = input(f"Would {self.name} like to double down? (y or n)? ").strip().lower()
                     if ifdouble in ("y", "n"):
                         break
                     print("y or n please")
@@ -178,4 +178,5 @@ def doubledowncheck():
     player.doubledown()
     print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
     print("New hand should have an extra card, net bet should be double the bet.")
+
 
