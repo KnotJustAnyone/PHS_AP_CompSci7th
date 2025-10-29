@@ -75,17 +75,8 @@ class Dealer: #dealer properties
     def deal1(self): #first deal for all players
         for player in self.players:
             player.newcard(2)
-            print(f"{player.name}'s cards will be revealed next. Please do not look if it is not your hand.")
-            time.sleep(3)
-            print(f"Player {player.name} cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
+            print(f"{player.name}'s cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
         self.dealerhand = self.deck.deal(2)
-        for i in range(countdown, 0, -1):
-            print(f"\r\033[4mWrite these cards down, they will be deleted in {i}\033[0m{' ' * 10}", end="", flush=True)
-            time.sleep(1)
-        print("\033[F\033[K\033[E\033[K", end="", flush=True)
-        # F = move cursor up 1 line
-        # K = clear to end of line
-        # E = move cursor down 1 line (next line)
 
     def dealershow(self): #dealer shows one card
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
@@ -165,6 +156,7 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
+
 
 
 
