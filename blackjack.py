@@ -24,7 +24,6 @@ class Player: #player properties
         self.hand = [] #hand of cards
         self.money = money #money amount
         self.bet = 0 #bet amount
-        self.double = False #for doubling down
     
     def newcard(self, count): #putting card in hand
         self.hand += deck.deal(count)
@@ -63,7 +62,7 @@ class Player: #player properties
                     players.append(splitplayer)
                     print(f"{self.name} has 2 hands.")
                     return True
-            return False
+            return None
 
     def doubledown(self):
         currenttot = 0
@@ -77,9 +76,10 @@ class Player: #player properties
                         break
                     print("y or n please")
                 if ifdouble == "y":
-                    self.double = True
                     self.newcard(1)
                     self.bet = self.bet * 2
+                    return True
+            return None
 
                 
     
@@ -167,3 +167,15 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
+
+def doubledowncheck():
+    print("type y to actually test")
+    dealer = Dealer()
+    player = Player("tester")
+    player.hand = ["h5","h6"]
+    player.bet = 5
+    print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
+    player.doubledown()
+    print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
+    print("New hand should have an extra card, net bet should be double the bet.")
+
