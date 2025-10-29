@@ -61,8 +61,11 @@ class Player: #player properties
                 self.newcard(1)  
                 splitplayer = Player(f"{self.name} Split", self.money)
                 splitplayer.hand = [splitcard]
+                splitplayer.bet = self.bet
+                self.money -= self.bet
                 splitplayer.newcard(1)
                 players.append(splitplayer)
+                self.players.append(splitplayer) #in case
                 print(f"{self.name} has 2 hands.")
                 return True
         return False
@@ -80,6 +83,8 @@ class Dealer: #dealer properties
     def deal1(self): #first deal for all players
         for player in self.players:
             player.newcard(2)
+            print(f"{player.name}'s cards will be revealed next. Please do not look if it is not your hand.")
+            time.sleep(3)
             print(f"Player {player.name} cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
         self.dealerhand = self.deck.deal(2)
         for i in range(countdown, 0, -1):
@@ -168,3 +173,4 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
+
