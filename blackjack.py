@@ -4,21 +4,15 @@ countdown = 10
 from deck_of_cards import Deck
 players = [] #players
 
-class Card: #card properties
-    def __init__(self,suit,rank,value): #creating card
-        self.suit = suit #suit
-        self.rank = rank #rank
-        self.value = value #value
-
-    def card_value(card): #handle 2-card code to get the value
-        if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
-            return 10
-        elif card[1] == "1":
-            return 11
-        elif card[1] in [str(n) for n in range(2,10)]:
-            return int(card[1])
-        else:
-            raise ValueError("Value must be a valid card code. Make sure your card rank is a single digit, or 'j', 'q', or 'k'.")
+def card_value(card): #handle 2-card code to get the value
+    if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
+        return 10
+    elif card[1] == "1":
+        return 11
+    elif card[1] in [str(n) for n in range(2,10)]:
+        return int(card[1])
+    else:
+        raise ValueError("Value must be a valid card code. Make sure your card rank is a single digit, or 'j', 'q', or 'k'.")
 
 # Start deck, will need to fix to have value
 deck = Deck(False, True, True, 6)
@@ -171,6 +165,7 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
+
 
 
 
