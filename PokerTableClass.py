@@ -128,7 +128,8 @@ def test_best_hand():
     print(f"Identifies better pair: {table.best_hand(hands[1]) > table.best_hand(hands[5])}")
     print(f"Identifies three of a kind beats pair: {table.best_hand(hands[4]) > table.best_hand(hands[6])}")
     print(f"Identifies better three of a kind: {table.best_hand(hands[4]) < table.best_hand(hands[9])}")
-    print(f"Identifies four of a kind beats three of a kind: {table.best_hand(hands[8]) > table.best_hand(hands[9])}")
+    print(f"Identifies four of a kind beats three of a kind: {table.best_hand(hands[8]) > table.best_hand(hands[9])}"
+
 
 
 
