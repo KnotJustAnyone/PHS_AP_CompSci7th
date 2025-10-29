@@ -1,5 +1,6 @@
 #Texas Hold Em Specific
 from deck_of_cards import Deck
+from collections import Counter
 class poker_table:
 
     hand_values = {} #A dictionary identifying the name of numerically ordered hands
@@ -24,7 +25,7 @@ class poker_table:
         hand_value = 0
         return hand_value #A number identifying the strength of the hand
 
-    from collections import Counter
+    
 
     def evaluate_hand(hand_str):
         # Parse hand: e.g. "AS KS QS JS TS" -> [('A','S'), ('K','S'), ...]
