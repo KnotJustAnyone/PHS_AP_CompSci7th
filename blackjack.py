@@ -77,7 +77,6 @@ class Dealer: #dealer properties
         #is it just self.deck = deck?
         self.players = players #taking players
         self.dealerhand = [] #dealer's hand of cards
-        self.pot = 0 #money in the pot
 
     def deal1(self): #first deal for all players
         for player in self.players:
@@ -172,5 +171,6 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
+
 
 
