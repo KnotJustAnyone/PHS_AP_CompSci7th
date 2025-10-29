@@ -44,42 +44,40 @@ class Player: #player properties
         return total
 
     def splitting(self):
-        for player in players:
-            if len(self.hand) == 2 and self.hand[0][1] == self.hand[1][1]:
-                while True:
-                    ifsplit = input(f"Would {self.name} like to split your hand? (y or n)? ").strip().lower()
-                    if ifsplit in ("y", "n"):
-                        break
-                    print("y or n please")
-                if ifsplit == "y":
-                    splitcard = self.hand.pop() 
-                    self.newcard(1)  
-                    splitplayer = Player(f"{self.name} Split", self.money)
-                    splitplayer.hand = [splitcard]
-                    splitplayer.bet = self.bet
-                    self.money -= self.bet
-                    splitplayer.newcard(1)
-                    players.append(splitplayer)
-                    print(f"{self.name} has 2 hands.")
-                    return True
-            return None
+        if len(self.hand) == 2 and self.hand[0][1] == self.hand[1][1]:
+            while True:
+                ifsplit = input(f"Would {self.name} like to split your hand? (y or n)? ").strip().lower()
+                if ifsplit in ("y", "n"):
+                    break
+                print("y or n please")
+            if ifsplit == "y":
+                splitcard = self.hand.pop() 
+                self.newcard(1)  
+                splitplayer = Player(f"{self.name} Split", self.money)
+                splitplayer.hand = [splitcard]
+                splitplayer.bet = self.bet
+                self.money -= self.bet
+                splitplayer.newcard(1)
+                players.append(splitplayer)
+                print(f"{self.name} has 2 hands.")
+                return True
+        return None
 
     def doubledown(self):
         currenttot = 0
-        for player in players:
-            for i in self.hand:
-                currenttot += i
-            if currenttot == 9 or currenttot == 10 or currenttot == 11:
-                while True:
-                    ifdouble = input(f"Would {self.name} like to double down? (y or n)? ").strip().lower()
-                    if ifdouble in ("y", "n"):
-                        break
-                    print("y or n please")
-                if ifdouble == "y":
-                    self.newcard(1)
-                    self.bet = self.bet * 2
-                    return True
-            return None
+        for i in self.hand:
+            currenttot += i
+        if currenttot == 9 or currenttot == 10 or currenttot == 11:
+            while True:
+                ifdouble = input(f"Would {self.name} like to double down? (y or n)? ").strip().lower()
+                if ifdouble in ("y", "n"):
+                    break
+                print("y or n please")
+            if ifdouble == "y":
+                self.newcard(1)
+                self.bet = self.bet * 2
+                return True
+        return None
 
                 
     
@@ -159,8 +157,9 @@ def test_hand_total():
 
 def splitcheck():
     print("type y to actually test")
-    dealer = Dealer()
+    dealer = Dealer(players)
     player = Player("tester")
+    players.append(player)
     player.hand = ["h2", "d2"]
     player.splitting()
     print('If "tester has 2 hands." is printed, it should be good. \nPrinting hands now.')
@@ -170,13 +169,12 @@ def splitcheck():
 
 def doubledowncheck():
     print("type y to actually test")
-    dealer = Dealer()
+    dealer = Dealer(players)
     player = Player("tester")
+    players.append(player)
     player.hand = ["h5","h6"]
     player.bet = 5
     print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
     player.doubledown()
     print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
     print("New hand should have an extra card, net bet should be double the bet.")
-
-
