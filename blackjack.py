@@ -156,8 +156,3 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
-
-
-
-
-
