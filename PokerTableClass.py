@@ -26,7 +26,7 @@ class poker_table:
 
     from collections import Counter
 
-    def evaluate_hand(hand_str):
+    def evaluate_hand(self, hand_str):
         # Parse hand: e.g. "AS KS QS JS TS" -> [('A','S'), ('K','S'), ...]
         cards = hand_str.split()
         ranks = [c[0] for c in cards]
@@ -129,6 +129,7 @@ def test_best_hand():
     print(f"Identifies three of a kind beats pair: {table.best_hand(hands[4]) > table.best_hand(hands[6])}")
     print(f"Identifies better three of a kind: {table.best_hand(hands[4]) < table.best_hand(hands[9])}")
     print(f"Identifies four of a kind beats three of a kind: {table.best_hand(hands[8]) > table.best_hand(hands[9])}")
+
 
 
 
