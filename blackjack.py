@@ -4,21 +4,15 @@ countdown = 10
 from deck_of_cards import Deck
 players = [] #players
 
-class Card: #card properties
-    def __init__(self,suit,rank,value): #creating card
-        self.suit = suit #suit
-        self.rank = rank #rank
-        self.value = value #value
-
-    def card_value(card): #handle 2-card code to get the value
-        if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
-            return 10
-        elif card[1] == "1":
-            return 11
-        elif card[1] in [str(n) for n in range(2,10)]:
-            return int(card[1])
-        else:
-            raise ValueError("Value must be a valid card code. Make sure your card rank is a single digit, or 'j', 'q', or 'k'.")
+def card_value(card): #handle 2-card code to get the value
+    if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
+        return 10
+    elif card[1] == "1":
+        return 11
+    elif card[1] in [str(n) for n in range(2,10)]:
+        return int(card[1])
+    else:
+        raise ValueError("Value must be a valid card code. Make sure your card rank is a single digit, or 'j', 'q', or 'k'.")
 
 # Start deck, will need to fix to have value
 deck = Deck(False, True, True, 6)
@@ -61,6 +55,8 @@ class Player: #player properties
                 self.newcard(1)  
                 splitplayer = Player(f"{self.name} Split", self.money)
                 splitplayer.hand = [splitcard]
+                splitplayer.bet = self.bet
+                self.money -= self.bet
                 splitplayer.newcard(1)
                 players.append(splitplayer)
                 print(f"{self.name} has 2 hands.")
@@ -75,20 +71,12 @@ class Dealer: #dealer properties
         #is it just self.deck = deck?
         self.players = players #taking players
         self.dealerhand = [] #dealer's hand of cards
-        self.pot = 0 #money in the pot
 
     def deal1(self): #first deal for all players
         for player in self.players:
             player.newcard(2)
-            print(f"Player {player.name} cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
+            print(f"{player.name}'s cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
         self.dealerhand = self.deck.deal(2)
-        for i in range(countdown, 0, -1):
-            print(f"\r\033[4mWrite these cards down, they will be deleted in {i}\033[0m{' ' * 10}", end="", flush=True)
-            time.sleep(1)
-        print("\033[F\033[K\033[E\033[K", end="", flush=True)
-        # F = move cursor up 1 line
-        # K = clear to end of line
-        # E = move cursor down 1 line (next line)
 
     def dealershow(self): #dealer shows one card
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
