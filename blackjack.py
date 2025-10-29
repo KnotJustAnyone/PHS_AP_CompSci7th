@@ -156,3 +156,32 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
+
+def test_deal1():
+    # Set up test players
+    numberOfPlayers = 3
+    players = [Player('testplr' + str(i)) for i in range(3)]
+    oldPlayerHandLength = [len(player.hand) for player in players]
+    # Set up dealer
+    dealer = Dealer(players)
+    # Test deal 1
+    try:
+        dealer.deal1()
+    except Exception as err:
+        print(f"ERROR#########\nUnexpected error occurred! {err}")
+        return
+
+    errorOccurred = False
+    for index,player in enumerate(players):
+        # Each player should have 2 more cards
+        if len(player.hand) - oldPlayerHandLength[index] != 2:
+            errorOccurred = True
+            print(f"ERROR ###########\ndealer.deal1() dealt {len(player.hand) - oldPlayerHandLength[index]} cards, expected 2")
+            print(f"Extra info:\nDealer dealt {player.hand} to {player}")
+        try:
+            results = [card_value(card) for card in player.hand]
+        except ValueError:
+            errorOccurred = True
+            print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
+    if not errorOccurred:
+        print("dealer.deal1 passed all tests")
