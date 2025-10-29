@@ -65,7 +65,6 @@ class Player: #player properties
                 self.money -= self.bet
                 splitplayer.newcard(1)
                 players.append(splitplayer)
-                self.players.append(splitplayer) #in case
                 print(f"{self.name} has 2 hands.")
                 return True
         return False
@@ -173,4 +172,5 @@ def splitcheck():
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
+
 
