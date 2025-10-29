@@ -1,5 +1,20 @@
 #Texas Hold Em Specific
 from deck_of_cards import Deck
+
+class Player: #player properties
+    def __init__(self,name,money=1500): #creating player, give money
+        self.name = name #player name, may not use because they'll see each other's cards?
+        self.hand = [] #hand of cards
+        self.money = money #money amount
+        self.bet #Money in pot
+
+    def newcard(self, count): #putting card in hand
+        self.hand += deck.deal(count)
+        
+    def resethand(self): #reset hand
+        self.hand = []
+
+
 class poker_table:
 
     hand_values = {} #A dictionary identifying the name of numerically ordered hands
@@ -129,6 +144,7 @@ def test_best_hand():
     print(f"Identifies three of a kind beats pair: {table.best_hand(hands[4]) > table.best_hand(hands[6])}")
     print(f"Identifies better three of a kind: {table.best_hand(hands[4]) < table.best_hand(hands[9])}")
     print(f"Identifies four of a kind beats three of a kind: {table.best_hand(hands[8]) > table.best_hand(hands[9])}")
+
 
 
 
