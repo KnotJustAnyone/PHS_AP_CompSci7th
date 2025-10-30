@@ -14,7 +14,15 @@ class poker_table:
         self.button_player = None
 
     def deal_hands(self): #Gives each player their initial two pocket cards
-        return None
+        for player in self.players:
+        # Ensure each player has a hand attribute
+            if not hasattr(player, "hand"):
+                player.hand = []
+
+        # Deal 2 cards from the deck to each player
+            for _ in range(2):
+                card = self.deck.deal_card()  # assumes Deck has a deal_card() method
+                player.hand.append(card)
 
     def deal_table(self): #Adds cards to the table as needed
         return None
