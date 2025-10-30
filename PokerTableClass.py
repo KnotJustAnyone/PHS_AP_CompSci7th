@@ -1,6 +1,7 @@
 #Texas Hold Em Specific
 from deck_of_cards import Deck
 from collections import Counter
+from itertools import combinations
 
 class poker_table:
     def __init__(self):
@@ -20,64 +21,61 @@ class poker_table:
 
     #Identifies the best hand which can be made with the set of cards
     def best_hand(self,cards):
-from itertools import combinations
-from collections import Counter
 
-def hand_score(hand):
     # rank mapping (0 = 10, 1 = Ace)
-    rank_map = {'2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8,
-                '9':9, '0':10, 'j':11, 'q':12, 'k':13, '1':14}
-    
-    best_score = -1
-    
-    # Check all 5-card combinations
-    for combo in combinations(hand, 5):
-        suits = [c[0] for c in combo]
-        ranks = [c[1] for c in combo]
-        values = sorted([rank_map[r] for r in ranks])
+        rank_map = {'2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8,
+                    '9':9, '0':10, 'j':11, 'q':12, 'k':13, '1':14}
         
-        # Handle Ace-low straight
-        is_ace_low_straight = values == [2, 3, 4, 5, 14]
-        if is_ace_low_straight:
-            values = [1, 2, 3, 4, 5]
+        best_score = -1
         
-        counts = Counter(values)
-        count_values = sorted(counts.values(), reverse=True)
+        # Check all 5-card combinations
+        for combo in combinations(hand, 5):
+            suits = [c[0] for c in combo]
+            ranks = [c[1] for c in combo]
+            values = sorted([rank_map[r] for r in ranks])
+            
+            # Handle Ace-low straight
+            is_ace_low_straight = values == [2, 3, 4, 5, 14]
+            if is_ace_low_straight:
+                values = [1, 2, 3, 4, 5]
+            
+            counts = Counter(values)
+            count_values = sorted(counts.values(), reverse=True)
+            
+            is_flush = len(set(suits)) == 1
+            is_straight = all(values[i] - values[i-1] == 1 for i in range(1, 5))
+            
+            # Determine hand rank
+            if is_flush and is_straight and max(values) == 14:
+                rank = 9  # Royal Flush
+            elif is_flush and is_straight:
+                rank = 8  # Straight Flush
+            elif count_values == [4, 1]:
+                rank = 7  # Four of a Kind
+            elif count_values == [3, 2]:
+                rank = 6  # Full House
+            elif is_flush:
+                rank = 5  # Flush
+            elif is_straight:
+                rank = 4  # Straight
+            elif count_values == [3, 1, 1]:
+                rank = 3  # Three of a Kind
+            elif count_values == [2, 2, 1]:
+                rank = 2  # Two Pair
+            elif count_values == [2, 1, 1, 1]:
+                rank = 1  # One Pair
+            else:
+                rank = 0  # High Card
+            
+            # Sort values by (frequency, then rank)
+            sorted_values = sorted(values, key=lambda x: (counts[x], x), reverse=True)
+            tiebreaker = sum(v * (15**(4-i)) for i, v in enumerate(sorted_values))
+            score = rank * (15**5) + tiebreaker
+            
+            if score > best_score:
+                best_score = score
         
-        is_flush = len(set(suits)) == 1
-        is_straight = all(values[i] - values[i-1] == 1 for i in range(1, 5))
-        
-        # Determine hand rank
-        if is_flush and is_straight and max(values) == 14:
-            rank = 9  # Royal Flush
-        elif is_flush and is_straight:
-            rank = 8  # Straight Flush
-        elif count_values == [4, 1]:
-            rank = 7  # Four of a Kind
-        elif count_values == [3, 2]:
-            rank = 6  # Full House
-        elif is_flush:
-            rank = 5  # Flush
-        elif is_straight:
-            rank = 4  # Straight
-        elif count_values == [3, 1, 1]:
-            rank = 3  # Three of a Kind
-        elif count_values == [2, 2, 1]:
-            rank = 2  # Two Pair
-        elif count_values == [2, 1, 1, 1]:
-            rank = 1  # One Pair
-        else:
-            rank = 0  # High Card
-        
-        # Sort values by (frequency, then rank)
-        sorted_values = sorted(values, key=lambda x: (counts[x], x), reverse=True)
-        tiebreaker = sum(v * (15**(4-i)) for i, v in enumerate(sorted_values))
-        score = rank * (15**5) + tiebreaker
-        
-        if score > best_score:
-            best_score = score
-    
-    return best_score
+        return best_score
         
 
     def evaluate_hand(hand_str):
@@ -201,4 +199,5 @@ def test_best_hand():
     print(f"Identifies straight flush beats four of a kind: {table.best_hand(hands[10]) < table.best_hand(hands[-3])}")
     print(f"Identifies 6-high straight beats Ace-high straight: {table.best_hand(hands[-3]) < table.best_hand(hands[-4])}")
     print(f"Identifies royal flush beats generic straight flush: {table.best_hand(hands[-4]) < table.best_hand(hands[-2])}")
+
 
