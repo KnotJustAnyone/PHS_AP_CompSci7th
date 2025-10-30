@@ -86,3 +86,8 @@ while True:
         print_maze()
         print("You reached the goal! You win!")
         break
+
+#Add color
+from colorama import Fore, Style
+print(Fore.GREEN + "P" + Style.RESET_ALL)
+
