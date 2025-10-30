@@ -102,7 +102,11 @@ class Dealer: #dealer properties
         pass
 
     def dealerturn(self): #dealer play, if under 17, will play, if not, will stand
-        pass
+        while self.dealer_value() < 17:
+            new_cards = self.deck.deal(1)
+            self.dealerhand += new_cards
+            print(f"Dealer hits: {new_cards}, hand now: {self.dealerhand}")
+        print(f"Dealer stands with: {self.dealerhand}")
 
     def dealer_value(self): #dealer total value, will handle aces
         pass
@@ -208,3 +212,4 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
