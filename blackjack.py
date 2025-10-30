@@ -4,21 +4,15 @@ countdown = 10
 from deck_of_cards import Deck
 players = [] #players
 
-class Card: #card properties
-    def __init__(self,suit,rank,value): #creating card
-        self.suit = suit #suit
-        self.rank = rank #rank
-        self.value = value #value
-
-    def card_value(card): #handle 2-card code to get the value
-        if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
-            return 10
-        elif card[1] == "1":
-            return 11
-        elif card[1] in [str(n) for n in range(2,10)]:
-            return int(card[1])
-        else:
-            raise ValueError("Value must be a valid card code. Make sure your card rank is a single digit, or 'j', 'q', or 'k'.")
+def card_value(card): #handle 2-card code to get the value
+    if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
+        return 10
+    elif card[1] == "1":
+        return 11
+    elif card[1] in [str(n) for n in range(2,10)]:
+        return int(card[1])
+    else:
+        raise ValueError("Value must be a valid card code. Make sure your card rank is a single digit, or 'j', 'q', or 'k'.")
 
 # Start deck, will need to fix to have value
 deck = Deck(False, True, True, 6)
@@ -61,12 +55,31 @@ class Player: #player properties
                 self.newcard(1)  
                 splitplayer = Player(f"{self.name} Split", self.money)
                 splitplayer.hand = [splitcard]
+                splitplayer.bet = self.bet
+                self.money -= self.bet
                 splitplayer.newcard(1)
                 players.append(splitplayer)
                 print(f"{self.name} has 2 hands.")
                 return True
-        return False
+        return None
 
+    def doubledown(self):
+        currenttot = 0
+        if len(self.hand) == 2:
+            for i in self.hand:
+                currenttot += card_value(i)
+            if currenttot == 9 or currenttot == 10 or currenttot == 11:
+                while True:
+                    ifdouble = input(f"Would {self.name} like to double down? (y or n)? ").strip().lower()
+                    if ifdouble in ("y", "n"):
+                        break
+                    print("y or n please")
+                if ifdouble == "y":
+                    self.newcard(1)
+                    self.bet = self.bet * 2
+                    return True
+            return None
+        return None
                 
     
 class Dealer: #dealer properties
@@ -75,20 +88,12 @@ class Dealer: #dealer properties
         #is it just self.deck = deck?
         self.players = players #taking players
         self.dealerhand = [] #dealer's hand of cards
-        self.pot = 0 #money in the pot
 
     def deal1(self): #first deal for all players
         for player in self.players:
             player.newcard(2)
-            print(f"Player {player.name} cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
+            print(f"{player.name}'s cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
         self.dealerhand = self.deck.deal(2)
-        for i in range(countdown, 0, -1):
-            print(f"\r\033[4mWrite these cards down, they will be deleted in {i}\033[0m{' ' * 10}", end="", flush=True)
-            time.sleep(1)
-        print("\033[F\033[K\033[E\033[K", end="", flush=True)
-        # F = move cursor up 1 line
-        # K = clear to end of line
-        # E = move cursor down 1 line (next line)
 
     def dealershow(self): #dealer shows one card
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
@@ -150,21 +155,56 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
-    
-def test_card_deletion():
-    playa = Player("testname")
-    players = [playa]
-    deala = Dealer(players)
-    deala.deal1()
-    print("If cards or countdown are not gone, this did not work. If so, yay...")
 
 def splitcheck():
     print("type y to actually test")
-    dealer = Dealer()
+    dealer = Dealer(players)
     player = Player("tester")
+    players.append(player)
     player.hand = ["h2", "d2"]
     player.splitting()
     print('If "tester has 2 hands." is printed, it should be good. \nPrinting hands now.')
     for playa in players:
         print(f"Player {playa}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
+
+def doubledowncheck():
+    print("type y to actually test")
+    dealer = Dealer(players)
+    player = Player("tester")
+    players.append(player)
+    player.hand = ["h5","h6"]
+    player.bet = 5
+    print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
+    player.doubledown()
+    print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
+    print("New hand should have an extra card, net bet should be double the bet.")
+    
+def test_deal1():
+    # Set up test players
+    numberOfPlayers = 3
+    players = [Player('testplr' + str(i)) for i in range(3)]
+    oldPlayerHandLength = [len(player.hand) for player in players]
+    # Set up dealer
+    dealer = Dealer(players)
+    # Test deal 1
+    try:
+        dealer.deal1()
+    except Exception as err:
+        print(f"ERROR#########\nUnexpected error occurred! {err}")
+        return
+
+    errorOccurred = False
+    for index,player in enumerate(players):
+        # Each player should have 2 more cards
+        if len(player.hand) - oldPlayerHandLength[index] != 2:
+            errorOccurred = True
+            print(f"ERROR ###########\ndealer.deal1() dealt {len(player.hand) - oldPlayerHandLength[index]} cards, expected 2")
+            print(f"Extra info:\nDealer dealt {player.hand} to {player}")
+        try:
+            results = [card_value(card) for card in player.hand]
+        except ValueError:
+            errorOccurred = True
+            print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
+    if not errorOccurred:
+        print("dealer.deal1 passed all tests")
