@@ -128,11 +128,18 @@ def test_best_hand():
         ['c6','c2','c9','h3','s4','d7','s8'], #9 high
         ['d3','c3','h3','s4','s6','dk','sq'], #Three of 3s
         ['d3','c3','h4','h8','s0','d1','s9'], #pair of 3s
-        ['cj','d3','dj'], #pair of jacks
-        ['ck','d5','h2'], #king high
+        ['cj','d3','dj','da','d6','hq','s2'], #pair of jacks
+        ['ck','d5','h2','h4','d0','sq','d8'], #king high
         ['c7','d7','h7','s7','s2','sk','s6'], #four of a kind, 7s, jack kicker
-        ['c7','d7','h7','ck'], #three 7s
-        ['c7','d7','h7','s7','s2','s1','s6']] #four of a kind, 7s, ace kicker
+        ['c7','d7','h7','ck','hq','d2','h5'], #three 7s
+        ['c7','d7','h7','s7','s2','s1','s6'], #four of a kind, 7s, ace kicker
+        ['c5','c1','c0','ck','d5','c2','h5'], #King high flush
+        ['c6','d7','h2','h8','h9','ck','s0'], #10 high straight
+        ['c2','c3','c4','d9','c5','c6','h2'], #6-high straight flush
+        ['c1','c2','c3','c4','c5','d0','s8'], #5-high straight flush
+        ['s1','sk','sq','s0','h8','sj','c6'], # Royal flush
+    ]
+    
         
     print(f"Identifies high card v1: {table.best_hand(hands[0]) < table.best_hand(hands[2])}")
     print(f"Identifies high card v2: {table.best_hand(hands[0]) > table.best_hand(hands[3])}")
@@ -149,3 +156,4 @@ def test_best_hand():
     print(f"Identifies better three of a kind: {table.best_hand(hands[4]) < table.best_hand(hands[9])}")
     print(f"Identifies four of a kind beats three of a kind: {table.best_hand(hands[8]) > table.best_hand(hands[9])}")
     print(f"Identifies kickers: {table.best_hand(hands[10]) < table.best_hand(hands[8])}")
+
