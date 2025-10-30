@@ -201,4 +201,3 @@ def test_best_hand():
     print(f"Identifies royal flush beats generic straight flush: {table.best_hand(hands[-4]) < table.best_hand(hands[-2])}")
 
 
-test_best_hand()
