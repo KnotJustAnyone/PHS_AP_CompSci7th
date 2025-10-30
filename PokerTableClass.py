@@ -13,6 +13,48 @@ class poker_table:
         self.current_player = None
         self.button_player = None
 
+    def poker_table_init_test():
+        table = poker_table(["John", "Abigail", "Steve"], 10, [10,5,5], 
+                            (False, True, True), [h2,s7,d5], "John", "Abigail")
+
+        if table.players = ["John", "Abigail", "Steve"]
+            print("test passed")
+        else: 
+            print("test failed")
+        
+        if table.pot = 10
+            print("test passed")
+        else: 
+            print("test failed")
+        
+        if table.bets = [10, 5, 5]
+            print("test passed")
+        else: 
+            print("test failed")
+        
+        if table.deck = [False, True, True]
+            print("test passed")
+        else: 
+            print("test failed")
+        
+        if table.table_cards = [h2, s7, d5]
+            print("test passed")
+        else: 
+            print("test failed")
+            
+        if table.current_player = "John"
+            print("test passed")
+        else: 
+            print("test failed")
+            
+        if table.button_player = "Abigail"
+            print("test passed")
+        else: 
+            print("test failed")
+
+    
+                               
+
     def deal_hands(self): #Gives each player their initial two pocket cards
         return None
 
@@ -199,5 +241,6 @@ def test_best_hand():
     print(f"Identifies straight flush beats four of a kind: {table.best_hand(hands[10]) < table.best_hand(hands[-3])}")
     print(f"Identifies 6-high straight beats Ace-high straight: {table.best_hand(hands[-3]) < table.best_hand(hands[-4])}")
     print(f"Identifies royal flush beats generic straight flush: {table.best_hand(hands[-4]) < table.best_hand(hands[-2])}")
+
 
 
