@@ -179,3 +179,32 @@ def doubledowncheck():
     player.doubledown()
     print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
     print("New hand should have an extra card, net bet should be double the bet.")
+    
+def test_deal1():
+    # Set up test players
+    numberOfPlayers = 3
+    players = [Player('testplr' + str(i)) for i in range(3)]
+    oldPlayerHandLength = [len(player.hand) for player in players]
+    # Set up dealer
+    dealer = Dealer(players)
+    # Test deal 1
+    try:
+        dealer.deal1()
+    except Exception as err:
+        print(f"ERROR#########\nUnexpected error occurred! {err}")
+        return
+
+    errorOccurred = False
+    for index,player in enumerate(players):
+        # Each player should have 2 more cards
+        if len(player.hand) - oldPlayerHandLength[index] != 2:
+            errorOccurred = True
+            print(f"ERROR ###########\ndealer.deal1() dealt {len(player.hand) - oldPlayerHandLength[index]} cards, expected 2")
+            print(f"Extra info:\nDealer dealt {player.hand} to {player}")
+        try:
+            results = [card_value(card) for card in player.hand]
+        except ValueError:
+            errorOccurred = True
+            print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
+    if not errorOccurred:
+        print("dealer.deal1 passed all tests")
