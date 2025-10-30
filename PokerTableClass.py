@@ -138,6 +138,7 @@ def test_best_hand():
         ['c2','c3','c4','d9','c5','c6','h2'], #6-high straight flush
         ['c1','c2','c3','c4','c5','d0','s8'], #5-high straight flush
         ['s1','sk','sq','s0','h8','sj','c6'], # Royal flush
+        ['d3','c3','h3','s4','s6','dq','sq'] # 3s full of queens
     ]
     
         
@@ -156,4 +157,10 @@ def test_best_hand():
     print(f"Identifies better three of a kind: {table.best_hand(hands[4]) < table.best_hand(hands[9])}")
     print(f"Identifies four of a kind beats three of a kind: {table.best_hand(hands[8]) > table.best_hand(hands[9])}")
     print(f"Identifies kickers: {table.best_hand(hands[10]) < table.best_hand(hands[8])}")
-
+    print(f"Identifies flush beats straight: {table.best_hand(hands[12]) < table.best_hand(hands[11])}")
+    print(f"Identifies full house beats flush: {table.best_hand(hands[11]) < table.best_hand(hands[16])}")
+    print(f"Identifies four of a kind beats full house: {table.best_hand(hands[10]) < table.best_hand(hands[-1])}")
+    print(f"Identifies straight flush beats flush: {table.best_hand(hands[11]) < table.best_hand(hands[-3])}")
+    print(f"Identifies straight flush beats four of a kind: {table.best_hand(hands[10]) < table.best_hand(hands[-3])}")
+    print(f"Identifies 6-high straight beats Ace-high straight: {table.best_hand(hands[-3]) < table.best_hand(hands[-4])}")
+    print(f"Identifies royal flush beats generic straight flush: {table.best_hand(hands[-4]) < table.best_hand(hands[-2])}")
