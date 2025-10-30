@@ -61,8 +61,25 @@ class Player: #player properties
                 players.append(splitplayer)
                 print(f"{self.name} has 2 hands.")
                 return True
-        return False
+        return None
 
+    def doubledown(self):
+        currenttot = 0
+        if len(self.hand) == 2:
+            for i in self.hand:
+                currenttot += card_value(i)
+            if currenttot == 9 or currenttot == 10 or currenttot == 11:
+                while True:
+                    ifdouble = input(f"Would {self.name} like to double down? (y or n)? ").strip().lower()
+                    if ifdouble in ("y", "n"):
+                        break
+                    print("y or n please")
+                if ifdouble == "y":
+                    self.newcard(1)
+                    self.bet = self.bet * 2
+                    return True
+            return None
+        return None
                 
     
 class Dealer: #dealer properties
@@ -138,18 +155,12 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
-    
-def test_card_deletion():
-    playa = Player("testname")
-    players = [playa]
-    deala = Dealer(players)
-    deala.deal1()
-    print("If cards or countdown are not gone, this did not work. If so, yay...")
 
 def splitcheck():
     print("type y to actually test")
-    dealer = Dealer()
+    dealer = Dealer(players)
     player = Player("tester")
+    players.append(player)
     player.hand = ["h2", "d2"]
     player.splitting()
     print('If "tester has 2 hands." is printed, it should be good. \nPrinting hands now.')
@@ -157,6 +168,18 @@ def splitcheck():
         print(f"Player {playa}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
 
+def doubledowncheck():
+    print("type y to actually test")
+    dealer = Dealer(players)
+    player = Player("tester")
+    players.append(player)
+    player.hand = ["h5","h6"]
+    player.bet = 5
+    print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
+    player.doubledown()
+    print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
+    print("New hand should have an extra card, net bet should be double the bet.")
+    
 def test_deal1():
     # Set up test players
     numberOfPlayers = 3
