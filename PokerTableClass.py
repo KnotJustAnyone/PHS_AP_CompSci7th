@@ -22,14 +22,14 @@ class poker_table:
     #Identifies the best hand which can be made with the set of cards
     def best_hand(self,cards):
 
-    # rank mapping (0 = 10, 1 = Ace)
-        rank_map = {'2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8,
-                    '9':9, '0':10, 'j':11, 'q':12, 'k':13, '1':14}
+        # rank mapping (0 = 10, 1 = Ace)
+        rank_map = {'0':10, '1':14, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8,
+                    '9':9, 'j':11, 'q':12, 'k':13}
         
         best_score = -1
         
         # Check all 5-card combinations
-        for combo in combinations(hand, 5):
+        for combo in combinations(cards, 5):
             suits = [c[0] for c in combo]
             ranks = [c[1] for c in combo]
             values = sorted([rank_map[r] for r in ranks])
@@ -157,13 +157,13 @@ class poker_table:
 def test_best_hand():
     table = poker_table()
     hands = [
-        ['c8',"c4","h3","h7","c2","c0","h2"], #Jack high
+        ['c8',"c4","h3","h7","c2","c0","hj"], #Jack high
         ['c9',"c2","h1","s4","s6",'d9',"dk"], #pair of 9s
         ['c0',"h3","s4","c7","h8",'c6',"s2"], #10 high
         ['c6','c2','c9','h3','s4','d7','s8'], #9 high
         ['d3','c3','h3','s4','s6','dk','sq'], #Three of 3s
         ['d3','c3','h4','h8','s0','d1','s9'], #pair of 3s
-        ['cj','d3','dj','da','d6','hq','s2'], #pair of jacks
+        ['cj','d3','dj','s1','d6','hq','s2'], #pair of jacks
         ['ck','d5','h2','h4','d0','sq','d8'], #king high
         ['c7','d7','h7','s7','s2','sk','s6'], #four of a kind, 7s, jack kicker
         ['c7','d7','h7','ck','hq','d2','h5'], #three 7s
@@ -172,12 +172,12 @@ def test_best_hand():
         ['c6','d7','h2','h8','h9','ck','s0'], #10 high straight
         ['c2','c3','c4','d9','c5','c6','h2'], #6-high straight flush
         ['c1','c2','c3','c4','c5','d0','s8'], #5-high straight flush
-        ['s1','sk','sq','s0','h8','sj','c6'], # Royal flush
+        ['s1','sk','sq','s0','h8','sj','c6'], #Royal flush
         ['d3','c3','h3','s4','s6','dq','sq'] # 3s full of queens
     ]
     
         
-    print(f"Identifies high card v1: {table.best_hand(hands[0]) < table.best_hand(hands[2])}")
+    print(f"Identifies high card v1: {table.best_hand(hands[0]) > table.best_hand(hands[2])}")
     print(f"Identifies high card v2: {table.best_hand(hands[0]) > table.best_hand(hands[3])}")
     print(f"Identifies high card v2: {table.best_hand(hands[2]) > table.best_hand(hands[3])}")
     print(f"Identifies high card v3: {table.best_hand(hands[0]) < table.best_hand(hands[7])}")
@@ -191,13 +191,14 @@ def test_best_hand():
     print(f"Identifies three of a kind beats pair: {table.best_hand(hands[4]) > table.best_hand(hands[6])}")
     print(f"Identifies better three of a kind: {table.best_hand(hands[4]) < table.best_hand(hands[9])}")
     print(f"Identifies four of a kind beats three of a kind: {table.best_hand(hands[8]) > table.best_hand(hands[9])}")
-    print(f"Identifies kickers: {table.best_hand(hands[10]) < table.best_hand(hands[8])}")
+    print(f"Identifies kickers: {table.best_hand(hands[10]) > table.best_hand(hands[8])}")
     print(f"Identifies flush beats straight: {table.best_hand(hands[12]) < table.best_hand(hands[11])}")
     print(f"Identifies full house beats flush: {table.best_hand(hands[11]) < table.best_hand(hands[16])}")
-    print(f"Identifies four of a kind beats full house: {table.best_hand(hands[10]) < table.best_hand(hands[-1])}")
+    print(f"Identifies four of a kind beats full house: {table.best_hand(hands[10]) > table.best_hand(hands[-1])}")
     print(f"Identifies straight flush beats flush: {table.best_hand(hands[11]) < table.best_hand(hands[-3])}")
     print(f"Identifies straight flush beats four of a kind: {table.best_hand(hands[10]) < table.best_hand(hands[-3])}")
     print(f"Identifies 6-high straight beats Ace-high straight: {table.best_hand(hands[-3]) < table.best_hand(hands[-4])}")
     print(f"Identifies royal flush beats generic straight flush: {table.best_hand(hands[-4]) < table.best_hand(hands[-2])}")
 
 
+test_best_hand()
