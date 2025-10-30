@@ -97,7 +97,7 @@ class Deck:
         if cards >= len(self.deck_current):
             cards = len(self.deck_current)
 
-        top_cards = list(deck_current[:cards])
+        top_cards = list(self.deck_current[:cards])
 
         if self.codes:
             output = top_cards
@@ -124,7 +124,7 @@ def test_peek(test_numb): #0 < Numb < 55, number of tests
         if i < 1:
             continue
         deck.shuffle()
-        if deck.[:i] != deck.peek(i):
+        if deck.deck_current[:i] != deck.peek(i):
             print(f"Test failed at peek({i})")
         else:
             print(f"Test passed at peek({i})")
