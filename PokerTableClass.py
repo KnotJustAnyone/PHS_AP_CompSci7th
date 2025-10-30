@@ -3,6 +3,19 @@ from deck_of_cards import Deck
 from collections import Counter
 from itertools import combinations
 
+class Player: #player properties
+    def __init__(self,name,money=1500): #creating player, give money
+        self.name = name #player name, may not use because they'll see each other's cards?
+        self.hand = [] #hand of cards
+        self.money = money #money amount
+        self.bet #Money in pot
+
+    def newcard(self, count): #putting card in hand
+        self.hand += deck.deal(count)
+        
+    def resethand(self): #reset hand
+        self.hand = []
+
 class poker_table:
     def __init__(self):
         self.players = [] #List of players, need a player class
@@ -199,5 +212,6 @@ def test_best_hand():
     print(f"Identifies straight flush beats four of a kind: {table.best_hand(hands[10]) < table.best_hand(hands[-3])}")
     print(f"Identifies 6-high straight beats Ace-high straight: {table.best_hand(hands[-3]) < table.best_hand(hands[-4])}")
     print(f"Identifies royal flush beats generic straight flush: {table.best_hand(hands[-4]) < table.best_hand(hands[-2])}")
+
 
 
