@@ -162,9 +162,46 @@ class poker_table:
         return None
 
     #Asks the player what they want to bet
-    def player_bet(self,player,game_state):
-        bet = 0
-        return bet #A number for the size of the bet
+def player_bet(self, player, game_state):
+    pot_size = game_state.get("pot_size", 0)
+    current_bet = game_state.get("current_bet", 0)
+    player_chips = game_state.get("player_chips", 1000)
+
+    print(f"\n--- {player}'s turn ---")
+    print(f"Pot size: {pot_size}")
+    print(f"Current bet to call: {current_bet}")
+    print(f"You have {player_chips} chips.")
+
+    while True:
+        try:
+            # Ask user for their action
+            action = input("Do you want to fold, call, or raise? ").strip().lower()
+
+            if action == "fold":
+                print(f"{player} folds.")
+                return 0  
+                # 0 means they folded
+
+            elif action == "call":
+                print(f"{player} calls {current_bet}.")
+                return current_bet
+
+            elif action == "raise":
+                raise_amount = float(input("Enter your raise amount: "))
+                total_bet = current_bet + raise_amount
+
+                if total_bet > player_chips:
+                    print("You don't have enough chips for that bet. Try again.")
+                    continue
+
+                print(f"{player} raises to {total_bet}.")
+                return total_bet
+
+            else:
+                print("Invalid action. Please type 'fold', 'call', or 'raise'.")
+
+        except ValueError:
+            print("Please enter a valid number for your raise.")
 
 #Tests ---------------------------------------------
 def test_best_hand():
@@ -212,6 +249,7 @@ def test_best_hand():
     print(f"Identifies straight flush beats four of a kind: {table.best_hand(hands[10]) < table.best_hand(hands[-3])}")
     print(f"Identifies 6-high straight beats Ace-high straight: {table.best_hand(hands[-3]) < table.best_hand(hands[-4])}")
     print(f"Identifies royal flush beats generic straight flush: {table.best_hand(hands[-4]) < table.best_hand(hands[-2])}")
+
 
 
 
