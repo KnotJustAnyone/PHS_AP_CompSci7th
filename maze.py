@@ -50,3 +50,19 @@ while True:
         print_maze()
         print("You reached the goal! You win!")
         break
+
+#Move counter
+moves = 0  
+while True:
+    print_maze()
+    move = input("Move (WASD): ").lower()
+    
+    new_x, new_y = player_x, player_y
+    if move == 'w': new_y -= 1
+    elif move == 's': new_y += 1
+    elif move == 'a': new_x -= 1
+    elif move == 'd': new_x += 1
+
+    if maze[new_y][new_x] != '#':  # only count valid moves
+        player_x, player_y = new_x, new_y
+        moves += 1  # increment move counter
