@@ -116,6 +116,20 @@ class Deck:
         self.deck_current = self.deck_full.copy()
         self.deck_dealt.clear()
 
+    def show_discard_pile(self):
+    if not self.deck_dealt:
+        print("No cards have been dealt yet.")
+        return
+
+    if self.codes:
+        output = self.deck_dealt
+    else:
+        output = [self.identify_card(c) for c in self.deck_dealt]
+
+    print("Dealt cards:", output)
+
+
+
 
 # Testing Area ------------------------------------------------------------------------------------------------------------------
 def test_peek(test_numb): #0 < Numb < 55, number of tests
