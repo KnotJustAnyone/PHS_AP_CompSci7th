@@ -50,3 +50,8 @@ while True:
         print_maze()
         print("You reached the goal! You win!")
         break
+
+#Tracks player progress
+import os
+os.system('cls' if os.name=='nt' else 'clear') 
+moves = 0 
