@@ -167,6 +167,19 @@ class poker_table:
         return bet #A number for the size of the bet
 
 #Tests ---------------------------------------------
+def test_remove_player():
+    table = poker_table()
+    player1 = Player("Sophia")
+    player2 = Player("Alvin")
+
+    table.players = [player1, player2]
+
+    table.remove_player(player2)
+
+    assert player2 not in table.players
+    assert player1 in table.players
+    assert len(table.players) == 1
+
 def test_best_hand():
     table = poker_table()
     hands = [
@@ -212,6 +225,7 @@ def test_best_hand():
     print(f"Identifies straight flush beats four of a kind: {table.best_hand(hands[10]) < table.best_hand(hands[-3])}")
     print(f"Identifies 6-high straight beats Ace-high straight: {table.best_hand(hands[-3]) < table.best_hand(hands[-4])}")
     print(f"Identifies royal flush beats generic straight flush: {table.best_hand(hands[-4]) < table.best_hand(hands[-2])}")
+
 
 
 
