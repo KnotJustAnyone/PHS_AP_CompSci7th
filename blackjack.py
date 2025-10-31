@@ -3,6 +3,7 @@ import time #for deleting lines
 countdown = 10
 from deck_of_cards import Deck
 players = [] #players
+round1 = False
 
 def card_value(card): #handle 2-card code to get the value
     if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
@@ -24,6 +25,7 @@ class Player: #player properties
         self.hand = [] #hand of cards
         self.money = money #money amount
         self.bet = 0 #bet amount
+        self.insbet = 0 #insurance bet amount
     
     def newcard(self, count): #putting card in hand
         self.hand += deck.deal(count)
@@ -44,43 +46,78 @@ class Player: #player properties
         return total
 
     def splitting(self):
-        if len(self.hand) == 2 and self.hand[0][1] == self.hand[1][1]:
-            while True:
-                ifsplit = input(f"Would {self.name} like to split your hand? (y or n)? ").strip().lower()
-                if ifsplit in ("y", "n"):
-                    break
-                print("y or n please")
-            if ifsplit == "y":
-                splitcard = self.hand.pop() 
-                self.newcard(1)  
-                splitplayer = Player(f"{self.name} Split", self.money)
-                splitplayer.hand = [splitcard]
-                splitplayer.bet = self.bet
-                self.money -= self.bet
-                splitplayer.newcard(1)
-                players.append(splitplayer)
-                print(f"{self.name} has 2 hands.")
-                return True
-        return None
+        for player in players:
+            if len(player.hand) == 2 and player.hand[0][1] == player.hand[1][1]:
+                while True:
+                    ifsplit = input(f"Would {player.name} like to split your hand? (y or n)? ").strip().lower()
+                    if ifsplit in ("y", "n"):
+                        break
+                    print("y or n please")
+                if ifsplit == "y":
+                    splitcard = player.hand.pop() 
+                    player.newcard(1)  
+                    splitplayer = Player(f"{player.name} Split", player.money)
+                    splitplayer.hand = [splitcard]
+                    splitplayer.bet = player.bet
+                    player.money -= player.bet
+                    splitplayer.newcard(1)
+                    players.append(splitplayer)
+                    print(f"{player.name} has 2 hands.")
+                    return True
+            return None
 
     def doubledown(self):
         currenttot = 0
-        if len(self.hand) == 2:
-            for i in self.hand:
-                currenttot += card_value(i)
-            if currenttot == 9 or currenttot == 10 or currenttot == 11:
+        for player in players:
+            if len(player.hand) == 2:
+                for i in player.hand:
+                    currenttot += card_value(i)
+                if currenttot == 9 or currenttot == 10 or currenttot == 11:
+                    while True:
+                        ifdouble = input(f"Would {player.name} like to double down? (y or n)?").strip().lower()
+                        if ifdouble in ("y", "n"):
+                            break
+                        print("y or n please")
+                    if ifdouble == "y":
+                        player.newcard(1)
+                        player.bet = player.bet * 2
+                        return True
+                return None
+            return None
+
+    def insurance(self, dealer):
+        insuranceT = False
+        dealer = Dealer(players)
+        if card_value(dealer.dealerhand[0]) == 11 and round1 == True:
+            for player in players:
                 while True:
-                    ifdouble = input(f"Would {self.name} like to double down? (y or n)? ").strip().lower()
-                    if ifdouble in ("y", "n"):
+                    ifins = input(f"Would {player.name} like insurance (y or n)?").strip().lower()
+                    if ifins in ("y","n"):
                         break
                     print("y or n please")
-                if ifdouble == "y":
-                    self.newcard(1)
-                    self.bet = self.bet * 2
-                    return True
-            return None
-        return None
-                
+                if ifins == "y":
+                    insuranceT = True
+                    while True:
+                        ins = int(input(f"How much would {player.name} like in the side bet?"))
+                        if ins <= 0.5 * player.bet and ins > 0 and type(ins) == int:
+                            break
+                        print("It must be under half your original bet and higher than 0.")
+                    player.insbet = ins
+                    player.money -= ins
+                    print(f"{player.name} has put ${player.insbet} in the side bet!")
+            if insuranceT == True:
+                insuranceT = False
+                print(f"The dealer reveals his second card as... {dealer.dealerhand[1]}")
+                if card_value(dealer.dealerhand[1]) == 10:
+                    for player in players:
+                        if player.insbet > 0:
+                            print(f"Player makes 2x their side bet, {player.insbet}!")
+                            player.bet += player.insbet * 2
+                            player.insbet = 0
+                else:
+                    print("All insurance bets are lost!")
+                    for player in players:
+                        player.insbet = 0
     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
@@ -94,11 +131,13 @@ class Dealer: #dealer properties
             player.newcard(2)
             print(f"{player.name}'s cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
         self.dealerhand = self.deck.deal(2)
+        round1 = True
 
     def dealershow(self): #dealer shows one card
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
     
     def round(self): #player: hit or stand, if over 21, bust
+        round1 = False
         pass
 
     def dealerturn(self): #dealer play, if under 17, will play, if not, will stand
@@ -212,4 +251,6 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
+
 
