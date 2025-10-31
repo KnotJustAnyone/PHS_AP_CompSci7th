@@ -23,6 +23,8 @@ def print_maze():
                 line += ch
         print(line)
 
+show_help()
+
 while True:
     print_maze()
     move = input("Move (WASD): ").lower()
@@ -50,3 +52,11 @@ while True:
         print_maze()
         print("You reached the goal! You win!")
         break
+
+def show_help():
+    print("\nControls:")
+    print("  W - move up")
+    print("  A - move left")
+    print("  S - move down")
+    print("  D - move right")
+    print("Reach 'G' to win!\n")
