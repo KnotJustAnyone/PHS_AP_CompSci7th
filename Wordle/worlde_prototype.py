@@ -2,14 +2,14 @@
 # Green Team Member: Noah Tsui (Group Leader), Aldo Ortiz
 #Class outline for a Word Guessing Game.
 # Aldo: It includes variables and functions but no actual working code yet.
-
+import random
 class WordGuessingGame:
 
     # Aldo: A list of possible words the game can choose from
     # A list of possible words the game can choose from.
     # This component is needed for the choose_word function to work.
     word_list = []
-    with open('words.py','r',encoding='utf-8') as f:
+    with open('Wordle/words.txt','r',encoding='utf-8') as f:
         for line in f:
             word_list.append(line.strip())
 
@@ -25,9 +25,7 @@ class WordGuessingGame:
         # Noah: Boolean value to track if the game is still active
         self.game_over = False
 
-import random
-
-def choose_word(self):
+    def choose_word(self):
 
         # Picks a random word from the word list and sets it as the secret word.
         # Also sets up the blank display word.
@@ -112,6 +110,7 @@ def choose_word(self):
         return None
 
 # End of WordGuessingGame class
+
 
 
 
