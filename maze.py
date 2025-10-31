@@ -50,3 +50,10 @@ while True:
         print_maze()
         print("You reached the goal! You win!")
         break
+
+# Scoring System
+score = 1000 - (moves * 10)            
+if score < 0: score = 0                  
+print(f"You won in {moves} moves!")      
+print(f"Your score: {score}")
+
