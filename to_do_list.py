@@ -5,8 +5,9 @@ class to_do_list:
         #maybe add class for tasks with self.start day or self.repetition_interval
 
     def add_tasks(self,task_name): #lets user add tasks to list.  
-        return None
-
+        task = (task_name, False, 0)
+        self.list.append(task)
+        print(f"Task '{task_name}' added.")
     def remove_tasks(self,task_name): #lets user remove tasks from list
         return None
 
