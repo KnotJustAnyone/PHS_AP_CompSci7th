@@ -8,7 +8,10 @@ class WordGuessingGame:
     # Aldo: A list of possible words the game can choose from
     # A list of possible words the game can choose from.
     # This component is needed for the choose_word function to work.
-    word_list = ["apple", "banana", "grape", "orange", "melon"]
+    word_list = []
+    with open('words.py','r',encoding='utf-8') as f:
+        for line in f:
+            word_list.append(line.strip())
 
     def __init__(self):
         # Noah:  secret word that the player tries to guess
@@ -109,5 +112,6 @@ def choose_word(self):
         return None
 
 # End of WordGuessingGame class
+
 
 
