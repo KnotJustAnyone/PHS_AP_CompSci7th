@@ -2,12 +2,26 @@ class Sudoku4x4:
     def __init__(self):
         # This is where we make the 4x4 board using a list of lists
         # At the beginning all the cells are 0 (empty)
+        
+        # Initialize a 4x4 Sudoku board (all zeros = empty)
         self.board = [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
             [0, 0, 0, 0],
             [0, 0, 0, 0]
         ]
+        
+        # Optional: keep a copy of the original board for resetting
+        self.original_board = [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
+        ]
+        
+        # Sudoku numbers can be 1–4 for a 4x4 board
+        self.size = 4
+        self.valid_numbers = [1, 2, 3, 4]
 
     def load_puzzle(self, puzzle):
         # Loads a starting puzzle (4x4 grid with numbers and zeros)
