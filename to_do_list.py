@@ -8,7 +8,21 @@ class to_do_list:
         return None
 
     def remove_tasks(self,task_name): #lets user remove tasks from list
-        return None
+        action = input("do you want to add / remove/ or save?")
+
+        if action == "remove":
+            remove_which_task  = input ("Which task do you want to remove? 1 - # (any number from 1 to the largest numbered task)")
+
+            if remove_which_task.isdigit(): #if their response is a number
+                a = int(remove_which_task) - 1 #making it work with the index number
+
+                if 0<= a <= len(self.list):
+                    removing = self.list.pop(a)
+                    print ("Task #" + remove_which_task + "has been removed --" + removing)
+
+            else:
+                print("Please type in a number in the range of the tasklist numbers")
+        
 
     def check_tasks(self,task_name): #checks off completed tasks
         #returns True or False boolean
