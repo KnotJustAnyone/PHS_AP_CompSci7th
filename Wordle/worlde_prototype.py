@@ -3,15 +3,13 @@
 #Class outline for a Word Guessing Game.
 # Aldo: It includes variables and functions but no actual working code yet.
 import random
-class WordGuessingGame:
 
-    # Aldo: A list of possible words the game can choose from
-    # A list of possible words the game can choose from.
-    # This component is needed for the choose_word function to work.
-    word_list = []
-    with open('Wordle/words.txt','r',encoding='utf-8') as f:
-        for line in f:
-            word_list.append(line.strip())
+def get_word():
+    with open("Wordle/words.txt", 'r') as file:
+        lines = file.readlines()
+    return random.choice(lines).strip()
+
+class WordGuessingGame:
 
     def __init__(self):
         # Noah:  secret word that the player tries to guess
@@ -29,7 +27,7 @@ class WordGuessingGame:
 
         # Picks a random word from the word list and sets it as the secret word.
         # Also sets up the blank display word.
-        self.secret_word = random.choice(self.word_list)
+        self.secret_word = get_word()
         self.display_word = "_" * len(self.secret_word)
         print("A secret word has been chosen.")
         return None
@@ -110,6 +108,7 @@ class WordGuessingGame:
         return None
 
 # End of WordGuessingGame class
+
 
 
 
