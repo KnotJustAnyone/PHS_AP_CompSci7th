@@ -121,31 +121,29 @@ class Player: #player properties
     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
-        self.deck = Deck(False, True, True) #taking deck
-        #is it just self.deck = deck?
         self.players = players #taking players
         self.dealerhand = [] #dealer's hand of cards
 
     def deal1(self): #first deal for all players
+        if len(deck.deck_current) < ((len(players) + 1) * 8): # Ensure enough cards in deck to deal
+            deck.shuffle()
         for player in self.players:
             player.newcard(2)
             print(f"{player.name}'s cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
         self.dealerhand = self.deck.deal(2)
-        round1 = True
 
     def dealershow(self): #dealer shows one card
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
     
     def round(self): #player: hit or stand, if over 21, bust
-        round1 = False
         pass
 
     def dealerturn(self): #dealer play, if under 17, will play, if not, will stand
         while self.dealer_value() < 17:
-            new_cards = self.deck.deal(1)
+            new_cards = deck.deal(1)
             self.dealerhand += new_cards
-            print(f"Dealer hits: {new_cards}, hand now: {self.dealerhand}")
-        print(f"Dealer stands with: {self.dealerhand}")
+            print(f"Dealer hits: {deck.identify_card(new_cards)}, hand now: {self.dealer_value()}")
+        print(f"Dealer stands with {self.dealer_value()}")
 
     def dealer_value(self): #dealer total value, will handle aces
         pass
@@ -251,6 +249,7 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
 
