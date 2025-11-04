@@ -23,7 +23,6 @@ class Player: #player properties
         self.hand = [] #hand of cards
         self.money = money #money amount
         self.bet = 0 #bet amount
-        self.insbet = 0 #insurance bet amount
     
     def newcard(self, count): #putting card in hand
         self.hand += deck.deal(count)
@@ -94,26 +93,17 @@ class Player: #player properties
                         break
                     print("y or n please")
                 if ifins == "y":
-                    insuranceT = True
-                    while True:
-                        ins = int(input(f"How much would {player.name} like in the side bet?"))
-                        if ins <= 0.5 * player.bet and ins > 0 and type(ins) == int:
-                            break
-                        print("It must be under half your original bet and higher than 0.")
-                    player.insbet = ins
-                    player.money -= ins
-                    print(f"{player.name} has put ${player.insbet} in the side bet!")
+                    player.insbet = 0.5 * player.bet
+                    player.money -= 0.5 * player.bet
+                    print(f"{player.name} has put ${player.insbet} in as insurance!")
             if insuranceT == True:
                 insuranceT = False
-                print(f"The dealer reveals his second card as... {dealer.dealerhand[1]}")
-                if card_value(dealer.dealerhand[1]) == 10:
+                if card_value(dealer.dealerhand[1]) == 10: # If this is true, the code should terminate all hands immediately
                     for player in players:
-                        if player.insbet > 0:
-                            print(f"Player makes 2x their side bet, {player.insbet}!")
-                            player.bet += player.insbet * 2
-                            player.insbet = 0
+                        player.money += player.insbet * 2
+                        player.insbet = 0
                 else:
-                    print("All insurance bets are lost!")
+                    print("Dealer does NOT have Blackjack, all insurance is lost.") # Round can continue
                     for player in players:
                         player.insbet = 0
     
@@ -247,3 +237,4 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
