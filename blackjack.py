@@ -1,6 +1,4 @@
-import random #for shuffling
-import time #for deleting lines
-countdown = 10
+import random
 from deck_of_cards import Deck
 players = [] #players
 round1 = False
@@ -13,7 +11,7 @@ def card_value(card): #handle 2-card code to get the value
     elif card[1] in [str(n) for n in range(2,10)]:
         return int(card[1])
     else:
-        raise ValueError("Value must be a valid card code. Make sure your card rank is a single digit, or 'j', 'q', or 'k'.")
+        return None
 
 # Start deck, will need to fix to have value
 deck = Deck(False, True, True, 6)
@@ -155,7 +153,7 @@ class Dealer: #dealer properties
 def resethand_checker():
     testclass = Player("test")
     if testclass.hand == []:
-        testclass.hand = [random.randint(0,100000000),1,2,3,4,5,6,7,8,9,"aa"]
+        testclass.hand = [random.randint(0,100000000),1,2.3,3,4,False,6,7,None,"None","aa"]
         print(testclass.hand)
         print("Hand was given 11 values")
     if testclass.hand != []:
@@ -165,16 +163,16 @@ def resethand_checker():
 
 def test_hand_total():
     normalTests = [
-        [[Card('Hearts','8',8)],8],
-        [[Card('Diamonds','Ace',11),Card('Diamonds','Ace',11)],12],
-        [[Card('Diamonds','Ace',11),Card('Hearts','9',9),Card('Hearts','9',9)],19],
-        [[Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11)],18],
-        [[Card('Diamonds','King',10),Card('Spades','Ace',11)],21],
-        [[Card('Diamonds','King',10),Card('Diamonds','King',10),Card('Spades','Ace',11)],21],
+        [["h8"],8],
+        [["d1","d1"],12],
+        [["d1","h9","h9"],19],
+        [["s1","s1","s1","s1","s1","s1","d1","d1"],18],
+        [["dk","d1"],21],
+        [["dk","sk","d1"],21],
     ]
     unexpectedTests = [
         [[],None or 0],
-        [[Card('Awesome','Card','Awesome')],None or 0],
+        [["AHHHHHHHHH"],None or 0],
         [[[[]]],None or 0],
         [[['A'],['B'],['C'],['D']],None or 0],
     ]
@@ -249,7 +247,3 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
-
-
-
-
