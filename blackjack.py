@@ -9,10 +9,10 @@ def getting_players():
             break
         except ValueError:
             print("a number (don't use letters) please")
-            
     for i in range(pnum)
         name = input(f"Player {i + 1} name: "))
         players.append(Player(name))
+    print(f"{pnum} players were added:\n {[pl.name for pl in players]} \n")
 
 def card_value(card): #handle 2-card code to get the value
     if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
@@ -222,6 +222,7 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
 
