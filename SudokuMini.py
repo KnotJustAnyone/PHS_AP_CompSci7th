@@ -11,7 +11,7 @@ class Sudoku4x4:
 
         checking = True
         for row in self.board:
-            for spot_vaue in row:
+            for spot_value in row:
                 if spot_value != 0:
                     checking = False 
                 
