@@ -105,7 +105,7 @@ class Player: #player properties
                     print(f"{player.name} has put ${player.insbet} in the side bet!")
             if insuranceT == True:
                 insuranceT = False
-                print(f"The dealer reveals his second card as... {dealer.dealerhand[1]}")
+                print(f"The dealer reveals his second card as \033[1m{deck.identify_card(dealer.dealerhand[1])}\033[0m")
                 if card_value(dealer.dealerhand[1]) == 10:
                     for player in players:
                         if player.insbet > 0:
@@ -140,7 +140,7 @@ class Dealer: #dealer properties
         while self.dealer_value() < 17:
             new_cards = deck.deal(1)
             self.dealerhand += new_cards
-            print(f"Dealer hits: {deck.identify_card(new_cards)}, hand now: {self.dealer_value()}")
+            print(f"Dealer hits: \033[1m{deck.identify_card(new_cards)}\033[0m, hand now: {self.dealer_value()}")
         print(f"Dealer stands with {self.dealer_value()}")
 
     def dealer_value(self): #dealer total value, will handle aces
@@ -247,3 +247,4 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
