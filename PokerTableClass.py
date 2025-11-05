@@ -1,5 +1,5 @@
 #Texas Hold Em Specific
-from deck_of_cards import Deck
+from deck_of_cards import deck
 from collections import Counter
 from itertools import combinations
 
@@ -21,7 +21,7 @@ class poker_table:
         self.players = [] #List of players, need a player class
         self.pot = 0
         self.bets = []
-        self.deck = Deck(False,True,True)
+        self.deck = deck(False,True,True)
         self.table_cards = []
         self.current_player = None
         self.button_player = None
@@ -231,6 +231,7 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+
 
 
 
