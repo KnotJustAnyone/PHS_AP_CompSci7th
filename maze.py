@@ -7,6 +7,9 @@ maze = [
     "########"
 ]
 
+#Add color
+from colorama import Fore, Style
+print(Fore.GREEN + "P" + Style.RESET_ALL)
 # Player position
 for y, row in enumerate(maze):
     if 'S' in row:
