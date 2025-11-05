@@ -212,6 +212,27 @@ def test_best_hand():
     print(f"Identifies straight flush beats four of a kind: {table.best_hand(hands[10]) < table.best_hand(hands[-3])}")
     print(f"Identifies 6-high straight beats Ace-high straight: {table.best_hand(hands[-3]) < table.best_hand(hands[-4])}")
     print(f"Identifies royal flush beats generic straight flush: {table.best_hand(hands[-4]) < table.best_hand(hands[-2])}")
+    
+    def test_deal_hands():
+        table = poker_table()
+        table.players = [Player("Angela"), Player("Bob"), Player("Jeff")]
+    
+        table.deal_hands()
+    
+        for player in table.players:
+            assert len(player.hand) == 2, f"{player.name} should have 2 cards"
+       
+        all_cards = []
+        for player in table.players:
+            for card in player.hand:
+                all_cards.append(card)
+        
+        if len(all_cards) != len(set(all_cards)):
+            print("There are duplicate cards.")
+        else:
+            print("It worked!!!")
+
+
 
 
 
