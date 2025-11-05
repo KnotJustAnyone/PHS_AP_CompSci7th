@@ -95,7 +95,6 @@ class Player: #player properties
             return None
 
     def insurance(self, dealer):
-        insuranceT = False
         dealer = Dealer(players)
         if card_value(dealer.dealerhand[0]) == 11 and round1 == True:
             for player in players:
@@ -108,16 +107,15 @@ class Player: #player properties
                     player.insbet = 0.5 * player.bet
                     player.money -= 0.5 * player.bet
                     print(f"{player.name} has put ${player.insbet} in as insurance!")
-            if insuranceT == True:
-                insuranceT = False
-                if card_value(dealer.dealerhand[1]) == 10: # If this is true, the code should terminate all hands immediately
-                    for player in players:
-                        player.money += player.insbet * 2
-                        player.insbet = 0
-                else:
-                    print("Dealer does NOT have Blackjack, all insurance is lost.") # Round can continue
-                    for player in players:
-                        player.insbet = 0
+                    if card_value(dealer.dealerhand[1]) == 10: 
+                        print("Dealer has Blackjack! Insurance bets are doubled and returned.")
+                        for player in players:
+                            player.money += player.insbet * 2
+                            player.insbet = 0
+                    else:
+                        print("Dealer does NOT have Blackjack, all insurance is lost.")
+                        for player in players:
+                            player.insbet = 0
     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
@@ -152,6 +150,11 @@ class Dealer: #dealer properties
         pass
 
 #Tests: -------------------------------------------------------------------------------------
+def test_getting_players():
+    print(f"Attempt {random.randint(2,10)} players.")
+    getting_players()
+    print(f"players array should be accurate: {players}")
+    
 def resethand_checker():
     testclass = Player("test")
     if testclass.hand == []:
@@ -199,9 +202,9 @@ def test_hand_total():
 
 def splitcheck():
     print("type y to actually test")
-    dealer = Dealer(players)
     player = Player("tester")
     players.append(player)
+    dealer = Dealer(players)
     player.hand = ["h2", "d2"]
     player.splitting()
     print('If "tester has 2 hands." is printed, it should be good. \nPrinting hands now.')
@@ -211,15 +214,34 @@ def splitcheck():
 
 def doubledowncheck():
     print("type y to actually test")
-    dealer = Dealer(players)
     player = Player("tester")
     players.append(player)
+    dealer = Dealer(players)
     player.hand = ["h5","h6"]
     player.bet = 5
     print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
     player.doubledown()
     print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
     print("New hand should have an extra card, net bet should be double the bet.")
+
+def inscheck():
+    players.append(Player("tester"))
+    while True:
+        which = input("Dealer does have Blackjack or no (y or n)?")
+        if which in ("y","n"):
+            break
+        print("y or n please")
+    player.bet = 50
+    print("player bet is 50.")
+    print("type y to actually test")
+    if which == "y":
+        dealer.dealerhand = ["h1","h10"]
+        insurance(dealer)
+        print(f'The phrase: "Dealer has Blackjack! Insurance bets are doubled and returned." should be printed.\n Your money total should be 1600: {player.money}.')
+    else:   
+        dealer.dealerhand = ["h10","h9"]
+        insurance(dealer)
+        print(f'The phase: "Dealer does NOT have Blackjack, all insurance is lost." should be printed. \n Your money total should be 1500: {player.money}.')
     
 def test_deal1():
     # Set up test players
@@ -249,5 +271,6 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
