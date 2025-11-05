@@ -124,7 +124,16 @@ class Dealer: #dealer properties
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
     
     def round(self): #player: hit or stand, if over 21, bust
-        pass
+        
+        def round_test():
+            player.hand =["h0","h8","s5"] #the player had 10 + 8 + 5 = 23, so it should be a bust
+
+            total = player.handtotal()
+            if total > 21:
+                print("player busts")
+                print("test works")
+            else:
+                print("test failed")
 
     def dealerturn(self): #dealer play, if under 17, will play, if not, will stand
         while self.dealer_value() < 17:
@@ -237,4 +246,5 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
