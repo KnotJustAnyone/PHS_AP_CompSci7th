@@ -8,7 +8,7 @@ class Player: #player properties
         self.name = name #player name, may not use because they'll see each other's cards?
         self.hand = [] #hand of cards
         self.money = money #money amount
-        self.bet #Money in pot
+        self.bet = 0 #Money in pot
 
     def newcard(self, count): #putting card in hand
         self.hand += deck.deal(count)
@@ -17,8 +17,8 @@ class Player: #player properties
         self.hand = []
 
 class poker_table:
-    def __init__(self):
-        self.players = [] #List of players, need a player class
+    def __init__(self, players):
+        self.players = players #List of players, need a player class
         self.pot = 0
         self.bets = []
         self.deck = Deck(False,True,True)
@@ -231,6 +231,7 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+
 
 
 
