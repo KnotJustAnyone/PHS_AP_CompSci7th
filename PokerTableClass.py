@@ -91,7 +91,7 @@ class poker_table:
         return best_score
         
 
-    def evaluate_hand(hand_str):
+    def evaluate_hand(self, hand_str):
         # Parse hand: e.g. "AS KS QS JS TS" -> [('A','S'), ('K','S'), ...]
         cards = hand_str.split()
         ranks = [c[0] for c in cards]
@@ -212,6 +212,7 @@ def test_best_hand():
     print(f"Identifies straight flush beats four of a kind: {table.best_hand(hands[10]) < table.best_hand(hands[-3])}")
     print(f"Identifies 6-high straight beats Ace-high straight: {table.best_hand(hands[-3]) < table.best_hand(hands[-4])}")
     print(f"Identifies royal flush beats generic straight flush: {table.best_hand(hands[-4]) < table.best_hand(hands[-2])}")
+
 
 
 
