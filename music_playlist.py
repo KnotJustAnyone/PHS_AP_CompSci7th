@@ -36,9 +36,3 @@ def display_playlist():
      for index, song in enumerate(playlist, start=1):
         print(f"{index}. {song}")
     #Megan Vuong suggested album cover jpeg displayed too
-
-#Song class
-class Song:
-    def __init__(self, title, artist, album=None, cover_image=None):
-        self.title, self.artist, self.album, self.cover_image = title, artist, album, cover_image
-    def __str__(self): return f"{self.title} by {self.artist}"
