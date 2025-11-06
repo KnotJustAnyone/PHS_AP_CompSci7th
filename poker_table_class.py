@@ -11,7 +11,7 @@ class Player: #player properties
         self.bet #Money in pot
 
     def newcard(self, count): #putting card in hand
-        self.hand += deck.deal(count)
+        self.hand += Deck.deal(count)
         
     def resethand(self): #reset hand
         self.hand = []
@@ -231,6 +231,8 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+
+
 
 
 
