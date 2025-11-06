@@ -36,3 +36,24 @@ def display_playlist():
      for index, song in enumerate(playlist, start=1):
         print(f"{index}. {song}")
     #Megan Vuong suggested album cover jpeg displayed too
+
+#Save Playlist Function
+def save_playlist(filename):
+    """Saves the current playlist to a JSON file."""
+    data = []
+
+    # Convert each Song object to a dictionary
+    for song in playlist:
+        song_dict = {
+            "title": song.title,
+            "artist": song.artist,
+            "album": song.album,
+            "cover_image": song.cover_image
+        }
+        data.append(song_dict)
+
+    # Write to JSON file with indentation for readability
+    with open(filename, "w") as file:
+        json.dump(data, file, indent=4)
+
+    print(f"Playlist saved to '{filename}'.")
