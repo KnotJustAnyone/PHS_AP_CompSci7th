@@ -20,3 +20,53 @@ class to_do_list:
         def interval(self):
         #choose the interval of repetition 
            return None
+
+def show_menu():
+    print("====== TO-DO LIST MENU ======")
+    print("1. View Tasks")
+    print("2. Add Task")
+    print("3. Remove Task")
+    print("4. Mark Task as Done")
+    print("5. Set Repeat Interval")
+    print("=============================")
+
+
+def main():
+    todo = ToDoList()
+
+    while True:
+        show_menu()
+        choice = input("Enter your choice 1-6").strip()
+
+        if choice == "1":
+            todo.show_tasks()
+
+        elif choice == "2":
+            name = input("Enter task name").strip()
+            if name:
+                todo.add_tasks(name)
+            else:
+                print("Task name cannot be empty")
+
+        elif choice == "3":
+            name = input("Enter task name to remove").strip()
+            todo.remove_tasks(name)
+
+        elif choice == "4":
+            name = input("Enter task name to mark as done").strip()
+            todo.check_tasks(name)
+
+        elif choice == "5":
+            name = input("Enter task name to repeat").strip()
+            interval = input("Enter repeat interval (in days)").strip()
+            if interval.isdigit():
+                todo.repeated_task(name, int(interval))
+            else:
+                print("Invalid interval")
+
+        else:
+            print("Invalid choice")
+
+
+if __name__ == "__main__":
+    main()
