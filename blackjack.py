@@ -95,7 +95,6 @@ class Player: #player properties
             return None
 
     def insurance(self, dealer):
-        dealer = Dealer(players)
         if card_value(dealer.dealerhand[0]) == 11 and round1 == True:
             for player in players:
                 while True:
@@ -223,11 +222,14 @@ def doubledowncheck():
     player.doubledown()
     print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
     print("New hand should have an extra card, net bet should be double the bet.")
-
+    
 def inscheck():
-    players.append(Player("tester"))
+    print("For test to work, hashtag out the round1 == True requirement.")
+    player = Player("tester")
+    players.append(player)
+    dealer = Dealer(players)
     while True:
-        which = input("Dealer does have Blackjack or no (y or n)?")
+        which = input("Do you want Dealer to have Blackjack (y or n)?")
         if which in ("y","n"):
             break
         print("y or n please")
@@ -235,13 +237,13 @@ def inscheck():
     print("player bet is 50.")
     print("type y to actually test")
     if which == "y":
-        dealer.dealerhand = ["h1","h10"]
-        insurance(dealer)
-        print(f'The phrase: "Dealer has Blackjack! Insurance bets are doubled and returned." should be printed.\n Your money total should be 1600: {player.money}.')
+        dealer.dealerhand = ["h1","hk"]
+        player.insurance(dealer)
+        print(f'The phrase: "Dealer has Blackjack! Insurance bets are doubled and returned." should be printed.\nMoney total: {player.money} (should be 1525).')
     else:   
-        dealer.dealerhand = ["h10","h9"]
-        insurance(dealer)
-        print(f'The phase: "Dealer does NOT have Blackjack, all insurance is lost." should be printed. \n Your money total should be 1500: {player.money}.')
+        dealer.dealerhand = ["h1","h9"]
+        player.insurance(dealer)
+        print(f'The phase: "Dealer does NOT have Blackjack, all insurance is lost." should be printed. \nMoney total: {player.money} (should be 1475).')
     
 def test_deal1():
     # Set up test players
@@ -271,6 +273,7 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
 
