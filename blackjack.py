@@ -13,7 +13,7 @@ def getting_players():
     for i in range(pnum):
         name = input(f"Player {i + 1}'s name: ")
         players.append(Player(name))
-    print(f"{pnum} players were added:\n {[pl.name for pl in players]} \n")
+    print(f"{pnum} players were added:\n{[pl.name for pl in players]} \n")
 
 def card_value(card): #handle 2-card code to get the value
     if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
@@ -150,9 +150,9 @@ class Dealer: #dealer properties
 
 #Tests: -------------------------------------------------------------------------------------
 def test_getting_players():
-    print(f"Attempt {random.randint(2,10)} players.")
+    print(f"Your job: attempt {random.randint(2,10)} players.")
     getting_players()
-    print(f"players array should be accurate: {players}")
+    print('If "5 players were added:\n[array of the names]"\n Was printed, then the code works.')
     
 def resethand_checker():
     testclass = Player("test")
@@ -205,10 +205,11 @@ def splitcheck():
     players.append(player)
     dealer = Dealer(players)
     player.hand = ["h2", "d2"]
+    print(f"Current hand: {player.hand}.")
     player.splitting()
     print('If "tester has 2 hands." is printed, it should be good. \nPrinting hands now.')
     for playa in players:
-        print(f"Player {playa}: {playa.hand}")
+        print(f"Player {playa.name}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
 
 def doubledowncheck():
@@ -218,9 +219,9 @@ def doubledowncheck():
     dealer = Dealer(players)
     player.hand = ["h5","h6"]
     player.bet = 5
-    print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
+    print(f"Player {player.name}'s hand: {player.hand}, the bet: {player.bet}")
     player.doubledown()
-    print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
+    print(f"Player {player.name}'s hand: {player.hand}, the bet: {player.bet}")
     print("New hand should have an extra card, net bet should be double the bet.")
     
 def inscheck():
@@ -273,6 +274,7 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
 
