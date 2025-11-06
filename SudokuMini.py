@@ -12,7 +12,7 @@ class Sudoku4x4:
     def load_puzzle(self, puzzle):
         # Loads a starting puzzle (4x4 grid with numbers and zeros)
         # puzzle is supposed to be a list of lists with the numbers
-        pass
+      self.board = puzzle
 
     def test_load_puzzle(self, puzzle):
         game = Sudoku4x4()
