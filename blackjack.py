@@ -98,7 +98,7 @@ class Player: #player properties
         if card_value(dealer.dealerhand[0]) == 11 and round1 == True:
             for player in players:
                 while True:
-                    ifins = input(f"Would {player.name} like insurance (y or n)?").strip().lower()
+                    ifins = input(f"Would {player.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.").strip().lower()
                     if ifins in ("y","n"):
                         break
                     print("y or n please")
@@ -275,6 +275,7 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
 
