@@ -13,7 +13,7 @@ def getting_players():
     for i in range(pnum):
         name = input(f"Player {i + 1}'s name: ")
         players.append(Player(name))
-    print(f"{pnum} players were added:\n {[pl.name for pl in players]} \n")
+    print(f"{pnum} players were added:\n{[pl.name for pl in players]} \n")
 
 def card_value(card): #handle 2-card code to get the value
     if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
@@ -95,12 +95,10 @@ class Player: #player properties
             return None
 
     def insurance(self, dealer):
-        insuranceT = False
-        dealer = Dealer(players)
         if card_value(dealer.dealerhand[0]) == 11 and round1 == True:
             for player in players:
                 while True:
-                    ifins = input(f"Would {player.name} like insurance (y or n)?").strip().lower()
+                    ifins = input(f"Would {player.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.").strip().lower()
                     if ifins in ("y","n"):
                         break
                     print("y or n please")
@@ -108,16 +106,15 @@ class Player: #player properties
                     player.insbet = 0.5 * player.bet
                     player.money -= 0.5 * player.bet
                     print(f"{player.name} has put ${player.insbet} in as insurance!")
-            if insuranceT == True:
-                insuranceT = False
-                if card_value(dealer.dealerhand[1]) == 10: # If this is true, the code should terminate all hands immediately
-                    for player in players:
-                        player.money += player.insbet * 2
-                        player.insbet = 0
-                else:
-                    print("Dealer does NOT have Blackjack, all insurance is lost.") # Round can continue
-                    for player in players:
-                        player.insbet = 0
+                    if card_value(dealer.dealerhand[1]) == 10: 
+                        print("Dealer has Blackjack! Insurance bets are doubled and returned.")
+                        for player in players:
+                            player.money += player.insbet * 2
+                            player.insbet = 0
+                    else:
+                        print("Dealer does NOT have Blackjack, all insurance is lost.")
+                        for player in players:
+                            player.insbet = 0
     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
@@ -152,6 +149,11 @@ class Dealer: #dealer properties
         pass
 
 #Tests: -------------------------------------------------------------------------------------
+def test_getting_players():
+    print(f"Your job: attempt {random.randint(2,10)} players.")
+    getting_players()
+    print('If "5 players were added:\n[array of the names]"\nWas printed, then the code works.')
+    
 def resethand_checker():
     testclass = Player("test")
     if testclass.hand == []:
@@ -199,32 +201,56 @@ def test_hand_total():
 
 def splitcheck():
     print("type y to actually test")
-    dealer = Dealer(players)
     player = Player("tester")
     players.append(player)
+    dealer = Dealer(players)
     player.hand = ["h2", "d2"]
+    print(f"Current hand: {player.hand}.")
     player.splitting()
     print('If "tester has 2 hands." is printed, it should be good. \nPrinting hands now.')
     for playa in players:
-        print(f"Player {playa}: {playa.hand}")
+        print(f"Player {playa.name}: {playa.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
 
 def doubledowncheck():
     print("type y to actually test")
-    dealer = Dealer(players)
     player = Player("tester")
     players.append(player)
-    player.hand = ["h5","h6"]
-    player.bet = 5
-    print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
+    dealer = Dealer(players)
+    player.hand = ["h5","h6"]    print(f"Your job: attempt {random.randint(2,10)} players.")
+    getting_players()
+    print('If "5 players were added:\n[array of the names]"\n Was printed, then the code works.')    player.bet = 5
+    print(f"Player {player.name}'s hand: {player.hand}, the bet: {player.bet}")
     player.doubledown()
-    print(f"Player {player}'s hand: {player.hand}, the bet: {player.bet}")
+    print(f"Player {player.name}'s hand: {player.hand}, the bet: {player.bet}")
     print("New hand should have an extra card, net bet should be double the bet.")
+    
+def inscheck():
+    print("For test to work, hashtag out the round1 == True requirement.")
+    player = Player("tester")
+    players.append(player)
+    dealer = Dealer(players)
+    while True:
+        which = input("Do you want Dealer to have Blackjack (y or n)?")
+        if which in ("y","n"):
+            break
+        print("y or n please")
+    player.bet = 50
+    print("player bet is 50.")
+    print("type y to actually test")
+    if which == "y":
+        dealer.dealerhand = ["h1","hk"]
+        player.insurance(dealer)
+        print(f'The phrase: "Dealer has Blackjack! Insurance bets are doubled and returned." should be printed.\nMoney total: {player.money} (should be 1525).')
+    else:   
+        dealer.dealerhand = ["h1","h9"]
+        player.insurance(dealer)
+        print(f'The phase: "Dealer does NOT have Blackjack, all insurance is lost." should be printed. \nMoney total: {player.money} (should be 1475).')
     
 def test_deal1():
     # Set up test players
     numberOfPlayers = 3
-    players = [Player('testplr' + str(i)) for i in range(3)]
+    players = [Player('testplr' + str(i)) for i in range(numberofPlayers)]
     oldPlayerHandLength = [len(player.hand) for player in players]
     # Set up dealer
     dealer = Dealer(players)
@@ -249,5 +275,10 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
+
+
+
+
 
 
