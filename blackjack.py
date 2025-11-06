@@ -152,7 +152,7 @@ class Dealer: #dealer properties
 def test_getting_players():
     print(f"Your job: attempt {random.randint(2,10)} players.")
     getting_players()
-    print('If "5 players were added:\n[array of the names]"\n Was printed, then the code works.')
+    print('If "5 players were added:\n[array of the names]"\nWas printed, then the code works.')
     
 def resethand_checker():
     testclass = Player("test")
@@ -217,8 +217,9 @@ def doubledowncheck():
     player = Player("tester")
     players.append(player)
     dealer = Dealer(players)
-    player.hand = ["h5","h6"]
-    player.bet = 5
+    player.hand = ["h5","h6"]    print(f"Your job: attempt {random.randint(2,10)} players.")
+    getting_players()
+    print('If "5 players were added:\n[array of the names]"\n Was printed, then the code works.')    player.bet = 5
     print(f"Player {player.name}'s hand: {player.hand}, the bet: {player.bet}")
     player.doubledown()
     print(f"Player {player.name}'s hand: {player.hand}, the bet: {player.bet}")
@@ -249,7 +250,7 @@ def inscheck():
 def test_deal1():
     # Set up test players
     numberOfPlayers = 3
-    players = [Player('testplr' + str(i)) for i in range(3)]
+    players = [Player('testplr' + str(i)) for i in range(numberofPlayers)]
     oldPlayerHandLength = [len(player.hand) for player in players]
     # Set up dealer
     dealer = Dealer(players)
@@ -274,6 +275,7 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
 
