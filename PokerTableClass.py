@@ -167,6 +167,19 @@ class poker_table:
         return bet #A number for the size of the bet
 
 #Tests ---------------------------------------------
+def test_remove_player():
+    table = poker_table()
+    player1 = Player("Sophia")
+    player2 = Player("Alvin")
+
+    table.players = [player1, player2]
+
+    table.remove_player(player2)
+
+    assert player2 not in table.players
+    assert player1 in table.players
+    assert len(table.players) == 1
+
 def test_best_hand():
     table = poker_table()
     hands = [
@@ -231,6 +244,7 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+
 
 
 
