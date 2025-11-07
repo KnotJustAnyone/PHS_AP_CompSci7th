@@ -275,6 +275,34 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+def test_round():
+    print("\n--- TESTING round() ---")
+
+    # Setup players
+    test_player = Player("Tester")
+    players.clear()
+    players.append(test_player)
+
+    # Use a mock deck with predictable cards
+    test_player.hand = ["h9", "h8"]  # Total = 17, should stand
+
+    # Mock input: automatically choose "s" (stand)
+    import builtins
+    original_input = builtins.input
+    builtins.input = lambda _: "s"
+
+    dealer = Dealer(players)
+
+    try:
+        dealer.round()
+        print(" PASSED: round() executed without errors.")
+        print(f"Final hand: {test_player.hand} (total = {test_player.handtotal()})")
+    except Exception as e:
+        print(f" FAILED: round() caused an error: {e}")
+
+    # Restore input so program works normally again
+    builtins.input = original_input
+
 
 
 
