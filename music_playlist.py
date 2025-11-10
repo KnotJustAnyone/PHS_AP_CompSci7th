@@ -41,4 +41,13 @@ def display_playlist():
 def count_songs():
     print(f"Total songs in playlist: {len(playlist)}")
 
-    
+#Search for songs
+def search_song(name):
+    results = [song for song in playlist if name.lower() in song.lower()]
+    if results:
+        print("Found these songs:")
+        for song in results:
+            print(song)
+    else:
+        print("No songs found with that name.")
+
