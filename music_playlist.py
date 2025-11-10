@@ -36,3 +36,9 @@ def display_playlist():
      for index, song in enumerate(playlist, start=1):
         print(f"{index}. {song}")
     #Megan Vuong suggested album cover jpeg displayed too
+
+#Landon Blain-Count # of songs
+def count_songs():
+    print(f"Total songs in playlist: {len(playlist)}")
+
+    
