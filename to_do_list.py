@@ -11,17 +11,16 @@ class to_do_list:
         action = input("do you want to add / remove/ or save?")
 
         if action == "remove":
-            remove_which_task  = input ("Which task do you want to remove? 1 - # (any number from 1 to the largest numbered task)")
+            remove_which_task  = input ("Which task do you want to remove? type the full name of it")
 
-            if remove_which_task.isdigit(): #if their response is a number
-                a = int(remove_which_task) - 1 #making it work with the index number
-
-                if 0<= a <= len(self.list):
-                    removing = self.list.pop(a)
-                    print ("Task #" + remove_which_task + "has been removed --" + removing)
-
+            for task in self.list:
+                if task[0] == remove_which_task:
+                    self.list.remove(task)
+                    print("The task has been removed")
+                    break
+                
             else:
-                print("Please type in a number in the range of the tasklist numbers")
+                print("a task has not been removed")
         
 
     def check_tasks(self,task_name): #checks off completed tasks
