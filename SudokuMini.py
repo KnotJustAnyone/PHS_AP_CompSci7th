@@ -9,16 +9,17 @@ class Sudoku4x4:
             [0, 0, 0, 0]
         ]
 
+    def test_init(self):
         checking = True
         for row in self.board:
             for spot_value in row:
                 if spot_value != 0:
                     checking = False 
                 
-        if checking == False:
-            print("It did not pass the test")
+        if checking:
+            print("test passed")
         else:
-            print("It passed the test")
+            print("test failed")
     
     def load_puzzle(self, puzzle):
         # Loads a starting puzzle (4x4 grid with numbers and zeros)
