@@ -85,9 +85,17 @@ class WordGuessingGame:
 
     def update_display(self):
        
-        #Noah: Updates the display word to show letters that have been guessed.
+        new_display = ""
+        for letter in self.secret_word:
+            if letter in self.guessed_letters:
+                new_display += letter
+            else:
+                new_display += "_"
+        self.display_word = new_display
+        return self.display_word
 
-        return None
+       
+        
 
     def check_win(self):
 
@@ -110,6 +118,7 @@ class WordGuessingGame:
         return None
 
 # End of WordGuessingGame class
+
 
 
 
