@@ -1,5 +1,6 @@
 #creates and empty playlist
 playlist = []
+import random
 
 #add song to playlist
 def add_song(song):
@@ -48,6 +49,12 @@ def search_song(name):
         print("Found these songs:")
         for song in results:
             print(song)
+
+#Shuffle 
     else:
-        print("No songs found with that name.")
+        print("No songs found with that name.")     
+def shuffle_playlist():
+    random.shuffle(playlist)
+    print("Playlist shuffled.")
+
 
