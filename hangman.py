@@ -96,12 +96,12 @@ class WordGuessingGame:
 
         return None
 
-    def show_status(self):
-        
-       # Noah: Prints or returns the current state of the game:
-       # Noah: display word, guessed letters, and tries left.
-        
-        return None
+	def show_status(self):
+        status = (
+            f"Word: {' '.join(self.display_word)}\n"
+            f"Guessed Letters: {', '.join(self.guessed_letters) if self.guessed_letters else 'None yet'}\n"
+            f"Tries Left: {self.tries_left}\n")
+        return status
 
     def restart_game(self):
         
@@ -110,6 +110,7 @@ class WordGuessingGame:
         return None
 
 # End of WordGuessingGame class
+
 
 
 
