@@ -105,8 +105,16 @@ class WordGuessingGame(self):
         return status
 
     def restart_game(self):
-        
-        #Noah: Resets all variables to start a new game.
+        option = input ("Do you want to restart the game?")
+        if option == "yes":
+            self.secret_word = ""
+            self.guessed_letters = []
+            self.tries_left = 6
+            self.display_word = ""
+            self.game_over = False
+            self.choose_word()
+        else:
+            print("Continuing game")
         
         return None
 
@@ -137,5 +145,6 @@ def run_game()
             quit()
 
 run_game()
+
 
 
