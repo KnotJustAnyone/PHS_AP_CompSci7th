@@ -3,7 +3,7 @@
 #Class outline for a Word Guessing Game.
 # Aldo: It includes variables and functions but no actual working code yet.
 import random
-class WordGuessingGame:
+class WordGuessingGame(self):
 
     # Aldo: A list of possible words the game can choose from
     # A list of possible words the game can choose from.
@@ -83,20 +83,20 @@ class WordGuessingGame:
         
         return None
 
-    def update_display(self):
+    def update_display(self): # POSSIBLE REDUNDANCY: show_status()
        
         #Noah: Updates the display word to show letters that have been guessed.
 
         return None
 
-    def check_win(self):
+    def check_win(self): # POSSIBLE REDUNDANCY: var game_over()
 
         #Noah: Checks if the player has guessed the full word.
         #Noah: Returns True or False.
 
         return None
 
-    def show_status(self):
+    def show_status(self): # POSSIBLE REDUNDANCY: update_display()
         
        # Noah: Prints or returns the current state of the game:
        # Noah: display word, guessed letters, and tries left.
@@ -111,7 +111,28 @@ class WordGuessingGame:
 
 # End of WordGuessingGame class
 
+# RUN:
+def run_game()
+    game = WordGuessingGame()
 
+    while True: # Loop in case of restarts
+        game.choose_word()
+        
+        while True: # Main game loop
+            game.update_display() # Redundancy? Will need fixing upon function coding
+            game.show_status() # Redundancy? Will need fixing upon function coding
+            if game.game_over():
+                break
 
+    # Restart?
+        print("Would you like to play again? ('y' or 'n')")
+        ans = input()
+        while not ans.strip().lower() in "yn"
+            print("Answer with 'y' or 'n' (without quotation marks). Would you like to play again?")
+            ans = input()
+        if ans == "y":
+            game.restart_game()
+        else:
+            quit()
 
-
+run_game()
