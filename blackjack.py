@@ -3,7 +3,7 @@ from deck_of_cards import Deck
 players = [] #players
 round1 = False
 
-def getting_players():
+def getting_players(): #ask players for player amount and names
     while True:
         try:
             pnum = int(input("How many players are playing?"))
@@ -53,7 +53,21 @@ class Player: #player properties
                     if total <= 21:
                         break
         return total
-
+        
+    def getbet(self):  #get the amount players want to bet
+        while True:
+            try:
+                bet = int(input(f"How much money would {self.name} like to bet? Betting is limited from $2-$500."))
+                if bet >= 2 and bet <= self.money and bet <= 500:
+                    self.money -= bet
+                    self.bet = bet
+                    print(f"{self.name} has bet {self.bet}!\nYou have ${self.money} left.")
+                    return bet
+                else:
+                    print(f"Invalid amount (must be between 2 and 500).\nCurrent amount: {self.money}")
+            except ValueError:
+                print("Use a number.")
+    
     def splitting(self):
         for player in players:
             if len(player.hand) == 2 and player.hand[0][1] == player.hand[1][1]:
@@ -129,6 +143,10 @@ class Dealer: #dealer properties
             print(f"{player.name}'s cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
         self.dealerhand = self.deck.deal(2)
 
+    def playerbets(self): #uses getbet
+        for player in self.players:
+            player.getbet()
+    
     def dealershow(self): #dealer shows one card
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
     
@@ -221,7 +239,7 @@ def doubledowncheck():
     player.bet = 50
     print(f"Player {player.name}'s hand: {player.hand}, the bet: {player.bet}")
     player.doubledown()
-    print(f"Player {player.name}'s hand: {player.hand}, the bet: {player.bet}")
+    print(f"Player {player.name}'s new hand: {player.hand}, the bet: {player.bet}")
     print("New hand should have an extra card, net bet should be double the bet.")
     
 def inscheck():
@@ -230,7 +248,7 @@ def inscheck():
     players.append(player)
     dealer = Dealer(players)
     while True:
-        which = input("Do you want Dealer to have Blackjack (y or n)?")
+        which = input("Do you want Dealer to have Blackjack (y or n)?").strip().lower()
         if which in ("y","n"):
             break
         print("y or n please")
@@ -274,3 +292,6 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
+
+
