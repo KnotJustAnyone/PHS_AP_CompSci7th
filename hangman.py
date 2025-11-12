@@ -123,14 +123,13 @@ class WordGuessingGame(self):
 # RUN:
 def run_game()
     game = WordGuessingGame()
+	game.choose_word()
 
     while True: # Loop in case of restarts
-        game.choose_word()
-        
         while True: # Main game loop
             game.update_display() # Redundancy? Will need fixing upon function coding
             game.show_status() # Redundancy? Will need fixing upon function coding
-            if game.game_over():
+            if game.game_over:
                 break
 
     # Restart?
