@@ -105,8 +105,11 @@ class WordGuessingGame(self):
         return status
 
     def restart_game(self):
-        option = input ("Do you want to restart the game?")
-        if option == "yes":
+		while True
+        	option = input ("Do you want to restart the game (y or n)?").strip().lower()
+			if option in ("y","n"):
+				break
+        if option == "y":
             self.secret_word = ""
             self.guessed_letters = []
             self.tries_left = 6
@@ -145,6 +148,7 @@ def run_game()
             quit()
 
 run_game()
+
 
 
 
