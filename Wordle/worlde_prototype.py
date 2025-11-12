@@ -5,7 +5,7 @@
 import random
 
 def get_word():
-    with open("Wordle/words.txt", 'r') as file:
+    with open("wordle/words.txt", 'r') as file:
         lines = file.readlines()
     return random.choice(lines).strip()
 
@@ -108,6 +108,7 @@ class WordGuessingGame:
         return None
 
 # End of WordGuessingGame class
+
 
 
 
