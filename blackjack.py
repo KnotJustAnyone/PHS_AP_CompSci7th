@@ -64,7 +64,7 @@ class Player: #player properties
                     print(f"{self.name} has bet {self.bet}!\nYou have ${self.money} left.")
                     return bet
                 else:
-                    print(f"You either gave an amount that is not between 2 and 500, or put more money than you currently have.\nCurrent amount: {self.money}")
+                    print(f"Invalid amount (must be between 2 and 500).\nCurrent amount: {self.money}")
             except ValueError:
                 print("Use a number.")
     
@@ -292,5 +292,6 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
