@@ -127,7 +127,7 @@ def run_game()
     # Restart?
         print("Would you like to play again? ('y' or 'n')")
         ans = input()
-        while not ans.strip().lower() in "yn"
+        while not ans.strip().lower() in "yn":
             print("Answer with 'y' or 'n' (without quotation marks). Would you like to play again?")
             ans = input()
         if ans == "y":
@@ -136,3 +136,4 @@ def run_game()
             quit()
 
 run_game()
+
