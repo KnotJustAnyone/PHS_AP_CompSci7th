@@ -85,9 +85,17 @@ class WordGuessingGame(self):
 
     def update_display(self): # POSSIBLE REDUNDANCY: show_status()
        
-        #Noah: Updates the display word to show letters that have been guessed.
+        new_display = ""
+        for letter in self.secret_word:
+            if letter in self.guessed_letters:
+                new_display += letter
+            else:
+                new_display += "_"
+        self.display_word = new_display
+        return self.display_word
 
-        return None
+       
+        
 
     def check_win(self): # POSSIBLE REDUNDANCY: var game_over()
 
@@ -97,7 +105,7 @@ class WordGuessingGame(self):
         return None
 
 
-	def show_status(self):
+    def show_status(self):
         status = (
             f"Word: {' '.join(self.display_word)}\n"
             f"Guessed Letters: {', '.join(self.guessed_letters) if self.guessed_letters else 'None yet'}\n"
@@ -122,9 +130,16 @@ class WordGuessingGame(self):
         return None
 
 # End of WordGuessingGame class
+def check_win(self):
+    """
+    Checks whether the player has guessed the full word.
+    Returns True if the display_word has no underscores "_".
+    Otherwise returns False.
+    """
+    return "_" not in self.display_word
 
 # RUN:
-def run_game()
+def run_game():
     game = WordGuessingGame()
 
     while True: # Loop in case of restarts
@@ -148,8 +163,3 @@ def run_game()
             quit()
 
 run_game()
-
-
-
-
-
