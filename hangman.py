@@ -121,7 +121,7 @@ class WordGuessingGame(self):
 # End of WordGuessingGame class
 
 # RUN:
-def run_game()
+def run_game():
     game = WordGuessingGame()
 
     while True: # Loop in case of restarts
@@ -145,6 +145,7 @@ def run_game()
             quit()
 
 run_game()
+
 
 
 
