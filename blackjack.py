@@ -119,11 +119,11 @@ class Player: #player properties
                 print(f"{player.name} has put ${player.insbet} in as insurance!")
                 if card_value(dealer.dealerhand[1]) == 10: 
                     print("Dealer has Blackjack! Insurance bets are doubled and returned.")
-                        player.money += player.insbet * 2
-                        player.insbet = 0
+                    player.money += player.insbet * 2
+                    player.insbet = 0
                 else:
                     print("Dealer does NOT have Blackjack, all insurance is lost.")
-                        player.insbet = 0
+                    player.insbet = 0
 
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
@@ -287,6 +287,7 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
 
