@@ -85,9 +85,17 @@ class WordGuessingGame(self):
 
     def update_display(self): # POSSIBLE REDUNDANCY: show_status()
        
-        #Noah: Updates the display word to show letters that have been guessed.
+        new_display = ""
+        for letter in self.secret_word:
+            if letter in self.guessed_letters:
+                new_display += letter
+            else:
+                new_display += "_"
+        self.display_word = new_display
+        return self.display_word
 
-        return None
+       
+        
 
     def check_win(self): # POSSIBLE REDUNDANCY: var game_over()
 
@@ -145,6 +153,7 @@ def run_game():
             quit()
 
 run_game()
+
 
 
 
