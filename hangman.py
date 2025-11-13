@@ -97,7 +97,7 @@ class WordGuessingGame(self):
         return None
 
 
-	def show_status(self):
+    def show_status(self):
         status = (
             f"Word: {' '.join(self.display_word)}\n"
             f"Guessed Letters: {', '.join(self.guessed_letters) if self.guessed_letters else 'None yet'}\n"
@@ -145,6 +145,7 @@ def run_game()
             quit()
 
 run_game()
+
 
 
 
