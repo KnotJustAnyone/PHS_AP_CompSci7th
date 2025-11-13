@@ -69,39 +69,39 @@ class Player: #player properties
                 print("Use a number.")
     
     def splitting(self):
-        if len(player.hand) == 2 and player.hand[0][1] == player.hand[1][1]:
+        if len(self.hand) == 2 and self.hand[0][1] == self.hand[1][1]:
             while True:
-                ifsplit = input(f"Would {player.name} like to split your hand? (y or n)? ").strip().lower()
+                ifsplit = input(f"Would {self.name} like to split your hand? (y or n)? ").strip().lower()
                 if ifsplit in ("y", "n"):
                     break
                 print("y or n please")
             if ifsplit == "y":
-                splitcard = player.hand.pop() 
-                player.newcard(1)  
-                splitplayer = Player(f"{player.name} Split", player.money)
+                splitcard = self.hand.pop() 
+                self.newcard(1)  
+                splitplayer = Player(f"{self.name} Split", self.money)
                 splitplayer.hand = [splitcard]
-                splitplayer.bet = player.bet
-                player.money -= player.bet
+                splitplayer.bet = self.bet
+                self.money -= self.bet
                 splitplayer.newcard(1)
                 players.append(splitplayer)
-                print(f"{player.name} has 2 hands.")
+                print(f"{self.name} has 2 hands.")
                 return True
         return None
 
     def doubledown(self):
         currenttot = 0
-        if len(player.hand) == 2:
-            for i in player.hand:
+        if len(self.hand) == 2:
+            for i in self.hand:
                 currenttot += card_value(i)
             if currenttot == 9 or currenttot == 10 or currenttot == 11:
                 while True:
-                    ifdouble = input(f"Would {player.name} like to double down? (y or n)?").strip().lower()
+                    ifdouble = input(f"Would {self.name} like to double down? (y or n)?").strip().lower()
                     if ifdouble in ("y", "n"):
                         break
                     print("y or n please")
                 if ifdouble == "y":
-                    player.newcard(1)
-                    player.bet = player.bet * 2
+                    self.newcard(1)
+                    self.bet = self.bet * 2
                     return True
             return None
         return None
@@ -109,21 +109,21 @@ class Player: #player properties
     def insurance(self, dealer):
         if card_value(dealer.dealerhand[0]) == 11 and round1 == True:
             while True:
-                ifins = input(f"Would {player.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.").strip().lower()
+                ifins = input(f"Would {self.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.").strip().lower()
                 if ifins in ("y","n"):
                     break
                 print("y or n please")
             if ifins == "y":
-                player.insbet = 0.5 * player.bet
-                player.money -= 0.5 * player.bet
-                print(f"{player.name} has put ${player.insbet} in as insurance!")
+                self.insbet = 0.5 * self.bet
+                self.money -= 0.5 * self.bet
+                print(f"{self.name} has put ${self.insbet} in as insurance!")
                 if card_value(dealer.dealerhand[1]) == 10: 
                     print("Dealer has Blackjack! Insurance bets are doubled and returned.")
-                    player.money += player.insbet * 2
-                    player.insbet = 0
+                    self.money += self.insbet * 2
+                    self.insbet = 0
                 else:
                     print("Dealer does NOT have Blackjack, all insurance is lost.")
-                    player.insbet = 0
+                    self.insbet = 0
 
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
@@ -221,8 +221,8 @@ def splitcheck():
     print(f"Current hand: {player.hand}.")
     player.splitting()
     print('If "tester has 2 hands." is printed, it should be good. \nPrinting hands now.')
-    for playa in players:
-        print(f"Player {playa.name}: {playa.hand}")
+    for player in players:
+        print(f"Player {player.name}: {player.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
 
 def doubledowncheck():
@@ -287,6 +287,7 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
 
