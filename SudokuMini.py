@@ -47,7 +47,7 @@ class Sudoku4x4:
         # Clears the board or maybe resets it to the original puzzle
         action = input("Do you want to reset the board? yes or no: ")
 
-        if action() == "yes":
+        if action == "yes":
             for row_num in range(4):  # it goes through the 4 rows in the board
                 for col_num in range(4):  # it goes through the 4 columns in the board
                     if self.starting_board[row_num][col_num] == 0: #if it was already 0 / didnt have any inputs from the player
