@@ -69,7 +69,7 @@ class Player: #player properties
                 print("Use a number.")
     
     def splitting(self):
-        for player in self.players:
+        for player in players:
             if len(player.hand) == 2 and player.hand[0][1] == player.hand[1][1]:
                 while True:
                     ifsplit = input(f"Would {player.name} like to split your hand? (y or n)? ").strip().lower()
@@ -91,7 +91,7 @@ class Player: #player properties
 
     def doubledown(self):
         currenttot = 0
-        for player in self.players:
+        for player in players:
             if len(player.hand) == 2:
                 for i in player.hand:
                     currenttot += card_value(i)
@@ -110,7 +110,7 @@ class Player: #player properties
 
     def insurance(self, dealer):
         if card_value(dealer.dealerhand[0]) == 11 and round1 == True:
-            for player in self.players:
+            for player in players:
                 while True:
                     ifins = input(f"Would {player.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.").strip().lower()
                     if ifins in ("y","n"):
@@ -122,12 +122,12 @@ class Player: #player properties
                     print(f"{player.name} has put ${player.insbet} in as insurance!")
                     if card_value(dealer.dealerhand[1]) == 10: 
                         print("Dealer has Blackjack! Insurance bets are doubled and returned.")
-                        for player in self.players:
+                        for player in players:
                             player.money += player.insbet * 2
                             player.insbet = 0
                     else:
                         print("Dealer does NOT have Blackjack, all insurance is lost.")
-                        for player in self.players:
+                        for player in players:
                             player.insbet = 0
     
 class Dealer: #dealer properties
@@ -138,13 +138,13 @@ class Dealer: #dealer properties
     def deal1(self): #first deal for all players
         if len(deck.deck_current) < ((len(players) + 1) * 8): # Ensure enough cards in deck to deal
             deck.shuffle()
-        for player in self.players:
+        for player in players:
             player.newcard(2)
             print(f"{player.name}'s cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
         self.dealerhand = self.deck.deal(2)
 
     def playerbets(self): #uses getbet
-        for player in self.players:
+        for player in players:
             player.getbet()
     
     def dealershow(self): #dealer shows one card
@@ -292,6 +292,7 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
 
