@@ -1,5 +1,6 @@
-#creates and empty playlist
+#creates and empty playlist and import JavaScript object notation.
 playlist = []
+import json
 
 #add song to playlist
 def add_song(song):
@@ -36,3 +37,12 @@ def display_playlist():
      for index, song in enumerate(playlist, start=1):
         print(f"{index}. {song}")
     #Megan Vuong suggested album cover jpeg displayed too
+
+#load playlist
+def load_playlist(filename):
+    """Loads songs from a JSON file and fills the playlist with Song objects."""
+    try:
+        with open(filename, "r") as file:
+            data = json.load(file)
+
+        playlist.clear()  # Clear existing songs before loading new ones
