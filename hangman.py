@@ -127,6 +127,13 @@ class WordGuessingGame(self):
         return None
 
 # End of WordGuessingGame class
+def check_win(self):
+    """
+    Checks whether the player has guessed the full word.
+    Returns True if the display_word has no underscores "_".
+    Otherwise returns False.
+    """
+    return "_" not in self.display_word
 
 # RUN:
 def run_game():
