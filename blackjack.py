@@ -89,21 +89,17 @@ class Player: #player properties
         return None
 
     def doubledown(self):
-        currenttot = 0
-        if len(self.hand) == 2:
-            for i in self.hand:
-                currenttot += card_value(i)
-            if currenttot == 9 or currenttot == 10 or currenttot == 11:
-                while True:
-                    ifdouble = input(f"Would {self.name} like to double down? (y or n)?").strip().lower()
-                    if ifdouble in ("y", "n"):
-                        break
-                    print("y or n please")
-                if ifdouble == "y":
-                    self.newcard(1)
-                    self.bet = self.bet * 2
-                    return True
-            return None
+        currenttot = self.handtotal()
+        if currenttot == 9 or currenttot == 10 or currenttot == 11:
+            while True:
+                ifdouble = input(f"Would {self.name} like to double down? (y or n)?").strip().lower()
+                if ifdouble in ("y", "n"):
+                    break
+                print("y or n please")
+            if ifdouble == "y":
+                self.newcard(1)
+                self.bet = self.bet * 2
+                return True
         return None
 
     def insurance(self, dealer):
@@ -287,6 +283,7 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
 
