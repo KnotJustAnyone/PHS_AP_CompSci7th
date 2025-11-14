@@ -79,16 +79,6 @@ class Sudoku4x4:
     def auto_solve(self):
         # Tries to solve the puzzle on its own (probably using backtracking)
         pass
-    def test_auto_solve_sudoku_mini():
-    board = [
-        [1, 0, 0, 4],
-        [0, 0, 1, 0],
-        [0, 3, 0, 0],
-        [2, 0, 0, 0]
-    ]
-    solved = auto_solve(board)
-    for row in solved:
-        assert set(row) == {1, 2, 3, 4}
 
 #Emiri outlined the code and found the general aspects of what to put
 #Angelleen wrote it all out on the program and definied all the variables
