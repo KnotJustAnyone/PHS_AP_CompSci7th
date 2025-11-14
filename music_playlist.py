@@ -1,4 +1,4 @@
-#creates and empty playlist
+#creates an empty playlist
 playlist = []
 import random
 
@@ -31,6 +31,12 @@ def move_song(song, new_position):
     if song in playlist:
         playlist.remove(song)
         playlist.insert(new_position, song)
+
+def move_song_test
+    move_song("mango", 0):
+    if playlist[-1] == "mango":
+        playlist.remove("mango")
+        playlist.insert(0, "mango")
 
 #prints the playlist with song name and artist
 def display_playlist():
