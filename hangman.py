@@ -3,7 +3,7 @@
 #Class outline for a Word Guessing Game.
 # Aldo: It includes variables and functions but no actual working code yet.
 import random
-class WordGuessingGame(self):
+class WordGuessingGame:
 
     # Aldo: A list of possible words the game can choose from
     # A list of possible words the game can choose from.
@@ -113,10 +113,10 @@ class WordGuessingGame(self):
         return status
 
     def restart_game(self):
-		while True:
-			option = input ("Do you want to restart the game (y or n)?").strip().lower()
-			if option in ("y","n"):
-				break
+        while True:
+            option = input ("Do you want to restart the game (y or n)?").strip().lower()
+            if option in ("y","n"):
+                break
         if option == "y":
             self.secret_word = ""
             self.guessed_letters = []
