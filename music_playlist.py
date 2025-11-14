@@ -1,5 +1,6 @@
 #creates and empty playlist
 playlist = []
+import random
 
 #add song to playlist
 def add_song(song):
@@ -33,4 +34,37 @@ def move_song(song, new_position):
 
 #prints the playlist with song name and artist
 def display_playlist():
+    if not playlist:
+        print("playlist empty")
+        return
+
+    print("Playlist:")
+    for i, song in enumerate(playlist, start=1):
+        title = song.get("title", "Unknown Title")
+        artist = song.get("artist", "Unknown Artist")
+        print(f"{i}. {title} — {artist}")
+    for index, song in enumerate(playlist, start=1):
+        print(f"{index}. {song}")
+    #Megan Vuong suggested album cov
     #Megan Vuong suggested album cover jpeg displayed too
+
+#Landon Blain-Count # of songs
+def count_songs():
+    print(f"Total songs in playlist: {len(playlist)}")
+
+#Search for songs
+def search_song(name):
+    results = [song for song in playlist if name.lower() in song.lower()]
+    if results:
+        print("Found these songs:")
+        for song in results:
+            print(song)
+
+#Shuffle 
+    else:
+        print("No songs found with that name.")     
+def shuffle_playlist():
+    random.shuffle(playlist)
+    print("Playlist shuffled.")
+
+
