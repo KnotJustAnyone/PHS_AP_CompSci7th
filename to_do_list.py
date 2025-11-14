@@ -20,3 +20,18 @@ class to_do_list:
         def interval(self):
         #choose the interval of repetition 
            return None
+
+def removeTask_test():
+    taskList = ["Do math homework", "wash dishes", "walk the dog"] #the to do list
+    To_be_removed = "wash dishes"
+    final_list = ["Do math homework", "walk the dog"]
+
+    action = "remove"
+    remove_which_task  = 2 #remove wash dishes
+    a = int(remove_which_task) - 1 #making it work with the index number
+    removing = taskList.pop(a)
+
+    if removing == To_be_removed and taskList == final_list:
+        print("test works")
+    else:
+        print ("test failed")
