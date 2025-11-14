@@ -1,5 +1,6 @@
 #creates and empty playlist
 playlist = []
+import random
 
 #add song to playlist
 def add_song(song):
@@ -33,27 +34,79 @@ def move_song(song, new_position):
 
 #prints the playlist with song name and artist
 def display_playlist():
-     for index, song in enumerate(playlist, start=1):
+    if not playlist:
+        print("playlist empty")
+        return
+
+    print("Playlist:")
+    for i, song in enumerate(playlist, start=1):
+        title = song.get("title", "Unknown Title")
+        artist = song.get("artist", "Unknown Artist")
+        print(f"{i}. {title} — {artist}")
+    for index, song in enumerate(playlist, start=1):
         print(f"{index}. {song}")
+    #Megan Vuong suggested album cov
     #Megan Vuong suggested album cover jpeg displayed too
 
-#Save Playlist Function
 def save_playlist(filename):
     """Saves the current playlist to a JSON file."""
+    # Check if playlist is empty
+    if not playlist:
+        print("Cannot save: playlist is empty.")
+        return
+    
+    # Check if filename is provided
+    if not filename:
+        print("Error: filename is required.")
+        return
+    
+    # Ensure filename ends with .json extension
+    if not filename.endswith('.json'):
+        filename = filename + '.json'
+    
+    # Old code - commented out because songs are strings, not objects
+    # data = []
+    # # Convert each Song object to a dictionary
+    # for song in playlist:
+    #     song_dict = {
+    #         "title": song.title,
+    #         "artist": song.artist,
+    #         "album": song.album,
+    #         "cover_image": song.cover_image
+    #     }
+    #     data.append(song_dict)
+    
+    # New code - works with string songs
+    # Create a list to store the playlist data
     data = []
-
-    # Convert each Song object to a dictionary
     for song in playlist:
-        song_dict = {
-            "title": song.title,
-            "artist": song.artist,
-            "album": song.album,
-            "cover_image": song.cover_image
-        }
-        data.append(song_dict)
-
+        # Since songs are strings, we'll save them directly
+        # Could be enhanced later to parse song strings if needed
+        data.append(song)
+    
     # Write to JSON file with indentation for readability
-    with open(filename, "w") as file:
-        json.dump(data, file, indent=4)
+    try:
+        with open(filename, "w") as file:
+            json.dump(data, file, indent=4)
+        print(f"Playlist saved successfully to '{filename}'.")
+        print(f"Total songs saved: {len(data)}")
+    except Exception as e:
+        print(f"Error saving playlist: {e}")
+#Landon Blain-Count # of songs
+def count_songs():
+    print(f"Total songs in playlist: {len(playlist)}")
 
-    print(f"Playlist saved to '{filename}'.")
+#Search for songs
+def search_song(name):
+    results = [song for song in playlist if name.lower() in song.lower()]
+    if results:
+        print("Found these songs:")
+        for song in results:
+            print(song)
+
+#Shuffle 
+    else:
+        print("No songs found with that name.")     
+def shuffle_playlist():
+    random.shuffle(playlist)
+    print("Playlist shuffled.")

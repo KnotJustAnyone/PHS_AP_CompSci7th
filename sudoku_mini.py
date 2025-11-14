@@ -15,15 +15,15 @@ class Sudoku4x4:
         pass
 
     def test_load_puzzle(self, puzzle):
-        game = Sudoku4x4()
-        puzzle = [
-            [1, 2, 3, 4],
-            [4, 1, 2, 3],
-            [3, 4, 1, 2],
-            [2, 3, 4, 1]
-        ]
-        game.load_puzzle(puzzle)
-        assert game.board == puzzle
+        game = Sudoku4x4()
+        puzzle = [
+            [1, 2, 3, 4],
+            [4, 1, 2, 3],
+            [3, 4, 1, 2],
+            [2, 3, 4, 1]
+        ]
+        game.load_puzzle(puzzle)
+        assert game.board == puzzle
 
     def print_board(self):
         # Could use this for testing or when playing in the console
