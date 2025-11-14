@@ -47,12 +47,25 @@ class Sudoku4x4:
     def place_number(self, row, col, num):
         # Actually puts the number on the board if the move is okay
         # Might return True or False depending on if it worked
-        pass
+        if row < 0 or row >= len(self.board) or col < 0 or col >= len(self.board[0]):
+            return False
+        if self.board[row][col] != 0:
+            return False
+        if not self.is_valid_move(row, col, num):
+            return False
+        self.board[row][col] = num
+        return True
 
     def check_win(self):
         # Checks if the whole board is filled out correctly
         # Returns True if the puzzle is solved
-        pass
+        for row in range(len(self.board)):
+            for col in range(len(self.board[0])):
+                num = self.board[row][col]
+                if num == 0 or not self.is_valid_move(row, col, num):
+                    return False
+        return True
+
 
     def reset_board(self):
         # Clears the board or maybe resets it to the original puzzle
