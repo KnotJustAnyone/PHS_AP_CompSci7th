@@ -92,8 +92,8 @@ class Deck:
         random.shuffle(self.deck_current)
 
     def peek(self, cards=1): # Look at the top few cards without removing them
-    # This will show the cards in the order they will next be played. 
-    # It takes it from the back of deck_current, which is where the deal function pulls cards from
+        # This will show the cards in the order they will next be played. 
+        # It takes it from the back of deck_current, which is where the deal function pulls cards from
         if cards >= len(self.deck_current):
             cards = len(self.deck_current)
 
@@ -115,6 +115,25 @@ class Deck:
     def reset(self): # Reset to a full, unshuffled deck
         self.deck_current = self.deck_full.copy()
         self.deck_dealt.clear()
+
+    def show_discard_pile(self):
+        if not self.deck_dealt:
+            if self.return_not_print:
+                return []
+            print("No cards have been dealt yet.")
+            return
+
+        if self.codes:
+            output = self.deck_dealt
+        else:
+            output = [self.identify_card(c) for c in self.deck_dealt]
+
+        if self.return_not_print:
+            return output
+        else:
+            print("Dealt cards:", output)
+
+
 
 
 # Testing Area ------------------------------------------------------------------------------------------------------------------
