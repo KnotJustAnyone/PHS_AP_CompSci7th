@@ -64,25 +64,24 @@ class Sudoku4x4:
         pass
 
     def auto_solve(self):
-        pass
-        
-    def is_legal_move(grid, row, col, number):
-    if grid[row][col] != 0:
-        return False
-
-    for i in range(4):
-        if grid[row][i] == number or grid[i][col] == number:
-            return False
-
-    start_row = (row // 2) * 2
-    start_col = (col // 2) * 2
-    for i in range(2):
-        for j in range(2):
-            if grid[start_row + i][start_col + j] == number:
-                return False
-    return True
         # Tries to solve the puzzle on its own (probably using backtracking)
         pass
+        
+    def is_legal_move(self, row, col, number):
+        if self.board[row][col] != 0:
+            return False
+
+        for i in range(4):
+            if self.board[row][i] == number or self.board[i][col] == number:
+                return False
+
+        start_row = (row // 2) * 2
+        start_col = (col // 2) * 2
+        for i in range(2):
+            for j in range(2):
+                if self.board[start_row + i][start_col + j] == number:
+                    return False
+        return True
 
 #Emiri outlined the code and found the general aspects of what to put
 #Angelleen wrote it all out on the program and definied all the variables
