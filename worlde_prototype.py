@@ -38,10 +38,12 @@ class WordGuessingGame:
     def guess_letter(self, letter):
 
         #Aldo: Checks if the guessed letter is in the secret word.
-    
-        def restart_game(self):
+        return None
 
-            return None
+    def restart_game(self):
+
+        #Noah: Resets all variables to start a new game.
+        return None
 
 # Step 2 (Test) - Noah:
 # Simple test to check if the choose_word function selects a word
