@@ -3,7 +3,7 @@
 #Class outline for a Word Guessing Game.
 # Aldo: It includes variables and functions but no actual working code yet.
 import random
-class WordGuessingGame(self):
+class WordGuessingGame:
 
     # Aldo: A list of possible words the game can choose from
     # A list of possible words the game can choose from.
@@ -113,7 +113,7 @@ class WordGuessingGame(self):
 # End of WordGuessingGame class
 
 # RUN:
-def run_game()
+def run_game():
     game = WordGuessingGame()
 	game.choose_word()
 
@@ -136,6 +136,7 @@ def run_game()
             quit()
 
 run_game()
+
 
 
 
