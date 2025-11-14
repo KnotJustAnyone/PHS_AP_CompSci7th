@@ -53,6 +53,37 @@ class Sudoku4x4:
         # Checks if the whole board is filled out correctly
         # Returns True if the puzzle is solved
         pass
+    
+    def check_win_test(self):
+    game = Sudoku4x4()
+
+    solved_puzzle = [
+        [1, 2, 3, 4],
+        [3, 4, 1, 2],
+        [2, 1, 4, 3],
+        [4, 3, 2, 1]
+    ]
+    game.board = solved_puzzle
+    assert game.check_win() == True
+
+    wrong_puzzle = [
+        [1, 1, 3, 4],
+        [3, 4, 1, 2],
+        [2, 1, 4, 3],
+        [4, 3, 2, 1]
+    ]
+    game.board = wrong_puzzle
+    assert game.check_win() == False
+
+    incomplete_puzzle = [
+        [1, 0, 3, 4],
+        [3, 4, 1, 2],
+        [2, 1, 4, 3],
+        [4, 3, 2, 1]
+    ]
+    game.board = incomplete_puzzle
+    assert game.check_win() == False
+
 
     def reset_board(self):
         # Clears the board or maybe resets it to the original puzzle
