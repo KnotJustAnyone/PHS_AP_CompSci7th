@@ -159,9 +159,10 @@ class Dealer: #dealer properties
 
 #Tests: -------------------------------------------------------------------------------------
 def test_getting_players():
-    print(f"Your job: attempt {random.randint(2,10)} players.")
+    x = random.randint(2,10)
+    print(f"Your job: attempt {x} players.")
     getting_players()
-    print('If "5 players were added:\n[array of the names]"\nWas printed, then the code works.')
+    print(f'If "{x} players were added:\n[array of the names]"\nWas printed, then the code works.')
     
 def resethand_checker():
     testclass = Player("test")
@@ -283,11 +284,4 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
-
-
-
-
-
-
-
-
+  
