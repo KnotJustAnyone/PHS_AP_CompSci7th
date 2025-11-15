@@ -83,35 +83,84 @@ class WordGuessingGame:
         
         return None
 
-    def update_display(self):
+    def update_display(self): # POSSIBLE REDUNDANCY: show_status()
        
-        #Noah: Updates the display word to show letters that have been guessed.
+        new_display = ""
+        for letter in self.secret_word:
+            if letter in self.guessed_letters:
+                new_display += letter
+            else:
+                new_display += "_"
+        self.display_word = new_display
+        return self.display_word
 
-        return None
+       
+        
 
-    def check_win(self):
+    def check_win(self): # POSSIBLE REDUNDANCY: var game_over()
 
         #Noah: Checks if the player has guessed the full word.
         #Noah: Returns True or False.
 
         return None
 
+
     def show_status(self):
-        
-       # Noah: Prints or returns the current state of the game:
-       # Noah: display word, guessed letters, and tries left.
-        
-        return None
+        status = (
+            f"Word: {' '.join(self.display_word)}\n"
+            f"Guessed Letters: {', '.join(self.guessed_letters) if self.guessed_letters else 'None yet'}\n"
+            f"Tries Left: {self.tries_left}\n")
+        return status
 
     def restart_game(self):
-        
-        #Noah: Resets all variables to start a new game.
+        while True:
+            option = input ("Do you want to restart the game (y or n)?").strip().lower()
+            if option in ("y","n"):
+                break
+        if option == "y":
+            self.secret_word = ""
+            self.guessed_letters = []
+            self.tries_left = 6
+            self.display_word = ""
+            self.game_over = False
+            self.choose_word()
+        else:
+            print("Continuing game")
         
         return None
 
 # End of WordGuessingGame class
+def check_win(self):
+    """
+    Checks whether the player has guessed the full word.
+    Returns True if the display_word has no underscores "_".
+    Otherwise returns False.
+    """
+    return "_" not in self.display_word
+
+# RUN:
+def run_game():
+    game = WordGuessingGame()
+
+    while True: # Loop in case of restarts
+        game.choose_word()
+        
+        while True: # Main game loop
+            game.update_display() # Redundancy? Will need fixing upon function coding
+            game.show_status() # Redundancy? Will need fixing upon function coding
+            if game.game_over:
+                break
+
+    # Restart?
+        print("Would you like to play again? ('y' or 'n')")
+        ans = input()
+        while not ans.strip().lower() in "yn":
+            print("Answer with 'y' or 'n' (without quotation marks). Would you like to play again?")
+            ans = input()
+        if ans == "y":
+            game.restart_game()
+        else:
+            quit()
 
 
-
-
-
+run_game()
