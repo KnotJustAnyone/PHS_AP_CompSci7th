@@ -45,8 +45,18 @@ while True:
     if maze[new_y][new_x] != '#':
         player_x, player_y = new_x, new_y
 
+
     # Check goal
     if maze[player_y][player_x] == 'G':
         print_maze()
         print("You reached the goal! You win!")
         break
+
+def restart_game():
+    global player_x, player_y
+    for y, row in enumerate(maze):
+        if 'S' in row:
+            player_x = row.index('S')
+            player_y = y
+    print("\nMaze restarted!\n")
+

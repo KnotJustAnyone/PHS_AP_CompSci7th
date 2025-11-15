@@ -148,7 +148,7 @@ def run_game():
         while True: # Main game loop
             game.update_display() # Redundancy? Will need fixing upon function coding
             game.show_status() # Redundancy? Will need fixing upon function coding
-            if game.game_over():
+            if game.game_over:
                 break
 
     # Restart?
@@ -161,5 +161,6 @@ def run_game():
             game.restart_game()
         else:
             quit()
+
 
 run_game()
