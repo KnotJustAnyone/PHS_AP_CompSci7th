@@ -18,18 +18,20 @@ class Player: #player properties
 
 class poker_table:
     def __init__(self):
+        global Deck
         self.players = [] #List of players, need a player class
         self.pot = 0
         self.bets = []
-        self.deck = Deck(False,True,True)
+        self.deck = Deck
         self.table_cards = []
         self.current_player = None
         self.button_player = None
 
     def deal_hands(self): #Gives each player their initial two pocket cards
         for _ in range(2):
-            for players in self.players:
-                player.hand.append[player.newcard]
+            for player in self.players:
+                ncard = deck.pop(0)
+                player.hand.append(ncard)
 
     def deal_table(self): #Adds cards to the table as needed
         return None
@@ -233,6 +235,7 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+
 
 
 
