@@ -43,14 +43,6 @@ class Sudoku4x4:
         # Checks if placing 'num' at (row, col) is allowed
         # Has to follow Sudoku rules (no repeats in row, column, or box)
         pass
-    def check_move_test(self):
-        game = Sudoku4x4()
-        for row in range(4):
-            for col in range(4):
-                for num in range(1, 5):
-                    assert game.check_move(row, col, num) == True
-
-        game.board[0] = [1, 2, 3, 4]
         assert game.check_move(0, 0, 1) == False
         assert game.check_move(0, 3, 4) == False
 
@@ -86,6 +78,13 @@ class Sudoku4x4:
     def auto_solve(self):
         # Tries to solve the puzzle on its own (probably using backtracking)
         pass
+def check_move_test(self):
+    game = Sudoku4x4()
+    for row in range(4):
+        for col in range(4):
+            for num in range(1, 5):
+                assert game.check_move(row, col, num) == True
 
+    game.board[0] = [1, 2, 3, 4]
 #Emiri outlined the code and found the general aspects of what to put
 #Angelleen wrote it all out on the program and definied all the variables
