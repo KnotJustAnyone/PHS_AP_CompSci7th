@@ -27,7 +27,9 @@ class poker_table:
         self.button_player = None
 
     def deal_hands(self): #Gives each player their initial two pocket cards
-        return None
+        for _ in range(2):
+            for players in self.players:
+                player.hand.append[player.newcard]
 
     def deal_table(self): #Adds cards to the table as needed
         return None
@@ -231,6 +233,7 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+
 
 
 
