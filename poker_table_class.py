@@ -144,10 +144,29 @@ class poker_table:
         score = rank * (15**5) + tiebreaker
         return score
 
+class PokerGame:
+    def __init__(self):
+        self.players = []
+        self.max_players = 8
 
-    def add_player(self): #adds a new player at the table
-        return None
+    def add_player(self, name, chips=1000): #adds a new player to the game w/ chips
+        if len(self.players) >= self.max_players:
+            print("The table is full. Cannot add more players.")
+            return
 
+        for player in self.players:
+            if player["name"].lower() == name.lower():
+                print(f"Player '{name}' is already at the table.")
+                return
+
+        new_player = {
+            "name": name,
+            "chips": chips,
+            "hand": []
+        }
+        self.players.append(new_player)
+        print(f"Player '{name}' joined the game with {chips} chips.")
+        
     def remove_player(self,player): #removes a player
         self.players.remove(player)
 
@@ -231,6 +250,7 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+
 
 
 
