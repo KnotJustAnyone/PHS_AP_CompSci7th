@@ -157,23 +157,27 @@ class Player: #player properties
 class Bot(Player):
     def __init__(self,name,personality):
         super().__init__(name)
-        self.personality = personality
+        self.personality = personality #1 = aggro, 2 = neutral, 3 = safe, 4 = wildcard
         
     def getbet(self):  #get the amount players want to bet
         if self.personality == 1:
             self.bet = random.randint(350,500)
             self.money -= self.bet
-            print(f"{self.name} has bet {self.bet}!\nThey have $self.money} left.")
+            print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
         elif self.personality == 2:
             self.bet = random.randint(150,375)
             self.money -= self.bet
-            print(f"{self.name} has bet {self.bet}!\nThey have $self.money} left.")
+            print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
         elif self.personality == 3:
             self.bet = random.randint(2,150)
             self.bet -= bet
-            print(f"{self.name} has bet {self.bet}!\nThey have $self.money} left.")
+            print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
+        elif self.personality == 4:
+            self.bet = random.randint(2,500)
+            self.bet -= bet
+            print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
 
-     def playerround(self):
+    def playerround(self):
         global round1
         hasddown = self.doubledown()
         self.splitting()
@@ -217,15 +221,21 @@ class Bot(Player):
                 else:
                     print(f"{self.name} stands!\nTheir total: {ctot}")
                     break
-    
-    def splitting(self):
-        if len(self.hand) == 2 and self.hand[0][1] == self.hand[1][1]:
-            while True:
-                ifsplit = input(f"Would {self.name} like to split your hand? (y or n)? ").strip().lower()
-                if ifsplit in ("y", "n"):
+            elif self.personality == 4:
+                if currenttot <= random.randint(1,20):
+                    self.newcard(1)
+                    new = self.hand[-1]
+                    ctot = self.handtotal()
+                    print(f"{self.name} has hit! Their card: {new}.\nTheir total: {ctot}.")
+                    if ctot >= 21:
+                        break
+                else:
+                    print(f"{self.name} stands!\nTheir total: {ctot}")
                     break
-                print("y or n please")
-            if ifsplit == "y":
+    
+    def splitting(self, dealer):
+        if len(self.hand) == 2 and self.hand[0][1] == self.hand[1][1]:
+            if personality == 1:
                 if self.money >= self.bet:
                     splitcard = self.hand.pop() 
                     self.newcard(1)  
@@ -238,37 +248,74 @@ class Bot(Player):
                     print(f"{self.name} has 2 hands.")
                     return True
                 else:
-                    print(f"You don't have enough money to make a split! Currently, you have {self.money}.")
+                    print(f"{self.name} doesn't have enough money to make a split! Currently, they have {self.money}.")
                     return False
+            if personality == 2 and dealer.dealerhand[0] <= 6:
+                if self.money >= self.bet:
+                    splitcard = self.hand.pop() 
+                    self.newcard(1)  
+                    splitplayer = Player(f"{self.name} Split", self.money)
+                    splitplayer.hand = [splitcard]
+                    splitplayer.bet = self.bet
+                    self.money -= self.bet
+                    splitplayer.newcard(1)
+                    players.append(splitplayer)
+                    print(f"{self.name} has 2 hands.")
+                    return True
+                else:
+                    print(f"{self.name} doesn't have enough money to make a split! Currently, they have {self.money}.")
+                    return False
+            elif personality == 4:
+                r = random.randint(1,2)
+                if r == 1:
+                    splitcard = self.hand.pop() 
+                    self.newcard(1)  
+                    splitplayer = Player(f"{self.name} Split", self.money)
+                    splitplayer.hand = [splitcard]
+                    splitplayer.bet = self.bet
+                    self.money -= self.bet
+                    splitplayer.newcard(1)
+                    players.append(splitplayer)
+                    print(f"{self.name} has 2 hands.")
+                    return True
+                else:
+                    print(f"{self.name} doesn't have enough money to make a split! Currently, they have {self.money}.")
+                    return False
+            else:
+                return False
         return False
 
     def doubledown(self):
         currenttot = self.handtotal()
         if currenttot == 9 or currenttot == 10 or currenttot == 11:
-            while True:
-                ifdouble = input(f"Would {self.name} like to double down? (y or n)?").strip().lower()
-                if ifdouble in ("y", "n"):
-                    break
-                print("y or n please")
-            if ifdouble == "y":
+            if personality == 1:
                 if self.money >= self.bet:
                     self.newcard(1)
                     self.money -= self.bet
                     self.bet = self.bet * 2
+                    print(f"{self.name} has doubled down! They get one card and cannot play anymore.")
                     return True
                 else:
                     print(f"You don't have enough money to double your bet! Currently, you have {self.money}.")
-                    return False
+                    return False   
+            elif personality == 4:
+                r = random.randint(1,2)
+                if r == 1:
+                    if self.money >= self.bet:
+                        self.newcard(1)
+                        self.money -= self.bet
+                        self.bet = self.bet * 2
+                        print(f"{self.name} has doubled down! They get one card and cannot play anymore.")
+                        return True
+                    else:
+                        print(f"You don't have enough money to double your bet! Currently, you have {self.money}.")
+                        return False   
+                
         return False
 
     def insurance(self, dealer):
         if card_value(dealer.dealerhand[0]) == 11 and round1 == True:
-            while True:
-                ifins = input(f"Would {self.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.").strip().lower()
-                if ifins in ("y","n"):
-                    break
-                print("y or n please")
-            if ifins == "y":
+            if personality == 1:
                 self.insbet = 0.5 * self.bet
                 self.money -= 0.5 * self.bet
                 print(f"{self.name} has put ${self.insbet} in as insurance!")
@@ -279,6 +326,19 @@ class Bot(Player):
                 else:
                     print("Dealer does NOT have Blackjack, all insurance is lost.")
                     self.insbet = 0
+            if personality ==  4:
+                r = random.randint(1,2)
+                if r == 1:
+                    self.insbet = 0.5 * self.bet
+                    self.money -= 0.5 * self.bet
+                    print(f"{self.name} has put ${self.insbet} in as insurance!")
+                    if card_value(dealer.dealerhand[1]) == 10: 
+                        print("Dealer has Blackjack! Insurance bets are doubled and returned.")
+                        self.money += self.insbet * 2
+                        self.insbet = 0
+                    else:
+                        print("Dealer does NOT have Blackjack, all insurance is lost.")
+                        self.insbet = 0
                     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
@@ -445,5 +505,6 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
 
