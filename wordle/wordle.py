@@ -1,3 +1,5 @@
+import random
+
 class Wordle():
     def __init__(self,maxGuesses):
         self.guesses = 0 # Amount of times player has guessed
@@ -21,7 +23,11 @@ class Wordle():
 
     # Returns a string of length 5, taken from words.py
     def generateWord(self):
-        pass
+        word_list = []
+        with open('wordle/words.txt','r',encoding='utf-8') as f:
+            for line in f:
+                word_list.append(line.strip())
+        return random.choice(word_list)
 
     # Does not return
     # word is a word generated from generateWord()
