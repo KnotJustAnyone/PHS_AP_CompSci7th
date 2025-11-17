@@ -183,7 +183,7 @@ class Bot(Player):
         if hasddown:
             print(f"{self.name} has doubled down, they are unable to take an action.")
             return
-        while True
+        while True:
             if self.personality == 1:
                 if currenttot <= random.randint(17,19):
                     self.newcard(1)
@@ -445,4 +445,5 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
 
