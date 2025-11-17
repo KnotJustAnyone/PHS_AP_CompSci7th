@@ -155,7 +155,7 @@ class Player: #player properties
                     self.insbet = 0
                     
 class Bot(Player):
-    def __init__(self,name,personality)
+    def __init__(self,name,personality):
         super().__init__(name)
         self.personality = personality
         
@@ -445,3 +445,4 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
