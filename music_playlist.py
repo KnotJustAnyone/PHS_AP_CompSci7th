@@ -101,4 +101,36 @@ def shuffle_playlist():
     random.shuffle(playlist)
     print("Playlist shuffled.")
 
+def shuffle_playlist_test():
+    playlist.clear()
+    add_song("orion")
+    add_song("mango")
+    add_song("zenith")
+    add_song("ember")
+    add_song("nova")
 
+    original = playlist.copy()
+
+    shuffle_playlist()
+
+    if sorted(original) == sorted(playlist):
+        print("✔ Shuffle keeps all songs")
+    else:
+        print("✘ Shuffle lost or duplicated songs (fail)")
+
+    if len(original) == len(playlist):
+        print("✔ Playlist length unchanged")
+    else:
+        print("✘ Playlist length changed (fail)")
+
+    if playlist == original:
+        print("⚠ Shuffle resulted in same order — retrying...")
+        shuffle_playlist()
+        if playlist == original:
+            print("✘ Shuffle did NOT change order (fail)")
+        else:
+            print("✔ Shuffle changed order on retry")
+    else:
+        print("✔ Shuffle changed order")
+
+    print("Final shuffled playlist:", playlist)
