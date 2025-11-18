@@ -101,4 +101,11 @@ def shuffle_playlist():
     random.shuffle(playlist)
     print("Playlist shuffled.")
 
+# Now Playing simulation
+def now_playing():
+    if not playlist:
+        print("No songs to play.")
+        return
 
+    song = random.choice(playlist)
+    print(f"Now playing: {song}")
