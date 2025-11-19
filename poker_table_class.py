@@ -8,7 +8,7 @@ class Player: #player properties
         self.name = name #player name, may not use because they'll see each other's cards?
         self.hand = [] #hand of cards
         self.money = money #money amount
-        self.bet #Money in pot
+        self.bet = 0 #Money in pot
 
     def newcard(self, count): #putting card in hand
         self.hand += Deck.deal(count)
@@ -162,9 +162,34 @@ class poker_table:
         return None
 
     #Asks the player what they want to bet
-    def player_bet(self,player,game_state):
-        bet = 0
-        return bet #A number for the size of the bet
+    def player_bet(self, player, game_state):
+
+        current_bet = game_state.get('current_bet', 0)
+        min_raise = game_state.get('min_raise', 10)
+
+        # Initialize player's bet if not already
+        if not hasattr(player, 'bet'):
+            player.bet = 0
+
+        # Example simple logic:
+        # - Fold if cannot cover the current bet
+        # - Call if possible
+        # - Raise if enough money
+        if player.money < current_bet:
+            # All-in if not enough to call
+            bet = player.money
+        elif player.money >= current_bet + min_raise:
+            # Raise by minimum raise
+            bet = current_bet + min_raise
+        else:
+            # Call the current bet
+            bet = current_bet
+
+        # Deduct from player money and update their current bet
+        player.money -= bet
+        player.bet += bet
+        
+        return bet
 
 #Tests ---------------------------------------------
 def test_best_hand():
@@ -231,6 +256,7 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+
 
 
 
