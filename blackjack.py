@@ -81,9 +81,8 @@ class Player: #player properties
             hitstand = input("Would you like to hit or stand (h or s)?").strip().lower()
             if hitstand == "h":
                 self.newcard(1)
-                new = self.hand[-1]
-                ctot = self.handtotal()
-                print(f"{self.name} has hit! Their card: {new}.\nTheir total: {ctot}.")
+                currenttot = self.handtotal()
+                print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
                 if ctot >= 21:
                     break
             elif hitstand == "s":
@@ -194,10 +193,9 @@ class Bot(Player):
             currenttot = self.handtotal()
             if self.personality == 1:
                 if currenttot <= p1rand:
-                    self.newcard(1)
                     new = self.hand[-1]
                     ctot = self.handtotal()
-                    print(f"{self.name} has hit! Their card: {new}.\nTheir total: {ctot}.")
+                    print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
                     if ctot >= 21:
                         break
                 else:
@@ -207,9 +205,8 @@ class Bot(Player):
             elif self.personality == 2:
                 if currenttot <= 17:
                     self.newcard(1)
-                    new = self.hand[-1]
                     ctot = self.handtotal()
-                    print(f"{self.name} has hit! Their card: {new}.\nTheir total: {ctot}.")
+                    print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
                     if ctot >= 21:
                         break
                 else:
@@ -219,9 +216,8 @@ class Bot(Player):
             elif self.personality == 3:
                 if currenttot <= p3rand:
                     self.newcard(1)
-                    new = self.hand[-1]
                     ctot = self.handtotal()
-                    print(f"{self.name} has hit! Their card: {new}.\nTheir total: {ctot}.")
+                    print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
                     if ctot >= 21:
                         break
                 else:
@@ -231,9 +227,8 @@ class Bot(Player):
             elif self.personality == 4:
                 if currenttot <= p4rand:
                     self.newcard(1)
-                    new = self.hand[-1]
                     ctot = self.handtotal()
-                    print(f"{self.name} has hit! Their card: {new}.\nTheir total: {ctot}.")
+                    print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
                     if ctot >= 21:
                         break
                 else:
@@ -513,4 +508,5 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")
+
   
