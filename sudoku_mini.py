@@ -91,6 +91,7 @@ class Sudoku4x4:
     def auto_solve(self):
         # Tries to solve the puzzle on its own (probably using backtracking)
         pass
+
 def check_move_test(self):
     game = Sudoku4x4()
     for row in range(4):
