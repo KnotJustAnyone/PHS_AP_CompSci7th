@@ -66,6 +66,17 @@ class Sudoku4x4:
         # This would give possible numbers that can go in a spot
         # Might help a player who is stuck
         pass
+        
+    def test_get_hints():
+        game = Sudoku4x4()
+        game.board = [
+            [1, 0, 0, 4],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [4, 0, 0, 1]
+        ]
+        hints = game.get_hints(0, 1)
+        print("Hints for cell (0,1):", hints)
 
     def auto_solve(self):
         # Tries to solve the puzzle on its own (probably using backtracking)
