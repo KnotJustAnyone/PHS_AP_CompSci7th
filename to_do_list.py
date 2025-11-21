@@ -1,3 +1,4 @@
+import random
 class to_do_list:
     def _init_(self):
         self.list = [] #list of tasks. task is task = (string, boolean, int)
@@ -40,6 +41,13 @@ class to_do_list:
                 new_list.append(task)
         self.list = new_list
         print("All completed tasks have been removed from your to-do list.")
+
+    def random_task(self):
+        incomplete_tasks = [task for task in self.list if not task[1]]
+        if not incomplete_tasks:
+            print("No incomplete tasks!")
+            return
+        print("Try doing:", random.choice(incomplete_tasks)[0])
 
     def stats(self):
         done = 0
