@@ -40,3 +40,11 @@ class to_do_list:
                 new_list.append(task)
         self.list = new_list
         print("All completed tasks have been removed from your to-do list.")
+
+    def stats(self):
+        done = 0
+        for t in self.list:
+            if t[1]:
+                done += 1
+        total = len(self.list)
+        print(f"Completed: {done}/{total}")
