@@ -68,7 +68,7 @@ class Player: #player properties
             except ValueError:
                 print("Use a number.")
 
-    def playerround(self):
+    def playerround(self, dealer):
         global round1
         hasddown = self.doubledown()
         self.splitting()
@@ -90,11 +90,10 @@ class Player: #player properties
             else:
                 print('use "h" or "s" please')
                     
-    
     def splitting(self, dealer=None):
         if len(self.hand) == 2 and self.hand[0][1] == self.hand[1][1]:
             while True:
-                ifsplit = input(f"Would {self.name} like to split your hand? (y or n)? ").strip().lower()
+                ifsplit = input(f"Would {self.name} like to split their hand? (y or n)? ").strip().lower()
                 if ifsplit in ("y", "n"):
                     break
                 print("y or n please")
@@ -161,23 +160,59 @@ class Bot(Player):
         
     def getbet(self):  #get the amount players want to bet
         if self.personality == 1:
-            self.bet = random.randint(350,500)
-            self.money -= self.bet
+            mini = 350
+            maxi = 500
+            botbet = min(random.randint(mini, maxi), self.money)
+            if self.money < mini:
+                if random.random() < 0.5:
+                    botbet = self.money
+                else:
+                    zero = max(0, self.money - 150)
+                    botbet = random.randint(zero, self.money)
+            self.bet = botbet
+            self.money -= botbet
             print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
         elif self.personality == 2:
-            self.bet = random.randint(150,375)
-            self.money -= self.bet
+            mini = 150
+            maxi = 375
+            botbet = min(random.randint(mini, maxi), self.money)
+            if self.money < mini:
+                if random.random() < 0.5:
+                    botbet = self.money
+                else:
+                    zero = max(0, self.money - 150)
+                    botbet = random.randint(zero, self.money)
+            self.bet = botbet
+            self.money -= botbet
             print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
         elif self.personality == 3:
-            self.bet = random.randint(2,150)
-            self.money -= self.bet
+            mini = 2
+            maxi = 150
+            botbet = min(random.randint(mini, maxi), self.money)
+            if self.money < miin:
+                if random.random() < 0.5:
+                    botbet = self.money
+                else:
+                    zero = max(0, self.money - 150)
+                    botbet = random.randint(zero, self.money)
+            self.bet = botbet
+            self.money -= botbet
             print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
         elif self.personality == 4:
-            self.bet = random.randint(2,500)
-            self.money -= self.bet
+            mini = 2
+            maxi = 500
+            botbet = min(random.randint(mini, maxi), self.money)
+            if self.money < mini:
+                if random.random() < 0.5:
+                    botbet = self.money
+                else:
+                    zero = max(0, self.money - 150)
+                    botbet = random.randint(zero, self.money)
+            self.bet = botbet
+            self.money -= botbet
             print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
 
-    def playerround(self):
+    def playerround(self, dealer):
         global round1
         hasddown = self.doubledown()
         self.splitting()
@@ -271,18 +306,21 @@ class Bot(Player):
             elif self.personality == 4:
                 r = random.randint(1,2)
                 if r == 1:
-                    splitcard = self.hand.pop() 
-                    self.newcard(1)  
-                    splitplayer = Player(f"{self.name} Split", self.money)
-                    splitplayer.hand = [splitcard]
-                    splitplayer.bet = self.bet
-                    self.money -= self.bet
-                    splitplayer.newcard(1)
-                    players.append(splitplayer)
-                    print(f"{self.name} has 2 hands.")
-                    return True
+                    if self.money >= self.bet:
+                        splitcard = self.hand.pop() 
+                        self.newcard(1)  
+                        splitplayer = Player(f"{self.name} Split", self.money)
+                        splitplayer.hand = [splitcard]
+                        splitplayer.bet = self.bet
+                        self.money -= self.bet
+                        splitplayer.newcard(1)
+                        players.append(splitplayer)
+                        print(f"{self.name} has 2 hands.")
+                        return True
+                    else:
+                        print(f"{self.name} doesn't have enough money to make a split! Currently, they have {self.money}.")
+                        return False
                 else:
-                    print(f"{self.name} doesn't have enough money to make a split! Currently, they have {self.money}.")
                     return False
             else:
                 return False
@@ -510,3 +548,4 @@ def test_deal1():
         print("dealer.deal1 passed all tests")
 
   
+
