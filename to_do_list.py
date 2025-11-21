@@ -29,11 +29,14 @@ class to_do_list:
         return None
 
     def repeated_tasks(self,task_name): #allows user to choose tasks to repeat
-                                
+
+
         def interval(self):
         #choose the interval of repetition 
            return None
 
+#repeated_tasks_test("Clean Room")
+                                
     def random_task(self):
         incomplete_tasks = [task for task in self.list if not task[1]]
         if not incomplete_tasks:
@@ -71,3 +74,8 @@ def removeTask_test():
                 new_list.append(task)
         self.list = new_list
         print("All completed tasks have been removed from your to-do list.")
+
+def repeated_tasks_test(task_name):
+    print(f"Repeating task: {task_name}")
+    for i in range(3):
+        print(f"Task '{task_name}' repetition {i + 1}")
