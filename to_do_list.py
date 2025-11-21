@@ -16,13 +16,16 @@ class to_do_list:
 
     def repeated_tasks(self,task_name): #allows user to choose tasks to repeat
 
-    def repeated_tasks_test(task_name):
-        print(f"Repeating task: {task_name}")
-        for i in range(3):
-            print(f"Task '{task_name}' repetition {i + 1}")
-    
-     repeated_tasks_test("Clean Room")
-                                
+
         def interval(self):
         #choose the interval of repetition 
            return None
+
+def repeated_tasks_test(task_name):
+    print(f"Repeating task: {task_name}")
+    for i in range(3):
+        print(f"Task '{task_name}' repetition {i + 1}")
+
+
+#repeated_tasks_test("Clean Room")
+                                
