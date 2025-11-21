@@ -33,14 +33,6 @@ class to_do_list:
         def interval(self):
         #choose the interval of repetition 
            return None
-   
-    def clear_completed_tasks(self):
-        new_list = []
-        for task in self.list:
-            if not task[1]:
-                new_list.append(task)
-        self.list = new_list
-        print("All completed tasks have been removed from your to-do list.")
 
     def random_task(self):
         incomplete_tasks = [task for task in self.list if not task[1]]
@@ -56,3 +48,26 @@ class to_do_list:
                 done += 1
         total = len(self.list)
         print(f"Completed: {done}/{total}")
+
+def removeTask_test():
+    taskList = ["Do math homework", "wash dishes", "walk the dog"] #the to do list
+    To_be_removed = "wash dishes"
+    final_list = ["Do math homework", "walk the dog"]
+
+    action = "remove"
+    remove_which_task  = 2 #remove wash dishes
+    a = int(remove_which_task) - 1 #making it work with the index number
+    removing = taskList.pop(a)
+
+    if removing == To_be_removed and taskList == final_list:
+        print("test works")
+    else:
+        print ("test failed")
+   
+    def clear_completed_tasks(self):
+        new_list = []
+        for task in self.list:
+            if not task[1]:
+                new_list.append(task)
+        self.list = new_list
+        print("All completed tasks have been removed from your to-do list.")
