@@ -17,7 +17,10 @@ class poker_table:
         return None
 
     def deal_table(self): #Adds cards to the table as needed
-        return None
+        self.deck += deck.deal(1)
+        return
+        
+
 
     #Identifies the best hand which can be made with the set of cards
     def best_hand(self,cards):
@@ -73,3 +76,5 @@ def test_best_hand():
     print(f"Identifies three of a kind beats pair: {table.best_hand(hands[4]) > table.best_hand(hands[6])}")
     print(f"Identifies better three of a kind: {table.best_hand(hands[4]) < table.best_hand(hands[9])}")
     print(f"Identifies four of a kind beats three of a kind: {table.best_hand(hands[8]) > table.best_hand(hands[9])}")
+
+
