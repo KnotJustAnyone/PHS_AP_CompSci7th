@@ -32,3 +32,11 @@ class to_do_list:
         def interval(self):
         #choose the interval of repetition 
            return None
+
+    def stats(self):
+        done = 0
+        for t in self.list:
+            if t[1]:
+                done += 1
+        total = len(self.list)
+        print(f"Completed: {done}/{total}")
