@@ -32,6 +32,14 @@ class to_do_list:
         def interval(self):
         #choose the interval of repetition 
            return None
+   
+    def clear_completed_tasks(self):
+        new_list = []
+        for task in self.list:
+            if not task[1]:
+                new_list.append(task)
+        self.list = new_list
+        print("All completed tasks have been removed from your to-do list.")
 
     def stats(self):
         done = 0
