@@ -1,3 +1,4 @@
+import random
 class to_do_list:
     def _init_(self):
         self.list = [] #list of tasks. task is task = (string, boolean, int)
@@ -32,3 +33,11 @@ class to_do_list:
         def interval(self):
         #choose the interval of repetition 
            return None
+
+    def random_task(self):
+        incomplete_tasks = [task for task in self.list if not task[1]]
+        if not incomplete_tasks:
+            print("No incomplete tasks!")
+            return
+        print("Try doing:", random.choice(incomplete_tasks)[0])
+
