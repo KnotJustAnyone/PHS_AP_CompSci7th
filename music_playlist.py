@@ -109,3 +109,4 @@ def now_playing():
 
     song = random.choice(playlist)
     print(f"Now playing: {song}")
+    return song
