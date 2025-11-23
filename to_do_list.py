@@ -1,6 +1,6 @@
 import random
 class to_do_list:
-    def _init_(self):
+    def __init__(self):
         self.list = [] #list of tasks. task is task = (string, boolean, int)
 
         #maybe add class for tasks with self.start day or self.repetition_interval
