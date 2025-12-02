@@ -45,6 +45,7 @@ while True:
     if maze[new_y][new_x] != '#':
         player_x, player_y = new_x, new_y
 
+
     # Check goal
     if maze[player_y][player_x] == 'G':
         print_maze()
