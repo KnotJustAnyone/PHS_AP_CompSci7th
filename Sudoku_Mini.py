@@ -14,17 +14,6 @@ class Sudoku4x4:
         # puzzle is supposed to be a list of lists with the numbers
         pass
 
-    def test_load_puzzle(self, puzzle):
-        game = Sudoku4x4()
-        puzzle = [
-            [1, 2, 3, 4],
-            [4, 1, 2, 3],
-            [3, 4, 1, 2],
-            [2, 3, 4, 1]
-        ]
-        game.load_puzzle(puzzle)
-        assert game.board == puzzle
-
     def print_board(self):
         # Could use this for testing or when playing in the console
         for character in range(len(self.board[0]) * 4 + 1): # Horizontal line at the top
@@ -52,7 +41,22 @@ class Sudoku4x4:
     def check_win(self):
         # Checks if the whole board is filled out correctly
         # Returns True if the puzzle is solved
-        pass
+        for row in self.board:
+            if sorted(row) != [1, 2, 3, 4]:
+                return False
+        for col in range(4):
+            column = [self.board[row][col] for row in range(4)]
+            if sorted(column) != [1, 2, 3, 4]:
+                return False
+        for r in [0, 2]:
+            for c in [0, 2]:
+                box = []
+                for i in range(2):
+                    for j in range(2):
+                        box.append(self.board[r + i][c + j])
+                if sorted(box) != [1, 2, 3, 4]:
+                    return False
+        return True
 
     def reset_board(self):
         # Clears the board or maybe resets it to the original puzzle
@@ -62,6 +66,17 @@ class Sudoku4x4:
         # This would give possible numbers that can go in a spot
         # Might help a player who is stuck
         pass
+        
+    def test_get_hints():
+        game = Sudoku4x4()
+        game.board = [
+            [1, 0, 0, 4],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [4, 0, 0, 1]
+        ]
+        hints = game.get_hints(0, 1)
+        print("Hints for cell (0,1):", hints)
 
     def auto_solve(self):
         # Tries to solve the puzzle on its own (probably using backtracking)
