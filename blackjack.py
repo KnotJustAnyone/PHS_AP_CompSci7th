@@ -1,8 +1,19 @@
-import random #for shuffling
-import time #for deleting lines
-countdown = 10
+import random
 from deck_of_cards import Deck
 players = [] #players
+round1 = False
+
+def getting_players(): #ask players for player amount and names
+    while True:
+        try:
+            pnum = int(input("How many players are playing?"))
+            break
+        except ValueError:
+            print("a number (don't use letters) please")
+    for i in range(pnum):
+        name = input(f"Player {i + 1}'s name: ")
+        players.append(Player(name))
+    print(f"{pnum} players were added:\n{[pl.name for pl in players]} \n")
 
 def card_value(card): #handle 2-card code to get the value
     if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
@@ -12,7 +23,7 @@ def card_value(card): #handle 2-card code to get the value
     elif card[1] in [str(n) for n in range(2,10)]:
         return int(card[1])
     else:
-        raise ValueError("Value must be a valid card code. Make sure your card rank is a single digit, or 'j', 'q', or 'k'.")
+        return None
 
 # Start deck, will need to fix to have value
 deck = Deck(False, True, True, 6)
@@ -43,6 +54,44 @@ class Player: #player properties
                         break
         return total
 
+    def getbet(self):  #get the amount players want to bet
+        while True:
+            try:
+                bet = int(input(f"How much money would {self.name} like to bet? Betting is limited from $2-$500."))
+                if bet >= 2 and bet <= self.money and bet <= 500:
+                    self.money -= bet
+                    self.bet = bet
+                    print(f"{self.name} has bet {self.bet}!\nYou have ${self.money} left.")
+                    return bet
+                else:
+                    print(f"Invalid amount (must be between 2 and 500).\nCurrent amount: {self.money}")
+            except ValueError:
+                print("Use a number.")
+
+    def playerround(self):
+        global round1
+        hasddown = self.doubledown()
+        self.splitting()
+        self.insurance(dealer)
+        round1 = False
+        if hasddown:
+            print(f"{self.name} has doubled down, they are unable to take an action.")
+            return
+        while True:
+            hitstand = input("Would you like to hit or stand (h or s)?").strip().lower()
+            if hitstand == "h":
+                self.newcard(1)
+                new = self.hand[-1]
+                ctot = self.handtotal()
+                print(f"{self.name} has hit! Their card: {new}.\nTheir total: {ctot}.")
+                if ctot >= 21:
+                    break
+            elif hitstand == "s":
+                break
+            else:
+                print('use "h" or "s" please')
+                    
+    
     def splitting(self):
         if len(self.hand) == 2 and self.hand[0][1] == self.hand[1][1]:
             while True:
@@ -51,33 +100,79 @@ class Player: #player properties
                     break
                 print("y or n please")
             if ifsplit == "y":
-                splitcard = self.hand.pop() 
-                self.newcard(1)  
-                splitplayer = Player(f"{self.name} Split", self.money)
-                splitplayer.hand = [splitcard]
-                splitplayer.bet = self.bet
-                self.money -= self.bet
-                splitplayer.newcard(1)
-                players.append(splitplayer)
-                print(f"{self.name} has 2 hands.")
-                return True
+                if self.money >= self.bet:
+                    splitcard = self.hand.pop() 
+                    self.newcard(1)  
+                    splitplayer = Player(f"{self.name} Split", self.money)
+                    splitplayer.hand = [splitcard]
+                    splitplayer.bet = self.bet
+                    self.money -= self.bet
+                    splitplayer.newcard(1)
+                    players.append(splitplayer)
+                    print(f"{self.name} has 2 hands.")
+                    return True
+                else:
+                    print(f"You don't have enough money to make a split! Currently, you have {self.money}.")
+                    return False
         return False
 
-                
-    
+    def doubledown(self):
+        currenttot = self.handtotal()
+        if currenttot == 9 or currenttot == 10 or currenttot == 11:
+            while True:
+                ifdouble = input(f"Would {self.name} like to double down? (y or n)?").strip().lower()
+                if ifdouble in ("y", "n"):
+                    break
+                print("y or n please")
+            if ifdouble == "y":
+                if self.money >= self.bet:
+                    self.newcard(1)
+                    self.money -= self.bet
+                    self.bet = self.bet * 2
+                    return True
+                else:
+                    print(f"You don't have enough money to double your bet! Currently, you have {self.money}.")
+                    return False
+        return False
+
+    def insurance(self, dealer):
+        if card_value(dealer.dealerhand[0]) == 11 and round1 == True:
+            while True:
+                ifins = input(f"Would {self.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.").strip().lower()
+                if ifins in ("y","n"):
+                    break
+                print("y or n please")
+            if ifins == "y":
+                self.insbet = 0.5 * self.bet
+                self.money -= 0.5 * self.bet
+                print(f"{self.name} has put ${self.insbet} in as insurance!")
+                if card_value(dealer.dealerhand[1]) == 10: 
+                    print("Dealer has Blackjack! Insurance bets are doubled and returned.")
+                    self.money += self.insbet * 2
+                    self.insbet = 0
+                else:
+                    print("Dealer does NOT have Blackjack, all insurance is lost.")
+                    self.insbet = 0
+
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
-        self.deck = Deck(False, True, True) #taking deck
-        #is it just self.deck = deck?
         self.players = players #taking players
         self.dealerhand = [] #dealer's hand of cards
 
     def deal1(self): #first deal for all players
+        global round1
+        round1 = True
+        if len(deck.deck_current) < ((len(players) + 1) * 8): # Ensure enough cards in deck to deal
+            deck.shuffle()
         for player in self.players:
             player.newcard(2)
             print(f"{player.name}'s cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
-        self.dealerhand = self.deck.deal(2)
+        self.dealerhand = deck.deal(2)
 
+    def playerbets(self): #uses getbet
+        for player in self.players:
+            player.getbet()
+    
     def dealershow(self): #dealer shows one card
         print(f"The Dealer reveals a card: {self.dealerhand[0]}.")
     
@@ -85,7 +180,11 @@ class Dealer: #dealer properties
         pass
 
     def dealerturn(self): #dealer play, if under 17, will play, if not, will stand
-        pass
+        while self.dealer_value() < 17:
+            new_cards = deck.deal(1)
+            self.dealerhand += new_cards
+            print(f"Dealer hits: \033[1m{deck.identify_card(new_cards[0])}\033[0m, hand now: {self.dealer_value()}")
+        print(f"Dealer stands with {self.dealer_value()}")
 
     def dealer_value(self): #dealer total value, will handle aces
         pass
@@ -94,10 +193,16 @@ class Dealer: #dealer properties
         pass
 
 #Tests: -------------------------------------------------------------------------------------
+def test_getting_players():
+    x = random.randint(2,10)
+    print(f"Your job: attempt {x} players.")
+    getting_players()
+    print(f'If "{x} players were added:\n[array of the names]"\nWas printed, then the code works.')
+    
 def resethand_checker():
     testclass = Player("test")
     if testclass.hand == []:
-        testclass.hand = [random.randint(0,100000000),1,2,3,4,5,6,7,8,9,"aa"]
+        testclass.hand = [random.randint(0,100000000),1,2.3,3,4,False,6,7,None,"None","aa"]
         print(testclass.hand)
         print("Hand was given 11 values")
     if testclass.hand != []:
@@ -107,16 +212,16 @@ def resethand_checker():
 
 def test_hand_total():
     normalTests = [
-        [[Card('Hearts','8',8)],8],
-        [[Card('Diamonds','Ace',11),Card('Diamonds','Ace',11)],12],
-        [[Card('Diamonds','Ace',11),Card('Hearts','9',9),Card('Hearts','9',9)],19],
-        [[Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11),Card('Spades','Ace',11)],18],
-        [[Card('Diamonds','King',10),Card('Spades','Ace',11)],21],
-        [[Card('Diamonds','King',10),Card('Diamonds','King',10),Card('Spades','Ace',11)],21],
+        [["h8"],8],
+        [["d1","d1"],12],
+        [["d1","h9","h9"],19],
+        [["s1","s1","s1","s1","s1","s1","d1","d1"],18],
+        [["dk","d1"],21],
+        [["dk","sk","d1"],21],
     ]
     unexpectedTests = [
         [[],None or 0],
-        [[Card('Awesome','Card','Awesome')],None or 0],
+        [["AHHHHHHHHH"],None or 0],
         [[[[]]],None or 0],
         [[['A'],['B'],['C'],['D']],None or 0],
     ]
@@ -138,29 +243,58 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
-    
-def test_card_deletion():
-    playa = Player("testname")
-    players = [playa]
-    deala = Dealer(players)
-    deala.deal1()
-    print("If cards or countdown are not gone, this did not work. If so, yay...")
 
 def splitcheck():
     print("type y to actually test")
-    dealer = Dealer()
     player = Player("tester")
+    players.append(player)
+    dealer = Dealer(players)
     player.hand = ["h2", "d2"]
+    print(f"Current hand: {player.hand}.")
     player.splitting()
     print('If "tester has 2 hands." is printed, it should be good. \nPrinting hands now.')
-    for playa in players:
-        print(f"Player {playa}: {playa.hand}")
+    for player in players:
+        print(f"Player {player.name}: {player.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
 
+def doubledowncheck():
+    print("type y to actually test")
+    player = Player("tester")
+    players.append(player)
+    dealer = Dealer(players)
+    player.hand = ["h5","h6"]
+    player.bet = 50
+    print(f"Player {player.name}'s hand: {player.hand}, the bet: {player.bet}")
+    player.doubledown()
+    print(f"Player {player.name}'s new hand: {player.hand}, the bet: {player.bet}")
+    print("New hand should have an extra card, net bet should be double the bet.")
+    
+def inscheck():
+    print("For test to work, hashtag out the round1 == True requirement.")
+    player = Player("tester")
+    players.append(player)
+    dealer = Dealer(players)
+    while True:
+        which = input("Do you want Dealer to have Blackjack (y or n)?").strip().lower()
+        if which in ("y","n"):
+            break
+        print("y or n please")
+    player.bet = 50
+    print("player bet is 50.")
+    print("type y to actually test")
+    if which == "y":
+        dealer.dealerhand = ["h1","hk"]
+        player.insurance(dealer)
+        print(f'The phrase: "Dealer has Blackjack! Insurance bets are doubled and returned." should be printed.\nMoney total: {player.money} (should be 1525).')
+    else:   
+        dealer.dealerhand = ["h1","h9"]
+        player.insurance(dealer)
+        print(f'The phase: "Dealer does NOT have Blackjack, all insurance is lost." should be printed. \nMoney total: {player.money} (should be 1475).')
+    
 def test_deal1():
     # Set up test players
     numberOfPlayers = 3
-    players = [Player('testplr' + str(i)) for i in range(3)]
+    players = [Player('testplr' + str(i)) for i in range(numberOfPlayers)]
     oldPlayerHandLength = [len(player.hand) for player in players]
     # Set up dealer
     dealer = Dealer(players)
@@ -184,4 +318,4 @@ def test_deal1():
             errorOccurred = True
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
-        print("dealer.deal1 passed all tests")
+        print("dealer.deal1 passed all tests")  
