@@ -1,8 +1,20 @@
+import random
+
 class Wordle():
     def __init__(self,maxGuesses):
+
+        self.answer_list = []
+        with open('wordle/answers.txt','r',encoding='utf-8') as f:
+            for line in f:
+                self.answer_list.append(line.strip())
+        self.word_list = []
+        with open('wordle/words.txt','r',encoding='utf-8') as f:
+            for line in f:
+                self.word_list.append(line.strip())
+
         self.guesses = 0 # Amount of times player has guessed
-        word = self.generateWord()
-        self.startGame(word,maxGuesses)
+        answer = self.generateAnswer()
+        self.startGame(answer,maxGuesses)
 
     # Must have a string of length 5 passed into it
     # Returns guessResults -> used to display color of the letters
@@ -10,6 +22,15 @@ class Wordle():
     # ['Green','Green','Yellow','Grey','Grey']
     def guess(self,word):
         pass
+
+    # Returns boolean
+    # True if word is in words.txt
+    # False otherwise
+    def isValidGuess(self,word):
+        if word in self.word_list:
+            # Returns false if guess is less than 5 letters, just in case
+            return len(word) == 5
+        return False
 
     # Does not return
     # guessResults is recieved from guess
@@ -20,8 +41,8 @@ class Wordle():
         pass
 
     # Returns a string of length 5, taken from words.py
-    def generateWord(self):
-        pass
+    def generateAnswer(self):
+        return random.choice(self.answer_list)
 
     # Does not return
     # word is a word generated from generateWord()
