@@ -17,10 +17,8 @@ class poker_table:
         return None
 
     def deal_table(self): #Adds cards to the table as needed
-        card = self.deck[0]
-        self.table_cards.append(card)
-        self.deck = self.deck[0:]
-        return card
+        self.table_cards.append += deck.deal(3)
+        return
         
 
 
@@ -85,3 +83,4 @@ def table_test():
     Nt.deal_table()
     print (Nt.table_cards)
 table_test()
+
