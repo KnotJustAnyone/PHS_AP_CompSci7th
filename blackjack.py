@@ -225,7 +225,7 @@ class Bot(Player):
                 if currenttot <= p1rand:
                     self.newcard(1)
                     ctot = self.handtotal()
-                    print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
+                    print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {ctot}.")
                     if ctot >= 21:
                         break
                 else:
@@ -236,7 +236,7 @@ class Bot(Player):
                 if currenttot <= 17:
                     self.newcard(1)
                     ctot = self.handtotal()
-                    print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
+                    print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {ctot}.")
                     if ctot >= 21:
                         break
                 else:
@@ -247,7 +247,7 @@ class Bot(Player):
                 if currenttot <= p3rand:
                     self.newcard(1)
                     ctot = self.handtotal()
-                    print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
+                    print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {ctot}.")
                     if ctot >= 21:
                         break
                 else:
@@ -258,7 +258,7 @@ class Bot(Player):
                 if currenttot <= p4rand:
                     self.newcard(1)
                     ctot = self.handtotal()
-                    print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
+                    print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {ctot}.")
                     if ctot >= 21:
                         break
                 else:
@@ -392,7 +392,7 @@ class Dealer: #dealer properties
         for player in self.players:
             player.insurance(self)
             player.doubledown()
-            player.splitting()
+            player.splitting(self)
 
     def playerbets(self): #uses getbet
         for player in self.players:
@@ -519,7 +519,7 @@ def inscheck():
         dealer.dealerhand = ["h1","h9"]
         player.insurance(dealer)
         print(f'The phase: "Dealer does NOT have Blackjack, all insurance is lost." should be printed. \nMoney total: {player.money} (should be 1475).')
-        players.clear()
+    players.clear()
     
 def test_deal1():
     # Set up test players
@@ -550,6 +550,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
