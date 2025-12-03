@@ -34,40 +34,20 @@ class to_do_list:
         #choose the interval of repetition 
            return None
 
-    def random_task(self):
-        incomplete_tasks = [task for task in self.list if not task[1]]
-        if not incomplete_tasks:
-            print("No incomplete tasks!")
-            return
-        print("Try doing:", random.choice(incomplete_tasks)[0])
+#Test for add_task
+from todo import add_task
 
-    def stats(self):
-        done = 0
-        for t in self.list:
-            if t[1]:
-                done += 1
-        total = len(self.list)
-        print(f"Completed: {done}/{total}")
+def test_add_task():
+tasks = []
+updated_tasks = add_task(tasks, "Finish homework", "high")
+assert len(updated_tasks) == 1
+task = updated_tasks[0]
+assert task["name"] == "Finish homework"
+assert task["priority"] == "high"
+assert task["completed"] is False
 
-def removeTask_test():
-    taskList = ["Do math homework", "wash dishes", "walk the dog"] #the to do list
-    To_be_removed = "wash dishes"
-    final_list = ["Do math homework", "walk the dog"]
-
-    action = "remove"
-    remove_which_task  = 2 #remove wash dishes
-    a = int(remove_which_task) - 1 #making it work with the index number
-    removing = taskList.pop(a)
-
-    if removing == To_be_removed and taskList == final_list:
-        print("test works")
-    else:
-        print ("test failed")
-   
-    def clear_completed_tasks(self):
-        new_list = []
-        for task in self.list:
-            if not task[1]:
-                new_list.append(task)
-        self.list = new_list
-        print("All completed tasks have been removed from your to-do list.")
+def test_add_task_default_priority():
+tasks = []
+add_task(tasks, "Clean room")
+assert tasks[0]["priority"] == "medium"
+assert tasks[0]["completed"] is False
