@@ -51,7 +51,7 @@ class Sudoku4x4:
             for row_num in range(4):  # it goes through the 4 rows in the board
                 for col_num in range(4):  # it goes through the 4 columns in the board
                     if self.starting_board[row_num][col_num] == 0: #if it was already 0 / didnt have any inputs from the player
-                    self.board[row_num][col_num] = 0 #resets all of the player inputs, but keeps the numbers the game give you
+                        self.board[row_num][col_num] = 0 #resets all of the player inputs, but keeps the numbers the game give you
             print("board has reset")
         else:
             print("board will not reset")
