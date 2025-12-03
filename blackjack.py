@@ -138,16 +138,19 @@ class Player: #player properties
                     break
                 print("y or n please")
             if ifins == "y":
-                self.insbet = 0.5 * self.bet
-                self.money -= 0.5 * self.bet
-                print(f"{self.name} has put ${self.insbet} in as insurance!")
-                if card_value(dealer.dealerhand[1]) == 10: 
-                    print("Dealer has Blackjack! Insurance bets are doubled and returned.")
-                    self.money += self.insbet * 2
-                    self.insbet = 0
-                else:
-                    print("Dealer does NOT have Blackjack, all insurance is lost.")
-                    self.insbet = 0
+                if self.money >= 0.5 * self.bet:
+                    self.insbet = 0.5 * self.bet
+                    self.money -= 0.5 * self.bet
+                    print(f"{self.name} has put ${self.insbet} in as insurance!")
+                    if card_value(dealer.dealerhand[1]) == 10: 
+                        print("Dealer has Blackjack! Insurance bets are doubled and returned.")
+                        self.money += self.insbet * 2
+                        self.insbet = 0
+                    else:
+                        print("Dealer does NOT have Blackjack, all insurance is lost.")
+                        self.insbet = 0
+            else:
+                print(f"{self.name} does not have enough money!")
                     
 class Bot(Player):
     def __init__(self,name,personality, money=1500):
@@ -220,7 +223,7 @@ class Bot(Player):
             currenttot = self.handtotal()
             if self.personality == 1:
                 if currenttot <= p1rand:
-                    new = self.hand[-1]
+                    self.newcard(1)
                     ctot = self.handtotal()
                     print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
                     if ctot >= 21:
@@ -332,8 +335,8 @@ class Bot(Player):
                         self.money -= self.bet
                         self.bet = self.bet * 2
                         print(f"{self.name} has doubled down! They get one card and cannot play anymore.")
-                        return True
                         self.hasddown = True
+                        return True
                     else:
                         print(f"You don't have enough money to double your bet! Currently, you have {self.money}.")
                         return False   
@@ -343,19 +346,7 @@ class Bot(Player):
     def insurance(self, dealer):
         if card_value(dealer.dealerhand[0]) == 11:
             if self.personality == 1:
-                self.insbet = 0.5 * self.bet
-                self.money -= 0.5 * self.bet
-                print(f"{self.name} has put ${self.insbet} in as insurance!")
-                if card_value(dealer.dealerhand[1]) == 10: 
-                    print("Dealer has Blackjack! Insurance bets are doubled and returned.")
-                    self.money += self.insbet * 2
-                    self.insbet = 0
-                else:
-                    print("Dealer does NOT have Blackjack, all insurance is lost.")
-                    self.insbet = 0
-            if self.personality ==  4:
-                r = random.randint(1,2)
-                if r == 1:
+                if self.money >= 0.5 * self.bet:
                     self.insbet = 0.5 * self.bet
                     self.money -= 0.5 * self.bet
                     print(f"{self.name} has put ${self.insbet} in as insurance!")
@@ -366,6 +357,24 @@ class Bot(Player):
                     else:
                         print("Dealer does NOT have Blackjack, all insurance is lost.")
                         self.insbet = 0
+                else:
+                    print(f"{self.name} does not have enough money!")
+            if self.personality ==  4:
+                r = random.randint(1,2)
+                if r == 1:
+                    if self.money >= 0.5 * self.bet:
+                        self.insbet = 0.5 * self.bet
+                        self.money -= 0.5 * self.bet
+                        print(f"{self.name} has put ${self.insbet} in as insurance!")
+                        if card_value(dealer.dealerhand[1]) == 10: 
+                            print("Dealer has Blackjack! Insurance bets are doubled and returned.")
+                            self.money += self.insbet * 2
+                            self.insbet = 0
+                        else:
+                            print("Dealer does NOT have Blackjack, all insurance is lost.")
+                            self.insbet = 0
+                    else:
+                        print(f"{self.name} does not have enough money!")
                     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
@@ -414,6 +423,7 @@ def test_getting_players():
     print(f"Your job: attempt {x} players.")
     getting_players()
     print(f'If "{x} players were added:\n[array of the names]"\nWas printed, then the code works.')
+    players.clear()
     
 def resethand_checker():
     testclass = Player("test")
@@ -425,6 +435,7 @@ def resethand_checker():
         testclass.resethand()
         print(testclass.hand)
         print("Ran resethand. Hand should be gone.")
+    players.clear()
 
 def test_hand_total():
     normalTests = [
@@ -459,6 +470,7 @@ def test_hand_total():
     print("Unexpected Tests ----- Do not need to pass, the cases tested only happen if other code is cooked")
     for test in unexpectedTests:
         evaluateTest(test)
+    players.clear()
 
 def splitcheck():
     print("type y to actually test")
@@ -472,6 +484,7 @@ def splitcheck():
     for player in players:
         print(f"Player {player.name}: {player.hand}")
     print("Ideally, both players should have one card of the same rank, and another random card.") 
+    players.clear()
 
 def doubledowncheck():
     print("type y to actually test")
@@ -484,6 +497,7 @@ def doubledowncheck():
     player.doubledown()
     print(f"Player {player.name}'s new hand: {player.hand}, the bet: {player.bet}")
     print("New hand should have an extra card, net bet should be double the bet.")
+    players.clear()
     
 def inscheck():
     player = Player("tester")
@@ -505,6 +519,7 @@ def inscheck():
         dealer.dealerhand = ["h1","h9"]
         player.insurance(dealer)
         print(f'The phase: "Dealer does NOT have Blackjack, all insurance is lost." should be printed. \nMoney total: {player.money} (should be 1475).')
+        players.clear()
     
 def test_deal1():
     # Set up test players
@@ -534,5 +549,7 @@ def test_deal1():
             print(f"ERROR ###########\ndealer.deal1() dealt the following cards: {player.hand}, one of which's value could not be determined by card_value()")
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
+    players.clear()
+
 
 
