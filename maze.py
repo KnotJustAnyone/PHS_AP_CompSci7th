@@ -52,11 +52,18 @@ while True:
         print("You reached the goal! You win!")
         break
 
-def restart_game():
-    global player_x, player_y
-    for y, row in enumerate(maze):
-        if 'S' in row:
-            player_x = row.index('S')
-            player_y = y
-    print("\nMaze restarted!\n")
+#Move counter
+moves = 0  
+while True:
+    print_maze()
+    move = input("Move (WASD): ").lower()
+    
+    new_x, new_y = player_x, player_y
+    if move == 'w': new_y -= 1
+    elif move == 's': new_y += 1
+    elif move == 'a': new_x -= 1
+    elif move == 'd': new_x += 1
 
+    if maze[new_y][new_x] != '#':  # only count valid moves
+        player_x, player_y = new_x, new_y
+        moves += 1  # increment move counter
