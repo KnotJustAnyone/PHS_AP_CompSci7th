@@ -52,11 +52,7 @@ while True:
         print("You reached the goal! You win!")
         break
 
-def restart_game():
-    global player_x, player_y
-    for y, row in enumerate(maze):
-        if 'S' in row:
-            player_x = row.index('S')
-            player_y = y
-    print("\nMaze restarted!\n")
-
+#Tracks player progress
+import os
+os.system('cls' if os.name=='nt' else 'clear') 
+moves = 0 
