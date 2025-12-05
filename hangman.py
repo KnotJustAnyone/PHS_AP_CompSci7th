@@ -3,7 +3,7 @@
 #Class outline for a Word Guessing Game.
 # Aldo: It includes variables and functions but no actual working code yet.
 import random
-class WordGuessingGame(self):
+class WordGuessingGame:
 
     # Aldo: A list of possible words the game can choose from
     # A list of possible words the game can choose from.
@@ -85,9 +85,17 @@ class WordGuessingGame(self):
 
     def update_display(self): # POSSIBLE REDUNDANCY: show_status()
        
-        #Noah: Updates the display word to show letters that have been guessed.
+        new_display = ""
+        for letter in self.secret_word:
+            if letter in self.guessed_letters:
+                new_display += letter
+            else:
+                new_display += "_"
+        self.display_word = new_display
+        return self.display_word
 
-        return None
+       
+        
 
     def check_win(self): # POSSIBLE REDUNDANCY: var game_over()
 
@@ -105,8 +113,11 @@ class WordGuessingGame(self):
         return status
 
     def restart_game(self):
-        option = input ("Do you want to restart the game?")
-        if option == "yes":
+        while True:
+            option = input ("Do you want to restart the game (y or n)?").strip().lower()
+            if option in ("y","n"):
+                break
+        if option == "y":
             self.secret_word = ""
             self.guessed_letters = []
             self.tries_left = 6
@@ -119,6 +130,13 @@ class WordGuessingGame(self):
         return None
 
 # End of WordGuessingGame class
+def check_win(self):
+    """
+    Checks whether the player has guessed the full word.
+    Returns True if the display_word has no underscores "_".
+    Otherwise returns False.
+    """
+    return "_" not in self.display_word
 
 # RUN:
 def run_game():
@@ -130,7 +148,7 @@ def run_game():
         while True: # Main game loop
             game.update_display() # Redundancy? Will need fixing upon function coding
             game.show_status() # Redundancy? Will need fixing upon function coding
-            if game.game_over():
+            if game.game_over:
                 break
 
     # Restart?
@@ -144,9 +162,5 @@ def run_game():
         else:
             quit()
 
+
 run_game()
-
-
-
-
-
