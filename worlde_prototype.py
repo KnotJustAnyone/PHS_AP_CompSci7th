@@ -45,6 +45,48 @@ class WordGuessingGame:
         #Noah: Resets all variables to start a new game.
         return None
 
+    def wordle_guess(self, guess):
+        """
+        Takes a 5-letter guess and returns a list:
+        ['green', 'yellow', 'gray', ...]
+        """
+        guess = guess.lower()
+        result = ["gray"] * 5
+
+        # Make editable copies
+        secret_list = list(self.secret_word)
+        guess_list = list(guess)
+
+        # FIRST PASS: Check greens
+        for i in range(5):
+            if guess_list[i] == secret_list[i]:
+                result[i] = "green"
+                secret_list[i] = None  # Remove matched letter
+
+        # SECOND PASS: Check yellows
+        for i in range(5):
+            if result[i] == "gray" and guess_list[i] in secret_list:
+                result[i] = "yellow"
+                secret_list[secret_list.index(guess_list[i])] = None
+
+        return result
+
+    def display_wordle_result(self, guess, result):
+        """
+        Prints emojis for Wordle result.
+        """
+        emoji_map = {
+            "green": "🟩",
+            "yellow": "🟨",
+            "gray": "⬛"
+        }
+
+        display = ""
+        for r in result:
+            display += emoji_map[r]
+
+        print(f"{guess.upper()}  ->  {display}")
+
 # Step 2 (Test) - Noah:
 # Simple test to check if the choose_word function selects a word
 def test_choose_word():
@@ -59,3 +101,4 @@ def test_choose_word():
 # End of WordGuessingGame class
 
 test_choose_word()
+
