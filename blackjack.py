@@ -72,21 +72,17 @@ class Dealer: #dealer properties
         pass
 
     def dealer_value(self): #dealer total value, will handle aces
-    value = 0
-    aces = 0
-        for card in cards:
-    if card in ['J', 'Q', 'K']:
-    value += 10
-    elif card == 'A':
-    aces += 1
-    else:
-    value += int(card)
-    for _ in range(aces):
-    if value + 11 <= 21:
-    value += 11
-    else:
-    value += 1
-    return value
+        value = 0
+        aces = False
+        for card in self.dealerhand:
+            if card_value(card) == 11:
+                aces = True
+                value += 1
+            else:
+                value += card_value(card)
+        if aces == True and value <= 11:
+            value += 10
+        return value
 
 
 
