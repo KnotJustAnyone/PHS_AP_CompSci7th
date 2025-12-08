@@ -8,20 +8,27 @@ import random
 class Deck:
     suits = {"c": "Clubs", "h": "Hearts", "d": "Diamonds", "s": "Spades"}
 
-    def __init__(self, jokers=True, codes=False, return_not_print=False):
+    def __init__(self,jokers=True,codes=False,return_not_print=False,deck_count=1):
         self.jokers = jokers
         self.codes = codes
         self.return_not_print = return_not_print
+        self.deck_count = deck_count
 
         # Build full deck
         self.deck_full = [s + str(n) for s in ["c", "h", "d", "s"] for n in list(range(10)) + ["j", "q", "k"]]
         if self.jokers:
             self.deck_full += ["jo", "jo"]
 
+        if self.deck_count > 1:
+            self.deck_full *= self.deck_count
+            
         # Start with a fresh, unshuffled deck
         self.deck_current = self.deck_full.copy()
         self.deck_dealt = []
 
+    def deck_count(self): # How many decks are in use? (should be common sense, but you never know...)
+        return self.deck_count
+    
     def identify_card(self, card): # Turn a 2-character code into a full name, e.g. 'c5' -> '5 of Clubs'
         if card == "jo": # Case: Joker
             return "Joker"
@@ -61,7 +68,7 @@ class Deck:
                 dealt.append(None)
                 break
 
-            card = self.deck_current.pop()
+            card = self.deck_current.pop(0)
             self.deck_dealt.append(card)
 
             if self.codes:
@@ -75,7 +82,7 @@ class Deck:
                 print(output)
 
         if self.return_not_print:
-            return dealt
+            return dealt # If more than one, ordered (left-right) in order of deal
 
     def shuffle(self, undealt_only=False): #Shuffle the deck. If undealt_only=False, reshuffle the full deck
         if not undealt_only:
@@ -90,7 +97,7 @@ class Deck:
         if cards >= len(self.deck_current):
             cards = len(self.deck_current)
 
-        top_cards = list(reversed(self.deck_current[-cards:]))
+        top_cards = list(self.deck_current[:cards])
 
         if self.codes:
             output = top_cards
@@ -110,12 +117,6 @@ class Deck:
         self.deck_dealt.clear()
 
 
-deck = Deck(True,True,True)
-deck.shuffle()
-print(deck.peek(3))
-print(deck.deck_current[-3:][::-1])
-print(deck.deck_current)
-
 # Testing Area ------------------------------------------------------------------------------------------------------------------
 def test_peek(test_numb): #0 < Numb < 55, number of tests
     deck = Deck(True,True,True)
@@ -123,8 +124,8 @@ def test_peek(test_numb): #0 < Numb < 55, number of tests
         if i < 1:
             continue
         deck.shuffle()
-        if deck.deck_current[-i:][::-1] != deck.peek(i):
+        if deck.deck_current[:i] != deck.peek(i):
             print(f"Test failed at peek({i})")
         else:
             print(f"Test passed at peek({i})")
-test_peek(10)
+# test_peek(10)
