@@ -9,7 +9,7 @@ class WordGuessingGame:
     # A list of possible words the game can choose from.
     # This component is needed for the choose_word function to work.
     word_list = []
-    with open('Wordle/words.txt','r',encoding='utf-8') as f:
+    with open('wordle/words.txt','r',encoding='utf-8') as f:
         for line in f:
             word_list.append(line.strip())
 
@@ -146,8 +146,11 @@ def run_game():
         game.choose_word()
         
         while True: # Main game loop
-            game.update_display() # Redundancy? Will need fixing upon function coding
-            game.show_status() # Redundancy? Will need fixing upon function coding
+            print(game.show_status())
+
+            #ask player for a guess
+            guess = input("Enter a letter: ").strip().lower()
+            game.guess_letter(guess)
             if game.game_over:
                 break
 
