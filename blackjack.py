@@ -162,55 +162,33 @@ class Bot(Player):
         if self.personality == 1:
             mini = 350
             maxi = 500
-            botbet = min(random.randint(mini, maxi), self.money)
-            if self.money < mini:
-                if random.random() < 0.5:
-                    botbet = self.money
-                else:
-                    zero = max(0, self.money - 150)
-                    botbet = random.randint(zero, self.money)
-            self.bet = botbet
-            self.money -= botbet
-            print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
+            randchance = 0.5
+            randbet = 150
         elif self.personality == 2:
             mini = 150
             maxi = 375
-            botbet = min(random.randint(mini, maxi), self.money)
-            if self.money < mini:
-                if random.random() < 0.5:
-                    botbet = self.money
-                else:
-                    zero = max(0, self.money - 150)
-                    botbet = random.randint(zero, self.money)
-            self.bet = botbet
-            self.money -= botbet
-            print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
+            randchance = 0.25
+            randbet = 125
         elif self.personality == 3:
             mini = 2
             maxi = 150
-            botbet = min(random.randint(mini, maxi), self.money)
-            if self.money < mini:
-                if random.random() < 0.5:
-                    botbet = self.money
-                else:
-                    zero = max(0, self.money - 150)
-                    botbet = random.randint(zero, self.money)
-            self.bet = botbet
-            self.money -= botbet
-            print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
+            randchance = 0.05
+            randbet = 75
         elif self.personality == 4:
             mini = 2
             maxi = 500
-            botbet = min(random.randint(mini, maxi), self.money)
-            if self.money < mini:
-                if random.random() < 0.5:
-                    botbet = self.money
-                else:
-                    zero = max(0, self.money - 150)
-                    botbet = random.randint(zero, self.money)
-            self.bet = botbet
-            self.money -= botbet
-            print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
+            randchance = 0.75
+            randbet = 150
+        botbet = min(random.randint(mini, maxi), self.money)
+        if self.money < mini:
+            if random.random() < randchance:
+                botbet = self.money
+            else:
+                zero = max(0, self.money - randbet)
+                botbet = random.randint(zero, self.money)
+        self.bet = botbet
+        self.money -= botbet
+        print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
 
     def playerround(self, dealer):
         p1rand = random.randint(17,19)
@@ -560,6 +538,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
