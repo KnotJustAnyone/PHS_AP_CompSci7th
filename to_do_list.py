@@ -8,19 +8,15 @@ class to_do_list:
         return None
 
     def remove_tasks(self,task_name): #lets user remove tasks from list
-        action = input("do you want to add / remove/ or save?")
+        remove_which_task  = input ("Type in the task you want to remove: ")
 
-        if action == "remove":
-            remove_which_task  = input ("Which task do you want to remove? type the full name of it")
-
-            for task in self.list:
-                if task[0] == remove_which_task:
-                    self.list.remove(task)
-                    print("The task has been removed")
-                    break
-                
-            else:
-                print("a task has not been removed")
+        for task in self.list:
+            if task[0] == remove_which_task:
+                self.list.remove(task)
+                print("The task has been removed")
+                break
+        else:
+            print("A task has not been removed.")
         
 
     def check_tasks(self,task_name): #checks off completed tasks
