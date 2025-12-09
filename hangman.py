@@ -160,7 +160,8 @@ def run_game():
         if ans == "y":
             game.restart_game()
         else:
-            break()
+            break
 
 run_game()
+
 
