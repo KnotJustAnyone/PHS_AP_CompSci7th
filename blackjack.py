@@ -412,7 +412,17 @@ class Dealer: #dealer properties
         print(f"Dealer stands with {self.dealer_value()}")
 
     def dealer_value(self): #dealer total value, will handle aces
-        pass
+        value = 0
+        aces = False
+        for card in self.dealerhand:
+            if card_value(card) == 11:
+                aces = True
+                value += 1
+            else:
+                value += card_value(card)
+        if aces == True and value <= 11:
+            value += 10
+        return value
 
     def check(self): #see if anyone busts or wins or ties
         pass
