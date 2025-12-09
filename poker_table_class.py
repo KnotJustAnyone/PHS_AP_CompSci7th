@@ -2,59 +2,56 @@
 from deck_of_cards import Deck
 from collections import Counter
 from itertools import combinations
+                               
+class Player: #player properties
+    def __init__(self, name, money=1500): #creating player, give money
+        self.name = name #player name, may not use because they'll see each other's cards?
+        self.hand = [] #hand of cards
+        self.money = money #money amount
+        self.bet = 0 #Money in pot
+        
+    def newcard(self, count): #putting card in hand
+        self.hand += Deck.deal(count)
+        
+    def resethand(self): #reset hand
+        self.hand = []
 
 class poker_table:
-    def __init__(self):
-        self.players = [] #List of players, need a player class
+    def __init__(self, players=None, small_blind=1, big_blind=2, ante=0,
+                button_index=0, max_players=9, starting_stack=None,
+                codes=True, return_not_print=True):
+        # Players and seating
+        self.players = list(players) if players else [] #List of players, need a player class
+        self.max_players = max_players
+
+        # Stakes
+        self.small_blind = small_blind
+        self.big_blind = big_blind if big_blind >= small_blind else small_blind * 2
+        self.ante = ante
+
+        # Pots and betting
         self.pot = 0
         self.bets = []
-        self.deck = Deck(False,True,True)
+
+        # Deck options
+        self.deck = Deck(False, codes, return_not_print, 1)
+
+        # Table and position
         self.table_cards = []
-        self.current_player = None
-        self.button_player = None
+        if self.players:
+            button_index = button_index % len(self.players)
+            self.button_player = self.players[button_index]
+            self.current_player = self.players[(button_index + 1) % len(self.players)]
+        else:
+            self.button_player = None
+            self.current_player = None
 
-    def poker_table_init_test():
-        table = poker_table(["John", "Abigail", "Steve"], 10, [10,5,5], 
-                            (False, True, True), [h2,s7,d5], "John", "Abigail")
-
-        if table.players = ["John", "Abigail", "Steve"]
-            print("test passed")
-        else: 
-            print("test failed")
-        
-        if table.pot = 10
-            print("test passed")
-        else: 
-            print("test failed")
-        
-        if table.bets = [10, 5, 5]
-            print("test passed")
-        else: 
-            print("test failed")
-        
-        if table.deck = [False, True, True]
-            print("test passed")
-        else: 
-            print("test failed")
-        
-        if table.table_cards = [h2, s7, d5]
-            print("test passed")
-        else: 
-            print("test failed")
-            
-        if table.current_player = "John"
-            print("test passed")
-        else: 
-            print("test failed")
-            
-        if table.button_player = "Abigail"
-            print("test passed")
-        else: 
-            print("test failed")
-
-    
-                               
-
+        # Chip stacks (rudimentary: equal starting stack for each player if provided)
+        self.stacks = {}
+        if starting_stack is not None and self.players:
+            for p in self.players:
+                self.stacks[p] = starting_stack
+ 
     def deal_hands(self): #Gives each player their initial two pocket cards
         return None
 
@@ -120,7 +117,7 @@ class poker_table:
         return best_score
         
 
-    def evaluate_hand(hand_str):
+    def evaluate_hand(self, hand_str):
         # Parse hand: e.g. "AS KS QS JS TS" -> [('A','S'), ('K','S'), ...]
         cards = hand_str.split()
         ranks = [c[0] for c in cards]
@@ -196,6 +193,45 @@ class poker_table:
         return bet #A number for the size of the bet
 
 #Tests ---------------------------------------------
+  def poker_table_init_test():
+      table = poker_table(["John", "Abigail", "Steve"], 10, [10,5,5], 
+                          (False, True, True), [h2,s7,d5], "John", "Abigail")
+
+      if table.players = ["John", "Abigail", "Steve"]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.pot = 10
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.bets = [10, 5, 5]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.deck = [False, True, True]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.table_cards = [h2, s7, d5]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.current_player = "John"
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.button_player = "Abigail"
+          print("test passed")
+      else: 
+          print("test failed")
+
 def test_best_hand():
     table = poker_table()
     hands = [
@@ -241,6 +277,30 @@ def test_best_hand():
     print(f"Identifies straight flush beats four of a kind: {table.best_hand(hands[10]) < table.best_hand(hands[-3])}")
     print(f"Identifies 6-high straight beats Ace-high straight: {table.best_hand(hands[-3]) < table.best_hand(hands[-4])}")
     print(f"Identifies royal flush beats generic straight flush: {table.best_hand(hands[-4]) < table.best_hand(hands[-2])}")
+    
+    def test_deal_hands():
+        table = poker_table()
+        table.players = [Player("Angela"), Player("Bob"), Player("Jeff")]
+    
+        table.deal_hands()
+    
+        for player in table.players:
+            assert len(player.hand) == 2, f"{player.name} should have 2 cards"
+       
+        all_cards = []
+        for player in table.players:
+            for card in player.hand:
+                all_cards.append(card)
+        
+        if len(all_cards) != len(set(all_cards)):
+            print("There are duplicate cards.")
+        else:
+            print("It worked!!!")
+
+
+
+
+
 
 
 
