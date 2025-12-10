@@ -159,26 +159,14 @@ class Bot(Player):
         self.money = money
         
     def getbet(self):  #get the amount players want to bet
-        if self.personality == 1:
-            mini = 350
-            maxi = 500
-            randchance = 0.5
-            randbet = 150
-        elif self.personality == 2:
-            mini = 150
-            maxi = 375
-            randchance = 0.25
-            randbet = 125
-        elif self.personality == 3:
-            mini = 2
-            maxi = 150
-            randchance = 0.05
-            randbet = 75
-        elif self.personality == 4:
-            mini = 2
-            maxi = 500
-            randchance = 0.75
-            randbet = 150
+        personality_bets = {
+            1: {"mini"; 350, "maxi"; 500, "randchance" = 0.5, "randbet" = 150}
+            2: {"mini"; 150, "maxi"; 375, "randchance" = 0.25, "randbet" = 75}
+            3: {"mini"; 2, "maxi"; 150, "randchance" = 0.05, "randbet" = 75}
+            4: {"mini"; 2, "maxi"; 500, "randchance" = 0.75, "randbet" = 150}
+        }
+        pbet = personality_bets[self.personality]
+        mini, maxi, randchance, randbet = pbet["mini"], pbet["maxi"], pbet["randchance"], pbet["randbet"]
         botbet = min(random.randint(mini, maxi), self.money)
         if self.money < mini:
             if random.random() < randchance:
@@ -538,6 +526,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
