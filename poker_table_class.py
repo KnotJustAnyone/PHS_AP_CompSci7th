@@ -1,18 +1,5 @@
 #Texas Hold Em Sepcific
-  def add_player_test():
-    add_player("Jacob")
-    if players[-1] == "Jacob":
-        print("test works")
-
-    else:
-        print("test failed")
-
-    add_song("Emily")
-        if playlist[-1] == "Emily" and playlist[-2] == "Jacob":
-            print("test works")
-
-        else:
-            print("test failed")
+ 
             
 class poker_table:
 
@@ -221,6 +208,21 @@ class poker_table:
         return bet #A number for the size of the bet
 
 #Tests ---------------------------------------------
+def add_player_test():
+    add_player("Jacob")
+    if players[-1] == "Jacob":
+        print("test works")
+
+    else:
+        print("test failed")
+
+    add_song("Emily")
+    if playlist[-1] == "Emily" and playlist[-2] == "Jacob":
+      print("test works")
+    else:
+      print("test failed")
+
+
 def test_best_hand():
     table = poker_table()
     hands = [
@@ -285,6 +287,7 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+
 
 
 
