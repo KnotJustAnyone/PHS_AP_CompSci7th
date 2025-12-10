@@ -160,10 +160,10 @@ class Bot(Player):
         
     def getbet(self):  #get the amount players want to bet
         personality_bets = {
-            1: {"mini"; 350, "maxi"; 500, "randchance" = 0.5, "randbet" = 150}
-            2: {"mini"; 150, "maxi"; 375, "randchance" = 0.25, "randbet" = 75}
-            3: {"mini"; 2, "maxi"; 150, "randchance" = 0.05, "randbet" = 75}
-            4: {"mini"; 2, "maxi"; 500, "randchance" = 0.75, "randbet" = 150}
+            1: {"mini": 350, "maxi": 500, "randchance": 0.5, "randbet": 150},
+            2: {"mini": 150, "maxi": 375, "randchance": 0.25, "randbet": 75},
+            3: {"mini": 2, "maxi": 150, "randchance": 0.05, "randbet": 75},
+            4: {"mini": 2, "maxi": 500, "randchance": 0.75, "randbet": 150}
         }
         pbet = personality_bets[self.personality]
         mini, maxi, randchance, randbet = pbet["mini"], pbet["maxi"], pbet["randchance"], pbet["randbet"]
@@ -183,9 +183,9 @@ class Bot(Player):
             print(f"{self.name} has doubled down, they are unable to take an action.")
             return
         bot_randomnum = {
-            1: lambda: random.randint(17,19)
-            2: lambda: 17
-            3: lambda: random.randint(15,17)
+            1: lambda: random.randint(17,19),
+            2: lambda: 17,
+            3: lambda: random.randint(15,17),
             4: lambda: random.randint(1,20)
         }
         b_rand = bot_randomnum[self.personality]()
@@ -227,7 +227,7 @@ class Bot(Player):
         currenttot = self.handtotal()
         if currenttot == 9 or currenttot == 10 or currenttot == 11:
             if (self.personality == 1) or \
-                (self.personality == 4 and random.randint(1,2) == 1)):
+                (self.personality == 4 and random.randint(1,2) == 1):
                 if self.money >= self.bet:
                     self.newcard(1)
                     self.money -= self.bet
@@ -244,7 +244,7 @@ class Bot(Player):
     def insurance(self, dealer):
         if card_value(dealer.dealerhand[0]) == 11:
             if (self.personality == 1) or \
-                (self.personality == 4 and random.randint(1,2) == 1)):
+                (self.personality == 4 and random.randint(1,2) == 1):
                 if self.money >= 0.5 * self.bet:
                     self.insbet = 0.5 * self.bet
                     self.money -= 0.5 * self.bet
@@ -443,6 +443,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
