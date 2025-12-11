@@ -77,6 +77,29 @@ class Dealer: #dealer properties
     def check(self): #see if anyone busts or wins or ties
         pass
 
+    def dealerturn(self):
+    # Dealer hits until total >= 17
+
+        def dealer_total():
+            total = 0
+        for card in self.dealerhand:
+            total += card_value(card)
+
+        # Ace handling (same idea as Player.handtotal)
+        if total > 21:
+            for card in self.dealerhand:
+                if card_value(card) == 11:  # Ace counted as 11
+                    total -= 10            # Reduce to Ace=1
+                    if total <= 21:
+                        break
+        return total
+
+    # Dealer draws until 17+
+    while dealer_value() < 17:
+        self.dealerhand += deck.deal(1)
+
+    return dealer_value()
+
 #Tests: -------------------------------------------------------------------------------------
 def resethand_checker():
     testclass = Player("L Bozo Code")
