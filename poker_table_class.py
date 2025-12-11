@@ -1,3 +1,18 @@
+#Texas Hold Em Sepcific
+ 
+            
+class poker_table:
+
+    hand_values = {} #A dictionary identifying the name of numerically ordered hands
+
+    def __init__(self):
+        self.players = [] #List of players, need a player class
+        self.pot = 0
+        self.bets = []
+        self.deck = None #Need a deck class
+        self.table_cards = []
+        self.current_player = None
+        self.button_player = None
 #Texas Hold Em Specific
 from deck_of_cards import Deck
 from collections import Counter
@@ -193,6 +208,21 @@ class poker_table:
         return bet #A number for the size of the bet
 
 #Tests ---------------------------------------------
+def add_player_test():
+    add_player("Jacob")
+    if players[-1] == "Jacob":
+        print("test works")
+
+    else:
+        print("test failed")
+
+    add_song("Emily")
+    if playlist[-1] == "Emily" and playlist[-2] == "Jacob":
+      print("test works")
+    else:
+      print("test failed")
+
+
 def test_best_hand():
     table = poker_table()
     hands = [
@@ -257,6 +287,7 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+
 
 
 
