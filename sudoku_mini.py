@@ -91,6 +91,23 @@ class Sudoku4x4:
     def auto_solve(self):
         # Tries to solve the puzzle on its own (probably using backtracking)
         pass
+        
+    def is_legal_move(self, row, col, number):
+        if self.board[row][col] != 0:
+            return False
+
+        for i in range(4):
+            if self.board[row][i] == number or self.board[i][col] == number:
+                return False
+
+        start_row = (row // 2) * 2
+        start_col = (col // 2) * 2
+        for i in range(2):
+            for j in range(2):
+                if self.board[start_row + i][start_col + j] == number:
+                    return False
+        return True
+
 def check_move_test(self):
     game = Sudoku4x4()
     for row in range(4):
