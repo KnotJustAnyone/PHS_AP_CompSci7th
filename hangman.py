@@ -9,7 +9,7 @@ class WordGuessingGame:
     # A list of possible words the game can choose from.
     # This component is needed for the choose_word function to work.
     word_list = []
-    with open('Wordle/words.txt','r',encoding='utf-8') as f:
+    with open('wordle/words.txt','r',encoding='utf-8') as f:
         for line in f:
             word_list.append(line.strip())
 
@@ -85,9 +85,17 @@ class WordGuessingGame:
 
     def update_display(self): # POSSIBLE REDUNDANCY: show_status()
        
-        #Noah: Updates the display word to show letters that have been guessed.
+        new_display = ""
+        for letter in self.secret_word:
+            if letter in self.guessed_letters:
+                new_display += letter
+            else:
+                new_display += "_"
+        self.display_word = new_display
+        return self.display_word
 
-        return None
+       
+        
 
     def check_win(self): # POSSIBLE REDUNDANCY: var game_over()
 
@@ -97,7 +105,7 @@ class WordGuessingGame:
         return None
 
 
-	def show_status(self):
+    def show_status(self):
         status = (
             f"Word: {' '.join(self.display_word)}\n"
             f"Guessed Letters: {', '.join(self.guessed_letters) if self.guessed_letters else 'None yet'}\n"
@@ -105,12 +113,30 @@ class WordGuessingGame:
         return status
 
     def restart_game(self):
-        
-        #Noah: Resets all variables to start a new game.
+        while True:
+            option = input ("Do you want to restart the game (y or n)?").strip().lower()
+            if option in ("y","n"):
+                break
+        if option == "y":
+            self.secret_word = ""
+            self.guessed_letters = []
+            self.tries_left = 6
+            self.display_word = ""
+            self.game_over = False
+            self.choose_word()
+        else:
+            print("Continuing game")
         
         return None
 
 # End of WordGuessingGame class
+def check_win(self):
+    """
+    Checks whether the player has guessed the full word.
+    Returns True if the display_word has no underscores "_".
+    Otherwise returns False.
+    """
+    return "_" not in self.display_word
 
 # RUN:
 def run_game():
@@ -122,6 +148,16 @@ def run_game():
 			game.update_display() # Redundancy? Will need fixing upon function coding
 			game.show_status() # Redundancy? Will need fixing upon function coding
 			if game.game_over:
+    while True: # Loop in case of restarts
+        game.choose_word()
+        
+        while True: # Main game loop
+            print(game.show_status())
+
+            #ask player for a guess
+            guess = input("Enter a letter: ").strip().lower()
+            game.guess_letter(guess)
+            if game.game_over:
                 break
 
     # Restart?
@@ -133,7 +169,7 @@ def run_game():
         if ans == "y":
             game.restart_game()
         else:
-            quit()
+            break
 
 run_game()
 
