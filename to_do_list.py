@@ -71,6 +71,14 @@ class to_do_list:
         def interval(self):
         #choose the interval of repetition 
            return None
+            
+    def print_toDoList(self):
+        printYN = input("Do you want to print your to do list?")
+        if printYN == "yes":
+            for task in self.list:
+                print(task)
+        else:
+            print("Not printing list")
 
 #repeated_tasks_test("Clean Room")
                                 
