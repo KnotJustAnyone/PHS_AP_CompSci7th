@@ -428,23 +428,21 @@ class Dealer: #dealer properties
         pass
 
 #Tests: -------------------------------------------------------------------------------------
- player_init_test
+def test_player_init():
+    p1 = Player("Jason", 50)
 
-    def test_player_init():
-        p1 = Player("Jason", 50)
+    print(p1.name)
+    print(p1.money)
 
-        print(p1.name)
-        print(p1.money)
+    if p1.name == "Jason":
+        print("name test passed")
+    else:
+        print("name test failed")
 
-        if p1.name = "Jason"
-            print("test passed")
-        else:
-            print("test failed")
-
-        if p1.money = "2000"
-            print("test passed")
-        else:
-            print("test failed")
+    if p1.money == 50:
+        print("money test passed")
+    else:
+        print("money test failed")
 
 
 def test_getting_players():
@@ -579,6 +577,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
