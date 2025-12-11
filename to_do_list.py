@@ -46,6 +46,26 @@ class to_do_list:
         return None
 
     def repeated_tasks(self,task_name): #allows user to choose tasks to repeat
+         """
+    Allows user to choose a task and assign a repetition interval.
+    repetition_interval meanings:
+        0 = not repeated
+        1 = daily
+        7 = weekly
+        30 = monthly
+    """
+      for i, task in enumerate(self.list):
+          name, completed, interval = task
+          if name == task_name:
+              # Ask user to pick repetition interval
+              new_interval = self.interval()
+              # Replace task with updated repetition interval
+              self.list[i] = (name, completed, new_interval)
+              print(f"Task '{task_name}' is now set to repeat every {new_interval} day(s).")
+              return
+
+      print(f"Task '{task_name}' not found.")
+                                
 
 
         def interval(self):
