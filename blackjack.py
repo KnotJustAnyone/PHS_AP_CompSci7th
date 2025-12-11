@@ -177,7 +177,7 @@ class Bot(Player):
             2: {"mini": 150, "maxi": 375, "randchance": 0.25, "randbet": 75},
             3: {"mini": 2, "maxi": 150, "randchance": 0.05, "randbet": 75},
             4: {"mini": 2, "maxi": 500, "randchance": 0.75, "randbet": 150},
-            5: {"mini": self.money, "maxi": self.money, "randchance": 1, "randbet":150}
+            5: {"mini": 500, "maxi": 500, "randchance": 1, "randbet":150}
         }
         pbet = personality_bets[self.personality]
         mini, maxi, randchance, randbet = pbet["mini"], pbet["maxi"], pbet["randchance"], pbet["randbet"]
@@ -458,6 +458,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
