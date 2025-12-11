@@ -2,7 +2,12 @@ import random
 from deck_of_cards import Deck
 players = [] #players
 
-def getting_players(): #ask players for player amount and names
+def randbotp():
+    personality = [1,2,3,4,5]
+    percentchance = [20,40,20,10,10]
+    return random.choices(personality, weight=percentchance)[0]
+
+def getting_players(): #ask players for player/bot amount and names
     while True:
         try:
             pnum = int(input("How many players are playing?"))
@@ -12,7 +17,15 @@ def getting_players(): #ask players for player amount and names
     for i in range(pnum):
         name = input(f"Player {i + 1}'s name: ")
         players.append(Player(name))
-    print(f"{pnum} players were added:\n{[pl.name for pl in players]} \n")
+    while True:
+        try:
+            bnum = int(input("How many bots do you want?"))
+            break
+        except ValueError:
+            print("a number (don't use letters) please")
+    for j in range(bnum):
+        players.append(Bot("Bot" + str(j), randbotp()))
+    print(f"{pnum} players were added:\n{[pl.name for pl in players]} \n{bnum} players were also added.\n")
 
 def card_value(card): #handle 2-card code to get the value
     if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
@@ -163,7 +176,8 @@ class Bot(Player):
             1: {"mini": 350, "maxi": 500, "randchance": 0.5, "randbet": 150},
             2: {"mini": 150, "maxi": 375, "randchance": 0.25, "randbet": 75},
             3: {"mini": 2, "maxi": 150, "randchance": 0.05, "randbet": 75},
-            4: {"mini": 2, "maxi": 500, "randchance": 0.75, "randbet": 150}
+            4: {"mini": 2, "maxi": 500, "randchance": 0.75, "randbet": 150},
+            5: {"mini": self.money, "maxi": self.money, "randchance": 1, "randbet":150}
         }
         pbet = personality_bets[self.personality]
         mini, maxi, randchance, randbet = pbet["mini"], pbet["maxi"], pbet["randchance"], pbet["randbet"]
@@ -186,7 +200,8 @@ class Bot(Player):
             1: lambda: random.randint(17,19),
             2: lambda: 17,
             3: lambda: random.randint(15,17),
-            4: lambda: random.randint(1,20)
+            4: lambda: random.randint(1,20),
+            5: lambda: 17
         }
         b_rand = bot_randomnum[self.personality]()
         while True:
@@ -443,6 +458,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
