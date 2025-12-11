@@ -189,7 +189,68 @@ class poker_table:
 
     #Asks the player what they want to bet
     def player_bet(self,player,game_state):
-        bet = 0
+        current_bet = game_state.get("current_bet", 0)
+        player_current_bet = game_state.get("player_bets", {}).get(player.name, 0)
+        to_call = current_bet - player_current_bet
+
+        print(f"\n--- {player.name}'s Turn ---")
+        print(f"Pot: {self.pot}")
+        print(f"Current Bet: {current_bet}")
+        print(f"Your Money: {player.money}")
+        print(f"Amount to Call: {to_call}")
+
+        # Get player's choice (for now input-based)
+        while True:
+            choice = input("Choose action (fold/check/call/raise): ").strip().lower()
+
+            # --- FOLD ---
+            if choice == "fold":
+                print(f"{player.name} folds.")
+                return ("fold", 0)
+
+            # --- CHECK ---
+            elif choice == "check":
+                if to_call > 0:
+                    print("You cannot check; there’s a bet to call.")
+                    continue
+                print(f"{player.name} checks.")
+                return ("check", 0)
+
+            # --- CALL ---
+            elif choice == "call":
+                if to_call <= 0:
+                    print("Nothing to call, choose check or raise.")
+                    continue
+                bet_amount = min(to_call, player.money)
+                player.money -= bet_amount
+                self.pot += bet_amount
+                game_state["player_bets"][player.name] = player_current_bet + bet_amount
+                print(f"{player.name} calls {bet_amount}.")
+                return ("call", bet_amount)
+
+            # --- RAISE ---
+            elif choice == "raise":
+                try:
+                    raise_amount = int(input("Enter raise amount (in addition to call): "))
+                except ValueError:
+                    print("Please enter a valid number.")
+                    continue
+
+                total_bet = to_call + raise_amount
+                if total_bet > player.money:
+                    print("Not enough money to raise that much.")
+                    continue
+
+                player.money -= total_bet
+                self.pot += total_bet
+                game_state["current_bet"] = player_current_bet + total_bet
+                game_state["player_bets"][player.name] = player_current_bet + total_bet
+                print(f"{player.name} raises to {game_state['current_bet']}.")
+                return ("raise", total_bet)
+
+            else:
+                print("Invalid choice. Please type: fold, check, call, or raise.")
+                
         return bet #A number for the size of the bet
 
 #Tests ---------------------------------------------
@@ -257,6 +318,7 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+
 
 
 
