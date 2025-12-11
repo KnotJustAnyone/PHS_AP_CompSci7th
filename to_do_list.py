@@ -44,6 +44,9 @@ class to_do_list:
     def check_tasks(self,task_name): #checks off completed tasks
         #returns True or False boolean
         return None
+    
+    def count_incomplete(self):
+        return sum(1 for t in self.list if not t[1])
 
     def repeated_tasks(self,task_name): #allows user to choose tasks to repeat
          """
