@@ -41,6 +41,10 @@ class to_do_list:
     def remove_tasks(self,task_name): #lets user remove tasks from list
         return None
 
+    def sort_alphabetically(self): 
+        self.list.sort(key=lambda t: t[0])
+        print("Tasks sorted alphabetically.")
+
     def check_tasks(self,task_name): #checks off completed tasks
         #returns True or False boolean
         return None
