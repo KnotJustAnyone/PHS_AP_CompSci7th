@@ -79,6 +79,10 @@ class to_do_list:
                 print(task)
         else:
             print("Not printing list")
+            
+    def clear_all(self):
+        self.list.clear()
+        print("All tasks cleared.")
 
 #repeated_tasks_test("Clean Room")
                                 
