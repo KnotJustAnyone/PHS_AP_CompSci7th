@@ -1,7 +1,7 @@
 import random
 
 class Wordle():
-    def __init__(self,maxGuesses):
+    def __init__(self,maxGuesses:int):
 
         self.answer_list = []
         with open('wordle/answers.txt','r',encoding='utf-8') as f:
@@ -16,35 +16,34 @@ class Wordle():
         answer = self.generateAnswer()
         self.startGame(answer,maxGuesses)
 
-    # Must have a string of length 5 passed into it
-    # Returns guessResults -> used to display color of the letters
-    # guessResults example:
+    # Should return something like this:
     # ['Green','Green','Yellow','Grey','Grey']
-    def guess(self,word):
+    # should be passed into displayGuess
+    def guess(self,word:str) -> list[str]:
         pass
 
-    # Returns boolean
-    # True if word is in words.txt
-    # False otherwise
-    def isValidGuess(self,word):
+    # Returns True if word is in words.txt
+    # else False
+    def isValidGuess(self,word:str) -> bool:
         if word in self.word_list:
-            # Returns false if guess is less than 5 letters, just in case
+            # Returns False if guess is less than 5 letters, just in case
             return len(word) == 5
         return False
 
-    # Does not return
     # guessResults is recieved from guess
     # Should print something like this to the console:
     #  CRANE
     #  🟩🟩🟨⬜⬜
-    def displayGuess(self,guessResults):
+    def displayGuess(self,guessResults:str) -> None:
         pass
 
-    # Returns a string of length 5, taken from words.py
-    def generateAnswer(self):
+    def generateAnswer(self) -> str:
         return random.choice(self.answer_list)
 
-    # Does not return
+    # word is a word generated from generateAnswer()
+    # Main game loop, function should end when the game is over
+    def startGame(self,word:str,maxGuesses:int) -> None:
+        pass
     # word is a word generated from generateWord()
     # maxGuesses is an int that determines how many guesses the player gets
     # Main game loop, function should end when the game is over
