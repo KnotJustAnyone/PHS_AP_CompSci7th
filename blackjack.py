@@ -25,7 +25,7 @@ def getting_players(): #ask players for player/bot amount and names
             print("a number (don't use letters) please")
     for j in range(bnum):
         players.append(Bot("Bot" + str(j), randbotp()))
-    print(f"{pnum} players were added:\n{[pl.name for pl in players]} \n{bnum} players were also added.\n")
+    print(f"{pnum} players were added:\n{[pl.name for pl in players]} \n{bnum} bots were also added.\n")
 
 def card_value(card): #handle 2-card code to get the value
     if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
@@ -458,10 +458,6 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
-
-
-
-
 
 
 
