@@ -101,6 +101,14 @@ class to_do_list:
         total = len(self.list)
         print(f"Completed: {done}/{total}")
 
+    def count_tasks_by_priority(self):
+        counts = {}
+        for t in self.list:
+            p = t.priority
+            counts[p] = counts.get(p, 0) + 1
+        return counts
+
+
 def removeTask_test():
     taskList = ["Do math homework", "wash dishes", "walk the dog"] #the to do list
     To_be_removed = "wash dishes"
