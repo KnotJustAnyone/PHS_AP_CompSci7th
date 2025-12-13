@@ -78,6 +78,11 @@ class Sudoku4x4:
                     return False
         return True
 
+    def is_board_full(self):
+    for row in self.board:
+        if 0 in row:
+            return False
+    return True
 
     def reset_board(self):
         # Clears the board or maybe resets it to the original puzzle
