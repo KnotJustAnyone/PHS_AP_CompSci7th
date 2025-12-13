@@ -14,6 +14,40 @@ class Sudoku4x4:
         # puzzle is supposed to be a list of lists with the numbers
         pass
 
+    def get_hints(self, row, col):
+        if self.board[row][col] != 0:
+            return []
+
+        possible = []
+
+        for num in range(1, 5):  
+            valid = True
+
+            for c in range(4):
+                if self.board[row][c] == num:
+                    valid = False
+                    break
+
+            if valid:
+                for r in range(4):
+                    if self.board[r][col] == num:
+                        valid = False
+                        break
+
+                box_row = (row // 2) * 2
+                box_col = (col // 2) * 2
+    
+                for r in range(box_row, box_row + 2):
+                    for c in range(box_col, box_col + 2):
+                        if self.board[r][c] == num:
+                            valid = False
+                            break
+                            
+                possible.append(num)
+
+        return possible
+
+    
     def test_load_puzzle(self, puzzle):
         game = Sudoku4x4()
         puzzle = [
