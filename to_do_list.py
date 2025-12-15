@@ -39,7 +39,16 @@ class to_do_list:
                 print(f"- {name} [{status}]")
 
     def remove_tasks(self,task_name): #lets user remove tasks from list
-        return None
+        task_name = input ("Type in the task you want to remove: ")
+
+        for task in self.list:
+            if task[0] == task_name:
+                self.list.remove(task)
+                print("The task has been removed")
+                break
+        else:
+            print("A task has not been removed.")
+        
 
     def check_tasks(self,task_name): #checks off completed tasks
         #returns True or False boolean
