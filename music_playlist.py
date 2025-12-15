@@ -1,8 +1,8 @@
-#creates and empty playlist
+# Creates and empty playlist
 playlist = []
 import random
 
-#add song to playlist
+# Add song to playlist
 def add_song(song):
     playlist.append(song)
 
@@ -21,12 +21,12 @@ def add_song_test():
     else:
         print("test failed")
 
-#delete song from playlist
+# Delete song from playlist
 def delete_song(song):
     if song in playlist:
         playlist.remove(song)
         
-# test for delete_song
+# Test for delete_song
 def delete_song_test():
     playlist.clear()
     add_song("orion")
@@ -60,13 +60,13 @@ def delete_song_test():
 
     print("Final playlist state:", playlist)
 
-#reorder songs in playlist
+# Reorder songs in playlist
 def move_song(song, new_position):
     if song in playlist:
         playlist.remove(song)
         playlist.insert(new_position, song)
 
-#prints the playlist with song name and artist
+# Prints the playlist with song name and artist
 def display_playlist():
     if not playlist:
         print("playlist empty")
@@ -79,14 +79,14 @@ def display_playlist():
         print(f"{i}. {title} — {artist}")
     for index, song in enumerate(playlist, start=1):
         print(f"{index}. {song}")
-    #Megan Vuong suggested album cov
-    #Megan Vuong suggested album cover jpeg displayed too
+    # Megan Vuong suggested album cov
+    # Megan Vuong suggested album cover jpeg displayed too
 
-#Landon Blain-Count # of songs
+# Landon Blain-Count # of songs
 def count_songs():
     print(f"Total songs in playlist: {len(playlist)}")
 
-#Search for songs
+# Search for songs
 def search_song(name):
     results = [song for song in playlist if name.lower() in song.lower()]
     if results:
@@ -94,7 +94,7 @@ def search_song(name):
         for song in results:
             print(song)
 
-#Shuffle 
+# Shuffle 
     else:
         print("No songs found with that name.")     
 def shuffle_playlist():
