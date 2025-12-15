@@ -8,10 +8,10 @@ class to_do_list:
         return None
 
     def remove_tasks(self,task_name): #lets user remove tasks from list
-        remove_which_task  = input ("Type in the task you want to remove: ")
+        task_name = input ("Type in the task you want to remove: ")
 
         for task in self.list:
-            if task[0] == remove_which_task:
+            if task[0] == task_name:
                 self.list.remove(task)
                 print("The task has been removed")
                 break
