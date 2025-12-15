@@ -50,6 +50,10 @@ class to_do_list:
             print("A task has not been removed.")
         
 
+    def sort_alphabetically(self): 
+        self.list.sort(key=lambda t: t[0])
+        print("Tasks sorted alphabetically.")
+
     def check_tasks(self,task_name): #checks off completed tasks
         #returns True or False boolean
         return None
