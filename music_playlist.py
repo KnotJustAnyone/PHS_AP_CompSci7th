@@ -98,7 +98,17 @@ def search_song(name):
     else:
         print("No songs found with that name.")     
 def shuffle_playlist():
-    random.shuffle(playlist)
+    if len(playlist) <= 1:
+        print("Not enough songs to shuffle.")
+        return
+
+    original = playlist.copy()
+
+    while True:
+        random.shuffle(playlist)
+        if playlist != original:
+            break
+
     print("Playlist shuffled.")
 
 def shuffle_playlist_test():
