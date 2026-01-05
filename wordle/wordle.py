@@ -48,5 +48,25 @@ class Wordle():
     # word is a word generated from generateWord()
     # maxGuesses is an int that determines how many guesses the player gets
     # Main game loop, function should end when the game is over
-    def startGame(self,word,maxGuesses):
-        pass
+   def startGame(self, word, maxGuesses):
+    print("Welcome to Wordle!")
+    print(f"You have {maxGuesses} guesses.\n")
+
+    while self.guesses < maxGuesses:
+        guess = input("Enter a 5-letter word: ").lower()
+
+        if not self.isValidGuess(guess):
+            print("Invalid guess. Try again.\n")
+            continue
+
+        self.guesses += 1
+        results = self.guess(guess)
+        self.displayGuess(results)
+
+        if guess == word:
+            print(f"\nYou won in {self.guesses} guesses! 🎉")
+            return
+
+        print(f"Guesses remaining: {maxGuesses - self.guesses}\n")
+
+    print(f"\nGame over! The word was: {word}")
