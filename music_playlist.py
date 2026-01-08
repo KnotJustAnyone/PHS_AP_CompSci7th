@@ -5,7 +5,7 @@ import random
 #instructions to user/how-to message
 print("You're ready to start creating your music playlist!")
 print("To add a song, type: add <songname>")
-print("To remove a song, type: remove <songname>")
+print("To delete a song, type: delete <songname>")
 print("To shuffle the playlist, type: shuffle")
 
 #creates a variable that stores the user's input
