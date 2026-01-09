@@ -311,6 +311,23 @@ class Dealer: #dealer properties
         pass
 
 #Tests: -------------------------------------------------------------------------------------
+def test_player_init():
+    p1 = Player("Jason", 50)
+
+    print(p1.name)
+    print(p1.money)
+
+    if p1.name == "Jason":
+        print("name test passed")
+    else:
+        print("name test failed")
+
+    if p1.money == 50:
+        print("money test passed")
+    else:
+        print("money test failed")
+
+
 def test_getting_players():
     x = random.randint(2,10)
     print(f"Your job: attempt {x} players.")
