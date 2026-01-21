@@ -324,6 +324,11 @@ class Dealer: #dealer properties
     def check(self): #see if anyone busts or wins or ties
         pass
 
+def run_game():
+    dealer = Dealer()
+    getting_players()
+    dealer.deal1
+
 #Tests: -------------------------------------------------------------------------------------
 def test_player_init():
     p1 = Player("Jason", 50)
@@ -474,6 +479,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
