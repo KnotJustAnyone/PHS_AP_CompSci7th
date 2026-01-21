@@ -301,9 +301,9 @@ class Dealer: #dealer properties
     
     def round(self): #player: hit or stand, if over 21, bust
         for player in players:
-            player.playerround()
-        dealerturn()
-        check()
+            player.playerround(self)
+        self.dealerturn()
+        self.check()
 
     def dealerturn(self): #dealer play, if under 17, will play, if not, will stand
         while self.dealer_value() < 17:
@@ -347,14 +347,16 @@ class Dealer: #dealer properties
             elif checks == dealer: #maybe add condition if double BlackJack, just to say they both had it, but doesn't really matter.
                 print(f"{player.name} ties with the Dealer. No loss/gain.")
                 player.money += player.bet
-        
 
 def run_game():
-    dealer = Dealer()
+    dealer = Dealer(players)
     getting_players()
     dealer.playerbets()
     dealer.deal1()
     dealer.round()
+
+#unhash to play game
+#run_game()
 
 #Tests: -------------------------------------------------------------------------------------
 def test_player_init():
@@ -506,15 +508,3 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
-
-
-
-
-
-
-
-
-
-
-
-
