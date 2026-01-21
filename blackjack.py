@@ -300,7 +300,9 @@ class Dealer: #dealer properties
         print(f"The Dealer reveals a card: {deck.identify_card(self.dealerhand[0])}.")
     
     def round(self): #player: hit or stand, if over 21, bust
-        pass
+        for player in players:
+            player.playerround()
+        dealerturn()
 
     def dealerturn(self): #dealer play, if under 17, will play, if not, will stand
         while self.dealer_value() < 17:
@@ -322,7 +324,17 @@ class Dealer: #dealer properties
         return total
         
     def check(self): #see if anyone busts or wins or ties
-        pass
+        dealer = self.dealer_value()
+        for player in players:
+            checks = player.player_value()
+            if checks > 21:
+                print(f"{player} busts! You lose. Lost: ${player.bet}.")
+                player.bet = 0
+            elif checks > dealer:
+                print(f"{player} wins! You win! Won: ${player.bet}.")
+            elif checks < dealer:
+                print(f"Dealer wins! You lose.")
+        
 
 def run_game():
     dealer = Dealer()
@@ -479,6 +491,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
