@@ -247,7 +247,7 @@ class Bot(Player):
                     self.newcard(1)
                     self.money -= self.bet
                     self.bet = self.bet * 2
-                    print(f"{self.name} has doubled down! They get one card and cannot play anymore.")
+                    print(f"{self.name} has doubled down! They get one card and must stand.")
                     self.hasddown = True
                     return True
                 else:
@@ -328,12 +328,23 @@ class Dealer: #dealer properties
         for player in players:
             checks = player.player_value()
             if checks > 21:
-                print(f"{player} busts! You lose. Lost: ${player.bet}.")
+                print(f"{player.name} busts! You lose. Lost: ${player.bet}.")
                 player.bet = 0
-            elif checks > dealer:
-                print(f"{player} wins! You win! Won: ${player.bet}.")
-            elif checks < dealer:
-                print(f"Dealer wins! You lose.")
+        if dealer > 21:
+            for player in players:
+                print(f"Dealer busts! {player.name} wins: ${player.bet}.")
+                player.money += player.bet * 2
+        else:
+            for player in players:
+                checks = player.player_value()
+                elif checks > dealer:
+                    print(f"{player.name} wins! Won: ${player.bet}.")
+                    player.money += player.bet * 2
+                elif checks < dealer:
+                    print(f"Dealer wins! {player} loses. Lost: ${player.bet}")
+                elif checks = dealer:
+                    print(f"{player.name} ties with the Dealer. No loss/gain.")
+                    player.money += player.bet
         
 
 def run_game():
@@ -491,6 +502,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
