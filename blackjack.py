@@ -330,21 +330,22 @@ class Dealer: #dealer properties
             if checks > 21:
                 print(f"{player.name} busts! You lose. Lost: ${player.bet}.")
                 player.bet = 0
-        if dealer > 21:
-            for player in players:
-                print(f"Dealer busts! {player.name} wins: ${player.bet}.")
+            elif dealer > 21:
+                print(f"Dealer busts! {player.name} wins: ${player.bet * 2}.")
                 player.money += player.bet * 2
-        else:
-            for player in players:
-                checks = player.player_value()
-                elif checks > dealer:
-                    print(f"{player.name} wins! Won: ${player.bet}.")
-                    player.money += player.bet * 2
-                elif checks < dealer:
-                    print(f"Dealer wins! {player} loses. Lost: ${player.bet}")
-                elif checks = dealer:
-                    print(f"{player.name} ties with the Dealer. No loss/gain.")
-                    player.money += player.bet
+            elif (checks == 21 and player.hand.len() == 2) and (dealer != 21 or self.dealerhand.len() > 2):
+                print(f"{player.name} has BlackJack! Won: ${player.bet * 1.5}.")
+                player.money += player.bet * 1.5
+            elif checks > dealer:
+                print(f"{player.name} wins! Won: ${player.bet * 2}.")
+                player.money += player.bet * 2
+            elif (dealer == 21 and self.dealerhand.len() == 2) and (checks != 21 or player.hand.len() >2):
+                print(f"Dealer has BlackJack! {player.name} loses. Lost {player.bet}")
+            elif checks < dealer:
+                print(f"Dealer wins! {player.name } loses. Lost: ${player.bet}")
+            elif checks == dealer: #maybe add condition if double BlackJack, just to say they both had it, but doesn't really matter.
+                print(f"{player.name} ties with the Dealer. No loss/gain.")
+                player.money += player.bet
         
 
 def run_game():
@@ -502,6 +503,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
