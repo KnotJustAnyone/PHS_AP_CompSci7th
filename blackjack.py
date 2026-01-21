@@ -303,6 +303,7 @@ class Dealer: #dealer properties
         for player in players:
             player.playerround()
         dealerturn()
+        check()
 
     def dealerturn(self): #dealer play, if under 17, will play, if not, will stand
         while self.dealer_value() < 17:
@@ -351,7 +352,9 @@ class Dealer: #dealer properties
 def run_game():
     dealer = Dealer()
     getting_players()
-    dealer.deal1
+    dealer.playerbets()
+    dealer.deal1()
+    dealer.round()
 
 #Tests: -------------------------------------------------------------------------------------
 def test_player_init():
@@ -503,6 +506,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
