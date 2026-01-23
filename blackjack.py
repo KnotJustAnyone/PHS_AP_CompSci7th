@@ -329,23 +329,23 @@ class Dealer: #dealer properties
         for player in players:
             checks = player.player_value()
             if checks > 21:
-                print(f"{player.name} busts! You lose. Lost: ${player.bet}.")
+                print(f"{player.name} busts! You lose. Lost: ${player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
                 player.bet = 0
             elif dealer > 21:
-                print(f"Dealer busts! {player.name} wins: ${player.bet * 2}.")
+                print(f"Dealer busts! {player.name} wins: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
                 player.money += player.bet * 2
             elif (checks == 21 and player.hand.len() == 2) and (dealer != 21 or self.dealerhand.len() > 2):
-                print(f"{player.name} has BlackJack! Won: ${player.bet * 1.5}.")
+                print(f"{player.name} has BlackJack! Won: ${player.bet * 1.5}.\n Dealer value:{dealer}, {player.name} value:{checks}..")
                 player.money += player.bet * 1.5
             elif checks > dealer:
-                print(f"{player.name} wins! Won: ${player.bet * 2}.")
+                print(f"{player.name} wins! Won: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
                 player.money += player.bet * 2
             elif (dealer == 21 and self.dealerhand.len() == 2) and (checks != 21 or player.hand.len() >2):
-                print(f"Dealer has BlackJack! {player.name} loses. Lost {player.bet}")
+                print(f"Dealer has BlackJack! {player.name} loses. Lost {player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
             elif checks < dealer:
-                print(f"Dealer wins! {player.name } loses. Lost: ${player.bet}")
+                print(f"Dealer wins! {player.name} loses. Lost: ${player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
             elif checks == dealer: #maybe add condition if double BlackJack, just to say they both had it, but doesn't really matter.
-                print(f"{player.name} ties with the Dealer. No loss/gain.")
+                print(f"{player.name} ties with the Dealer. No loss/gain.\n Dealer value:{dealer}, {player.name} value:{checks}.")
                 player.money += player.bet
 
 def run_game():
@@ -508,3 +508,4 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
