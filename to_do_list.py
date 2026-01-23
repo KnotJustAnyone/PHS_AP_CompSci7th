@@ -18,9 +18,9 @@ class task:
     
 class to_do_list:
     def __init__(self):
-        self.list = [] #list of tasks. task is task = (string, boolean, int)
+        self.list = [] # List of tasks. task is task = (string, boolean, int)
 
-        #maybe add class for tasks with self.start day or self.repetition_interval
+        # Maybe add class for tasks with self.start day or self.repetition_interval
 
     def add_tasks(self,task_name): #lets user add tasks to list.  
         task1 = task(task_name, False, 0)
@@ -50,14 +50,14 @@ class to_do_list:
             print("A task has not been removed.")
         
 
-    def check_tasks(self,task_name): #checks off completed tasks
-        #returns True or False boolean
+    def check_tasks(self,task_name): # Checks off completed tasks
+        # Returns True or False boolean
         return None
     
     def count_incomplete(self):
         return sum(1 for t in self.list if not t[1])
 
-    def repeated_tasks(self,task_name): #allows user to choose tasks to repeat
+    def repeated_tasks(self,task_name): # Allows user to choose tasks to repeat
          """
     Allows user to choose a task and assign a repetition interval.
     repetition_interval meanings:
@@ -81,7 +81,7 @@ class to_do_list:
 
 
         def interval(self):
-        #choose the interval of repetition 
+        # Choose the interval of repetition 
            return None
             
     def print_toDoList(self):
@@ -96,7 +96,7 @@ class to_do_list:
         self.list.clear()
         print("All tasks cleared.")
 
-#repeated_tasks_test("Clean Room")
+# Repeated_tasks_test("Clean Room")
                                 
     def random_task(self):
         incomplete_tasks = [task for task in self.list if not task[1]]
@@ -127,8 +127,8 @@ def removeTask_test():
     final_list = ["Do math homework", "walk the dog"]
 
     action = "remove"
-    remove_which_task  = 2 #remove wash dishes
-    a = int(remove_which_task) - 1 #making it work with the index number
+    remove_which_task  = 2 # Remove wash dishes
+    a = int(remove_which_task) - 1 # Making it work with the index number
     removing = taskList.pop(a)
 
     if removing == To_be_removed and taskList == final_list:
