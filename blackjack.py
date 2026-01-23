@@ -335,7 +335,7 @@ class Dealer: #dealer properties
                 print(f"Dealer busts! {player.name} wins: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
                 player.money += player.bet * 2
             elif (checks == 21 and player.hand.len() == 2) and (dealer != 21 or self.dealerhand.len() > 2):
-                print(f"{player.name} has BlackJack! Won: ${player.bet * 1.5}.\n Dealer value:{dealer}, {player.name} value:{checks}..")
+                print(f"{player.name} has BlackJack! Won: ${player.bet * 1.5}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
                 player.money += player.bet * 1.5
             elif checks > dealer:
                 print(f"{player.name} wins! Won: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
@@ -508,4 +508,5 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
