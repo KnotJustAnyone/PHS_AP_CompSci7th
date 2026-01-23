@@ -4,11 +4,11 @@ class Wordle():
     def __init__(self,maxGuesses:int):
 
         self.answer_list = []
-        with open('answers.txt','r',encoding='utf-8') as f:
+        with open('wordle/answers.txt','r',encoding='utf-8') as f:
             for line in f:
                 self.answer_list.append(line.strip())
         self.word_list = []
-        with open('words.txt','r',encoding='utf-8') as f:
+        with open('wordle/words.txt','r',encoding='utf-8') as f:
             for line in f:
                 self.word_list.append(line.strip())
 
