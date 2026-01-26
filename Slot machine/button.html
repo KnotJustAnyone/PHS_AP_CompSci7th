@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Button</title>
+  <style>
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: 2px solid black;
+      background: red;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #eee;
+    }
+  </style>
+</head>
+<body>
+
+<button id="myButton">Gamble</button>
+
+<script>
+  document.getElementById("myButton").addEventListener("click", () => {
+    alert("Button clicked!");
+  });
+</script>
+
+</body>
+</html>
