@@ -55,7 +55,7 @@ class Player: #player properties
     def resethand(self): #reset hand
         self.hand = []
 
-    def handtotal(self): #total value of cards + will handle ace shenanigans
+    def player_value(self): #total value of cards + will handle ace shenanigans
         total = 0
         for card in self.hand:
             total += card_value(card)
@@ -89,7 +89,7 @@ class Player: #player properties
             hitstand = input("Would you like to hit or stand (h or s)?").strip().lower()
             if hitstand == "h":
                 self.newcard(1)
-                currenttot = self.handtotal()
+                currenttot = self.player_value()
                 print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
                 if currenttot >= 21:
                     break
@@ -123,7 +123,7 @@ class Player: #player properties
                 print(f"{self.name} has doubled down, they are unable to split.")
 
     def doubledown(self):
-        currenttot = self.handtotal()
+        currenttot = self.player_value()
         if currenttot == 9 or currenttot == 10 or currenttot == 11:
             while True:
                 ifdouble = input(f"Would {self.name} like to double down? (y or n)?\nNote that you can no longer hit or stand if you do.").strip().lower()
@@ -205,15 +205,15 @@ class Bot(Player):
         }
         b_rand = bot_randomnum[self.personality]()
         while True:
-            currenttot = self.handtotal()
+            currenttot = self.player_value()
             if currenttot <= b_rand:
                 self.newcard(1)
-                ctot = self.handtotal()
+                ctot = self.player_value()
                 print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {ctot}.")
                 if ctot >= 21:
                     break
             else:
-                ctot = self.handtotal()
+                ctot = self.player_value()
                 print(f"{self.name} stands!\nTheir total: {ctot}")
                 break
     
@@ -239,7 +239,7 @@ class Bot(Player):
                 print(f"{self.name} has doubled down, they are unable to split.")
 
     def doubledown(self):
-        currenttot = self.handtotal()
+        currenttot = self.player_value()
         if currenttot == 9 or currenttot == 10 or currenttot == 11:
             if (self.personality == 1) or \
                 (self.personality == 4 and random.randint(1,2) == 1):
@@ -247,7 +247,7 @@ class Bot(Player):
                     self.newcard(1)
                     self.money -= self.bet
                     self.bet = self.bet * 2
-                    print(f"{self.name} has doubled down! They get one card and cannot play anymore.")
+                    print(f"{self.name} has doubled down! They get one card and must stand.")
                     self.hasddown = True
                     return True
                 else:
@@ -300,7 +300,10 @@ class Dealer: #dealer properties
         print(f"The Dealer reveals a card: {deck.identify_card(self.dealerhand[0])}.")
     
     def round(self): #player: hit or stand, if over 21, bust
-        pass
+        for player in players:
+            player.playerround(self)
+        self.dealerturn()
+        self.check()
 
     def dealerturn(self): #dealer play, if under 17, will play, if not, will stand
         while self.dealer_value() < 17:
@@ -310,20 +313,50 @@ class Dealer: #dealer properties
         print(f"Dealer stands with {self.dealer_value()}")
 
     def dealer_value(self): #dealer total value, will handle aces
-        value = 0
-        aces = False
+        total = 0
         for card in self.dealerhand:
-            if card_value(card) == 11:
-                aces = True
-                value += 1
-            else:
-                value += card_value(card)
-        if aces == True and value <= 11:
-            value += 10
-        return value
-
+            total += card_value(card)
+        if total > 21: # Lowers the value of aces to 1 if the total is over 21
+            for card in self.dealerhand:
+                if card_value(card) == 11:
+                    total -= 10 #Should just redo total every time it checks... inefficient, but will work
+                    if total <= 21:
+                        break
+        return total
+        
     def check(self): #see if anyone busts or wins or ties
-        pass
+        dealer = self.dealer_value()
+        for player in players:
+            checks = player.player_value()
+            if checks > 21:
+                print(f"{player.name} busts! You lose. Lost: ${player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                player.bet = 0
+            elif dealer > 21:
+                print(f"Dealer busts! {player.name} wins: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                player.money += player.bet * 2
+            elif (checks == 21 and player.hand.len() == 2) and (dealer != 21 or self.dealerhand.len() > 2):
+                print(f"{player.name} has BlackJack! Won: ${player.bet * 1.5}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                player.money += player.bet * 1.5
+            elif checks > dealer:
+                print(f"{player.name} wins! Won: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                player.money += player.bet * 2
+            elif (dealer == 21 and self.dealerhand.len() == 2) and (checks != 21 or player.hand.len() >2):
+                print(f"Dealer has BlackJack! {player.name} loses. Lost {player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+            elif checks < dealer:
+                print(f"Dealer wins! {player.name} loses. Lost: ${player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+            elif checks == dealer: #maybe add condition if double BlackJack, just to say they both had it, but doesn't really matter.
+                print(f"{player.name} ties with the Dealer. No loss/gain.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                player.money += player.bet
+
+def run_game():
+    dealer = Dealer(players)
+    getting_players()
+    dealer.playerbets()
+    dealer.deal1()
+    dealer.round()
+
+#unhash to play game
+#run_game()
 
 #Tests: -------------------------------------------------------------------------------------
 def test_player_init():
@@ -381,7 +414,7 @@ def test_hand_total():
     def evaluateTest(test):
         try:
             plr.hand = test[0]
-            result = plr.handtotal()
+            result = plr.player_value()
             expectedResult = test[1]
             if result == expectedResult:
                 print("O - Test passed")
@@ -475,9 +508,5 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
-
-
-
-
 
 
