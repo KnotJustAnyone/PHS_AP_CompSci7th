@@ -9,6 +9,10 @@ def get_stock_price(ticker):
     symbol = ticker.lower() + ".us"
     url = f"https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv"
 
+def save_stock(ticker):
+    with open("stocks.txt", "a") as file:
+    file.write(ticker + "\n")
+
     # Requesting data
     response = requests.get(url)
     response.raise_for_status()
@@ -52,6 +56,7 @@ while True:
         print("Volume:", stock_data["volume"])
 
         searched_stocks.append(ticker)
+        save_stock(ticker)
 
 print("\nStocks searched this session:")
 for stock in searched_stocks:
