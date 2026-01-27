@@ -5,7 +5,7 @@ players = [] #players
 def randbotp():
     personality = [1,2,3,4,5]
     percentchance = [20,40,20,10,10]
-    return random.choices(personality, weight=percentchance)[0]
+    return random.choices(personality, weights=percentchance)[0]
 
 def getting_players(): #ask players for player/bot amount and names
     while True:
@@ -86,7 +86,7 @@ class Player: #player properties
             print(f"{self.name} has doubled down, they are unable to take an action.")
             return
         while True:
-            hitstand = input("Would you like to hit or stand (h or s)?").strip().lower()
+            hitstand = input(f"{self.name}, would you like to hit or stand (h or s)?").strip().lower()
             if hitstand == "h":
                 self.newcard(1)
                 currenttot = self.player_value()
@@ -508,5 +508,6 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
