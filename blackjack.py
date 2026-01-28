@@ -10,7 +10,7 @@ def randbotp():
 def getting_players(): #ask players for player/bot amount and names
     while True:
         try:
-            pnum = int(input("How many players are playing?"))
+            pnum = int(input("How many players are you adding?"))
             break
         except ValueError:
             print("a number (don't use letters) please")
@@ -55,6 +55,12 @@ class Player: #player properties
     def resethand(self): #reset hand
         self.hand = []
 
+    def reset_player(self)
+        self.hand = []
+        self.money = 1500
+        self.bet = 0
+        self.hasddown = False
+    
     def player_value(self): #total value of cards + will handle ace shenanigans
         total = 0
         for card in self.hand:
@@ -330,7 +336,6 @@ class Dealer: #dealer properties
             checks = player.player_value()
             if checks > 21:
                 print(f"{player.name} busts! You lose. Lost: ${player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
-                player.bet = 0
             elif dealer > 21:
                 print(f"Dealer busts! {player.name} wins: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
                 player.money += player.bet * 2
@@ -347,13 +352,53 @@ class Dealer: #dealer properties
             elif checks == dealer: #maybe add condition if double BlackJack, just to say they both had it, but doesn't really matter.
                 print(f"{player.name} ties with the Dealer. No loss/gain.\n Dealer value:{dealer}, {player.name} value:{checks}.")
                 player.money += player.bet
+            player.bet = 0
+            player.hasddown = False
 
+def reset_game()
+    while True:
+        reset = input(f'''Would you like to restart the game (y = reset, n = continue)?
+        And with the same players (y or n)?
+        Type them together, e.g. "yy" or "yn". 1st is restart, 2nd is players.
+        Just type n if you do not want to restart:''').strip().lower()
+        if reset in ("yy","yn","n"):
+            break
+        print('Please type a valid answer. Valid: "yy", "yn","n".')
+    if reset == "n":
+        run_game()
+    elif reset == "yy":
+        for player in players:
+            player.reset_player()
+        run_game()
+    elif reset == "yn":
+        for player in players:
+            player.reset_player()
+        while True:
+            try:
+                remove_players = int(input(f"""{players}
+        Who would you like to remove?
+        Assume the 1st player (left) is numbered 1, the 2nd 2, etc.
+        If you are removing multiple players, type it with commas inbetween.
+        EX: 1,2,6,8""").strip())
+                if new_players > players.len() + 1 or new_players < 1:
+                    print("Please enter a valid player.")
+                else:
+                    break
+            except ValueError:
+                print("Please enter an integer (whole number).")
+        remove_players = remove_players.split(",")
+        players = [plr for plr in players if plr not in remove_players]
+        getting_players()
+        run_game()
+        
 def run_game():
     dealer = Dealer(players)
-    getting_players()
+    if players == []:
+        getting_players()
     dealer.playerbets()
     dealer.deal1()
     dealer.round()
+    reset_game()
 
 #unhash to play game
 #run_game()
@@ -508,6 +553,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
