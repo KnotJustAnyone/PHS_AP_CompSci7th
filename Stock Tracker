@@ -1,6 +1,10 @@
+import json 
+import os 
 import requests
 import csv
 from io import StringIO
+
+PORTFOLIO_FILE = "portfolio.json"
 
 def get_stock_price(ticker):
     """
