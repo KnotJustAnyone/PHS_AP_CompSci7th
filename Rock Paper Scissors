@@ -1,20 +1,29 @@
 import random
 
-options = ["rock", "paper", "scissors"]
+while True:
 
-user_choice = input("Choose rock, paper, or scissors: ").lower()
-computer_choice = random.choice(options)
+    options = ["rock", "paper", "scissors"]
 
-print(f"You chose: {user_choice}")
-print(f"Computer chose: {computer_choice}")
+    user_choice = input("Choose rock, paper, or scissors: ").lower()
+    computer_choice = random.choice(options)
 
-if user_choice == computer_choice:
-    print("It's a tie!")
-elif (
-    (user_choice == "rock" and computer_choice == "scissors") or
-    (user_choice == "paper" and computer_choice == "rock") or
-    (user_choice == "scissors" and computer_choice == "paper")
-):
-    print("You win!")
-else:
-    print("You lose!")
+    print(f"You chose: {user_choice}")
+    print(f"Computer chose: {computer_choice}")
+
+    if user_choice == computer_choice:
+        print("It's a tie!")
+    elif (
+        (user_choice == "rock" and computer_choice == "scissors") or
+        (user_choice == "paper" and computer_choice == "rock") or
+        (user_choice == "scissors" and computer_choice == "paper")
+    ):
+        print("You win!")
+    else:
+        print("You lose!")
+
+    play_again = input("Would you like to play again? Enter yes or no: ").lower()
+    
+    if play_again == "no":
+        break
+
+print("Bye Bye!")
