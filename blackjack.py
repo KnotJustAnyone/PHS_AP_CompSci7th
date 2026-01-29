@@ -55,7 +55,7 @@ class Player: #player properties
     def resethand(self): #reset hand
         self.hand = []
 
-    def reset_player(self)
+    def reset_player(self):
         self.hand = []
         self.money = 1500
         self.bet = 0
@@ -91,6 +91,10 @@ class Player: #player properties
         if self.hasddown:
             print(f"{self.name} has doubled down, they are unable to take an action.")
             return
+        print(f"{self.name}'s cards:")
+        for card in self.hand:
+            print(f"\033[1m{deck.identify_card(card)}\033[0m.")
+        print(f"Total: {self.player_value()}.")
         while True:
             hitstand = input(f"{self.name}, would you like to hit or stand (h or s)?").strip().lower()
             if hitstand == "h":
@@ -339,13 +343,13 @@ class Dealer: #dealer properties
             elif dealer > 21:
                 print(f"Dealer busts! {player.name} wins: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
                 player.money += player.bet * 2
-            elif (checks == 21 and player.hand.len() == 2) and (dealer != 21 or self.dealerhand.len() > 2):
+            elif (checks == 21 and len(player.hand) == 2) and (dealer != 21 or len(self.dealerhand) > 2):
                 print(f"{player.name} has BlackJack! Won: ${player.bet * 1.5}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
                 player.money += player.bet * 1.5
             elif checks > dealer:
                 print(f"{player.name} wins! Won: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
                 player.money += player.bet * 2
-            elif (dealer == 21 and self.dealerhand.len() == 2) and (checks != 21 or player.hand.len() >2):
+            elif (dealer == 21 and len(self.dealerhand) == 2) and (checks != 21 or len(player.hand) >2):
                 print(f"Dealer has BlackJack! {player.name} loses. Lost {player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
             elif checks < dealer:
                 print(f"Dealer wins! {player.name} loses. Lost: ${player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
@@ -355,12 +359,13 @@ class Dealer: #dealer properties
             player.bet = 0
             player.hasddown = False
 
-def reset_game()
+def reset_game():
+    global players
     while True:
         reset = input(f'''Would you like to restart the game (y = reset, n = continue)?
-        And with the same players (y or n)?
-        Type them together, e.g. "yy" or "yn". 1st is restart, 2nd is players.
-        Just type n if you do not want to restart:''').strip().lower()
+And with the same players (y or n)?
+Type them together, e.g. "yy" or "yn". 1st is restart, 2nd is players.
+Just type n if you do not want to restart:''').strip().lower()
         if reset in ("yy","yn","n"):
             break
         print('Please type a valid answer. Valid: "yy", "yn","n".')
@@ -375,12 +380,13 @@ def reset_game()
             player.reset_player()
         while True:
             try:
-                remove_players = int(input(f"""{players}
-        Who would you like to remove?
-        Assume the 1st player (left) is numbered 1, the 2nd 2, etc.
-        If you are removing multiple players, type it with commas inbetween.
-        EX: 1,2,6,8""").strip())
-                if new_players > players.len() + 1 or new_players < 1:
+                for player in players:
+                    print(player.name)
+                remove_players = int(input(f"""Who would you like to remove?
+Assume the 1st player (top) is numbered 1, the 2nd 2, etc.
+If you are removing multiple players, type it with commas inbetween.
+EX: 1,2,6,8""").strip())
+                if remove_players > len(players) + 1 or new_players < 1:
                     print("Please enter a valid player.")
                 else:
                     break
@@ -553,6 +559,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
