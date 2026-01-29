@@ -48,6 +48,7 @@ class Player: #player properties
         self.money = money #money amount
         self.bet = 0 #bet amount
         self.hasddown = False
+        self.personality = 0
     
     def newcard(self, count): #putting card in hand
         self.hand += deck.deal(count)
@@ -152,28 +153,6 @@ class Player: #player properties
                     print(f"You don't have enough money to double your bet! Currently, you have {self.money}.")
                     return False
         return False
-
-    def insurance(self, dealer):
-        if card_value(dealer.dealerhand[0]) == 11:
-            while True:
-                ifins = input(f"Would {self.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.").strip().lower()
-                if ifins in ("y","n"):
-                    break
-                print("y or n please")
-            if ifins == "y":
-                if self.money >= 0.5 * self.bet:
-                    self.insbet = 0.5 * self.bet
-                    self.money -= 0.5 * self.bet
-                    print(f"{self.name} has put ${self.insbet} in as insurance!")
-                    if card_value(dealer.dealerhand[1]) == 10: 
-                        print("Dealer has Blackjack! Insurance bets are doubled and returned.")
-                        self.money += self.insbet * 2
-                        self.insbet = 0
-                    else:
-                        print("Dealer does NOT have Blackjack, all insurance is lost.")
-                        self.insbet = 0
-            else:
-                print(f"{self.name} does not have enough money!")
                     
 class Bot(Player):
     def __init__(self,name,personality, money=1500):
@@ -265,24 +244,6 @@ class Bot(Player):
                     return False   
             return False
         return False
-
-    def insurance(self, dealer):
-        if card_value(dealer.dealerhand[0]) == 11:
-            if (self.personality == 1) or \
-                (self.personality == 4 and random.randint(1,2) == 1):
-                if self.money >= 0.5 * self.bet:
-                    self.insbet = 0.5 * self.bet
-                    self.money -= 0.5 * self.bet
-                    print(f"{self.name} has put ${self.insbet} in as insurance!")
-                    if card_value(dealer.dealerhand[1]) == 10: 
-                        print("Dealer has Blackjack! Insurance bets are doubled and returned.")
-                        self.money += self.insbet * 2
-                        self.insbet = 0
-                    else:
-                        print("Dealer does NOT have Blackjack, all insurance is lost.")
-                        self.insbet = 0
-                else:
-                    print(f"{self.name} does not have enough money!")
                     
 class Dealer: #dealer properties
     def __init__(self, players): #creating dealer + what its actions will be
@@ -333,7 +294,35 @@ class Dealer: #dealer properties
                     if total <= 21:
                         break
         return total
+
+    def insurance(self):
+        if card_value(self.dealerhand[0]) == 11:
+            for player in self.players:
+                if (player.personality == 1) or \
+                (player.personality == 4 and random.randint(1,2) == 1):
+                    ifins = "y"
+                else:
+                    while True:
+                        ifins = input(f"Would {player.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.").strip().lower()
+                        if ifins in ("y","n"):
+                            break
+                        print("y or n please")
+                if ifins == "y":
+                    if player.money >= 0.5 * player.bet:
+                        player.insbet = 0.5 * player.bet
+                        player.money -= 0.5 * player.bet
+                        print(f"{player.name} has put ${player.insbet} in as insurance!")
+                    else:
+                        print(f"{player.name} does not have enough money!")
+                if card_value(self.dealerhand[1]) == 10: 
+                    print("Dealer has Blackjack! Insurance bets are doubled and returned.")
+                    player.money += player.insbet * 2
+                    player.insbet = 0
+                else:
+                    print("Dealer does NOT have Blackjack, all insurance is lost.")
+                    player.insbet = 0
         
+    
     def check(self): #see if anyone busts or wins or ties
         dealer = self.dealer_value()
         for player in players:
@@ -522,11 +511,11 @@ def inscheck():
     print("type y to actually test")
     if which == "y":
         dealer.dealerhand = ["h1","hk"]
-        player.insurance(dealer)
+        dealer.insurance()
         print(f'The phrase: "Dealer has Blackjack! Insurance bets are doubled and returned." should be printed.\nMoney total: {player.money} (should be 1525).')
     else:   
         dealer.dealerhand = ["h1","h9"]
-        player.insurance(dealer)
+        dealer.insurance()
         print(f'The phase: "Dealer does NOT have Blackjack, all insurance is lost." should be printed. \nMoney total: {player.money} (should be 1475).')
     players.clear()
     
@@ -559,6 +548,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
