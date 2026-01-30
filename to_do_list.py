@@ -41,6 +41,12 @@ class to_do_list:
     def remove_tasks(self,task_name): #lets user remove tasks from list
         task_name = input ("Type in the task you want to remove: ")
 
+    def sort_alphabetically(self): 
+        self.list.sort(key=lambda t: t[0])
+        print("Tasks sorted alphabetically.")
+
+    def check_tasks(self,task_name): #Checks off completed tasks
+        #returns True or False boolean
         for task in self.list:
             if task[0] == task_name:
                 self.list.remove(task)
@@ -48,11 +54,6 @@ class to_do_list:
                 break
         else:
             print("A task has not been removed.")
-        
-
-    def check_tasks(self,task_name): # Checks off completed tasks
-        # Returns True or False boolean
-        return None
     
     def count_incomplete(self):
         return sum(1 for t in self.list if not t[1])
