@@ -180,7 +180,7 @@ class Bot(Player):
                 botbet = random.randint(zero, self.money)
         self.bet = botbet
         self.money -= botbet
-        print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
+        print(f"{self.name} has bet ${self.bet}!\nThey have ${self.money} left.")
 
     def playerround(self, dealer):
         if self.hasddown:
@@ -549,6 +549,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
