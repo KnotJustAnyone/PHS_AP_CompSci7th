@@ -75,6 +75,7 @@ class Player: #player properties
         return total
 
     def getbet(self):  #get the amount players want to bet
+        print(f"{self.name} has ${self.money}.")
         while True:
             try:
                 bet = int(input(f"How much money would {self.name} like to bet? Betting is limited from $2-$500."))
@@ -259,7 +260,7 @@ class Dealer: #dealer properties
         self.dealerhand = deck.deal(2)
         self.dealershow()
         for player in self.players:
-            player.insurance(self)
+            self.insurance()
             player.doubledown()
             player.splitting(self)
 
@@ -548,6 +549,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
