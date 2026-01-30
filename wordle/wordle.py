@@ -1,8 +1,20 @@
 import random
+import datetime
+
+Settings = {
+    'daily': False, # Determines whether the game should choose a seed based off of the current day or not
+    'maxGuesses': 6,
+    'colorblind': False, # If true, prints direct results instead of colored text
+}
+
+class Color:
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    WHITE = '\033[37m'
+    RESET = '\033[0m'
 
 class Wordle():
-    def __init__(self,maxGuesses:int):
-
+    def __init__(self,*,maxGuesses=6,daily=False,colorblind=False):
         self.answer_list = []
         with open('wordle/answers.txt','r',encoding='utf-8') as f:
             for line in f:
@@ -12,16 +24,19 @@ class Wordle():
             for line in f:
                 self.word_list.append(line.strip())
 
-        self.guesses = 0
+        self.guesses = []
+        self.results = []
+
         self.maxGuesses = maxGuesses
+        self.colorblind = colorblind
         self.won = False
-        self.answer = self.generateAnswer()
+        self.answer = self.generateAnswer(daily)
         self.startGame()
 
     # Should return something like this if successful:
     # ['Green','Green','Yellow','Grey','Grey']
     def guess(self) -> list[str] or None:
-        print(f"Guesses left: {6- self.guesses}/{self.maxGuesses}")
+        print(f"Guesses left: {self.maxGuesses - len(self.guesses)}/{self.maxGuesses}")
         print("----------------------")
         player_guess = input(f"Guess a {len(self.answer)} letter word: ")
 
@@ -31,9 +46,13 @@ class Wordle():
             print("Error while trying to lower player guess")
             return
 
-
         if len(player_guess) != len(self.answer):
             print(f"\nGuess must be {len(self.answer)} letters.\n")
+            self.guess()
+            return
+
+        if player_guess in self.guesses:
+            print("\nAlready guessed word.\n")
             self.guess()
             return
 
@@ -64,44 +83,51 @@ class Wordle():
             else:
                 results[index] = 'Grey'
 
-        self.guesses += 1
+        self.guesses.append(player_guess)
+        self.results.append(results)
         self.displayGuess(player_guess,results)
+
+        if player_guess == self.answer:
+            self.won = True
 
         return results
 
-    # Should print something like this to the console:
-    #  CRANE
-    #  🟩🟩🟨⬜⬜
     def displayGuess(self,guess:str,results:str) -> None:
+        guess_index = self.guesses.index(guess)
+        if guess_index > 0:
+            self.displayGuess(self.guesses[guess_index - 1],self.results[guess_index - 1])
+
+        if self.colorblind:
+            print(results)
+            return
+
         string = ""
-        for result in results:
-            if result == 'Green':
-                string += '🟩 '
-            elif result == 'Yellow':
-                string += '🟨 '
+
+        for index,letter in enumerate(guess):
+            if results[index] == 'Green':
+                string += Color.GREEN + letter.upper() + Color.RESET
+            elif results[index] == 'Yellow':
+                string += Color.YELLOW + letter.upper() + Color.RESET
             else:
-                string += '⬜ '
-        guess_print = ""
-        for letter in guess:
-            guess_print += letter.upper() + ' '
-
+                string += Color.WHITE + letter.upper() + Color.RESET
+        
         print(string)
-        print(guess_print)
 
-        if guess == self.answer:
-            self.won = True
+    def generateAnswer(self,daily=False) -> str:
+        if daily:
+            today = datetime.date.today().isoformat()
+            random.seed(today)
 
-    def generateAnswer(self) -> str:
         return random.choice(self.answer_list)
+
 
     # Main game loop, function should end when the game is over
     def startGame(self) -> None:
-        while self.guesses < 6 and not self.won:
+        while len(self.guesses) < self.maxGuesses and not self.won:
             self.guess()
         if self.won:
-            print(f"You won!\nYou correctly guessed the word {self.answer}.\nGuesses used: {self.guesses}")
+            print(f"You won!\nYou correctly guessed the word {self.answer}.\nGuesses used: {len(self.guesses)}")
         else:
             print(f"You lost.\nThe word was: {self.answer}")
 
-maxGuesses = 6
-game = Wordle(maxGuesses)
+game = Wordle(**Settings)
