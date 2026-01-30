@@ -1,0 +1,62 @@
+import json 
+import os 
+import requests
+import csv
+from io import StringIO
+
+PORTFOLIO_FILE = "portfolio.json"
+
+def get_stock_price(ticker):
+    """
+    Fetch stock price data from Stooq (public, no API key)
+    """
+    symbol = ticker.lower() + ".us"
+    url = f"https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv"
+
+    # Requesting data
+    response = requests.get(url)
+    response.raise_for_status()
+
+    # Parsing data
+    csv_data = response.text
+    reader = csv.DictReader(StringIO(csv_data))
+    rows = list(reader)
+
+    # Checking if data is available
+    if len(rows) == 0 or rows[0]["Close"] == "N/A":
+        return None
+
+    stock = rows[0]
+
+    # Returning data structured
+    return {
+        "ticker": ticker,
+        "date": stock["Date"],
+        "close": float(stock["Close"]),
+        "volume": int(stock["Volume"])
+    }
+
+searched_stocks = []
+
+# Iteration (loop)
+while True:
+    ticker = input("Enter a stock ticker (or type QUIT): ").upper()
+
+    if ticker == "QUIT":
+        break
+
+    stock_data = get_stock_price(ticker)
+
+    if stock_data is None:
+        print("Invalid ticker or data unavailable.")
+    else:
+        print("\nTicker:", stock_data["ticker"])
+        print("Date:", stock_data["date"])
+        print("Closing Price: $", stock_data["close"])
+        print("Volume:", stock_data["volume"])
+
+        searched_stocks.append(ticker)
+
+print("\nStocks searched this session:")
+for stock in searched_stocks:
+    print("-", stock)

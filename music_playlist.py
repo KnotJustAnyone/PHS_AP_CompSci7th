@@ -8,7 +8,16 @@ def save_playlist(filename):
         json.dump(playlist, file, indent=4)
     print("Playlist saved.")
 
-#Add song to playlist
+#instructions to user/how-to message
+print("You're ready to start creating your music playlist!")
+print("To add a song, type: add <songname>")
+print("To delete a song, type: delete <songname>")
+print("To shuffle the playlist, type: shuffle")
+
+#creates a variable that stores the user's input
+user_input = input()
+
+#add song to playlist
 def add_song(song):
     playlist.append(song)
 
@@ -26,6 +35,12 @@ def add_song_test():
 
     else:
         print("test failed")
+
+#user input to add song
+if user_input.startswith("add "):
+    song = user_input[4:]  # everything after "add "
+    add_song(song)
+    print(f'"{song}" added to playlist.')
 
 #Delete song from playlist
 def delete_song(song):
@@ -66,13 +81,19 @@ def delete_song_test():
 
     print("Final playlist state:", playlist)
 
+#user input to delete song
+if user_input.startswith("delete "):
+    song = user_input[7:]
+    delete_song(song)
+    print(f'"{song}" removed from playlist.')
+
 #reorder songs in playlist
 def move_song(song, new_position):
     if song in playlist:
         playlist.remove(song)
         playlist.insert(new_position, song)
 
-#prints the playlist with song name and artist
+# Prints the playlist with song name and artist
 def display_playlist():
     if not playlist:
         print("playlist empty")
@@ -85,14 +106,14 @@ def display_playlist():
         print(f"{i}. {title} — {artist}")
     for index, song in enumerate(playlist, start=1):
         print(f"{index}. {song}")
-    #Megan Vuong suggested album cov
-    #Megan Vuong suggested album cover jpeg displayed too
+    # Megan Vuong suggested album cov
+    # Megan Vuong suggested album cover jpeg displayed too
 
 #Count # of songs
 def count_songs():
     print(f"Total songs in playlist: {len(playlist)}")
 
-#Search for songs
+# Search for songs
 def search_song(name):
     results = [song for song in playlist if name.lower() in song.lower()]
     if results:
@@ -100,11 +121,21 @@ def search_song(name):
         for song in results:
             print(song)
 
-#Shuffle 
+# Shuffle 
     else:
         print("No songs found with that name.")     
 def shuffle_playlist():
-    random.shuffle(playlist)
+    if len(playlist) <= 1:
+        print("Not enough songs to shuffle.")
+        return
+
+    original = playlist.copy()
+
+    while True:
+        random.shuffle(playlist)
+        if playlist != original:
+            break
+
     print("Playlist shuffled.")
 
 def shuffle_playlist_test():
@@ -140,3 +171,7 @@ def shuffle_playlist_test():
         print("✔ Shuffle changed order")
 
     print("Final shuffled playlist:", playlist)
+
+#user input for shuffle
+if user_input == "shuffle":
+    shuffle_playlist()
