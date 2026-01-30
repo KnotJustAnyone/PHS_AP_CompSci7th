@@ -129,6 +129,8 @@ class Player: #player properties
                         splitplayer.newcard(1)
                         players.append(splitplayer)
                         print(f"{self.name} has 2 hands.")
+                        print(f"{self.name}'s new hand: \033[1m{deck.identify_card(self.hand[0])}, {deck.identify_card(self.hand[1])}\033[0m.")
+                        print(f"{players[-1].name}'s new hand:\033[1m{deck.identify_card(players[-1].hand[0])}, {deck.identify_card(players[-1].hand[1])}\033[0m.")
                     else:
                         print(f"You don't have enough money to make a split! Currently, you have {self.money}.")
             else:
@@ -360,7 +362,7 @@ Just type n if you do not want to restart:''').strip().lower()
             break
         print('Please type a valid answer. Valid: "yy", "yn","n".')
     if reset == "n":
-        run_game()
+        quit()
     elif reset == "yy":
         for player in players:
             player.reset_player()
@@ -549,6 +551,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
