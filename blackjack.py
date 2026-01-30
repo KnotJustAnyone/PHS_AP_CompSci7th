@@ -75,6 +75,7 @@ class Player: #player properties
         return total
 
     def getbet(self):  #get the amount players want to bet
+        print(f"{self.name} has ${self.money}.")
         while True:
             try:
                 bet = int(input(f"How much money would {self.name} like to bet? Betting is limited from $2-$500."))
@@ -128,6 +129,8 @@ class Player: #player properties
                         splitplayer.newcard(1)
                         players.append(splitplayer)
                         print(f"{self.name} has 2 hands.")
+                        print(f"{self.name}'s new hand: \033[1m{deck.identify_card(self.hand[0])}, {deck.identify_card(self.hand[1])}\033[0m.")
+                        print(f"{players[-1].name}'s new hand:\033[1m{deck.identify_card(players[-1].hand[0])}, {deck.identify_card(players[-1].hand[1])}\033[0m.")
                     else:
                         print(f"You don't have enough money to make a split! Currently, you have {self.money}.")
             else:
@@ -179,7 +182,7 @@ class Bot(Player):
                 botbet = random.randint(zero, self.money)
         self.bet = botbet
         self.money -= botbet
-        print(f"{self.name} has bet {self.bet}!\nThey have ${self.money} left.")
+        print(f"{self.name} has bet ${self.bet}!\nThey have ${self.money} left.")
 
     def playerround(self, dealer):
         if self.hasddown:
@@ -259,7 +262,7 @@ class Dealer: #dealer properties
         self.dealerhand = deck.deal(2)
         self.dealershow()
         for player in self.players:
-            player.insurance(self)
+            self.insurance()
             player.doubledown()
             player.splitting(self)
 
@@ -359,7 +362,7 @@ Just type n if you do not want to restart:''').strip().lower()
             break
         print('Please type a valid answer. Valid: "yy", "yn","n".')
     if reset == "n":
-        run_game()
+        quit()
     elif reset == "yy":
         for player in players:
             player.reset_player()
@@ -548,6 +551,9 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
+
+
 
 
 
