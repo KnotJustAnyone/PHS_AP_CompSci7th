@@ -2,7 +2,16 @@
 playlist = []
 import random
 
-# Add song to playlist
+#instructions to user/how-to message
+print("You're ready to start creating your music playlist!")
+print("To add a song, type: add <songname>")
+print("To delete a song, type: delete <songname>")
+print("To shuffle the playlist, type: shuffle")
+
+#creates a variable that stores the user's input
+user_input = input()
+
+#add song to playlist
 def add_song(song):
     playlist.append(song)
 
@@ -21,7 +30,13 @@ def add_song_test():
     else:
         print("test failed")
 
-# Delete song from playlist
+#user input to add song
+if user_input.startswith("add "):
+    song = user_input[4:]  # everything after "add "
+    add_song(song)
+    print(f'"{song}" added to playlist.')
+
+#delete song from playlist
 def delete_song(song):
     if song in playlist:
         playlist.remove(song)
@@ -60,7 +75,13 @@ def delete_song_test():
 
     print("Final playlist state:", playlist)
 
-# Reorder songs in playlist
+#user input to delete song
+if user_input.startswith("delete "):
+    song = user_input[7:]
+    delete_song(song)
+    print(f'"{song}" removed from playlist.')
+
+#reorder songs in playlist
 def move_song(song, new_position):
     if song in playlist:
         playlist.remove(song)
@@ -98,7 +119,17 @@ def search_song(name):
     else:
         print("No songs found with that name.")     
 def shuffle_playlist():
-    random.shuffle(playlist)
+    if len(playlist) <= 1:
+        print("Not enough songs to shuffle.")
+        return
+
+    original = playlist.copy()
+
+    while True:
+        random.shuffle(playlist)
+        if playlist != original:
+            break
+
     print("Playlist shuffled.")
 
 def shuffle_playlist_test():
@@ -134,3 +165,7 @@ def shuffle_playlist_test():
         print("✔ Shuffle changed order")
 
     print("Final shuffled playlist:", playlist)
+
+#user input for shuffle
+if user_input == "shuffle":
+    shuffle_playlist()
