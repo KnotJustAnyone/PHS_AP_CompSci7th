@@ -1,6 +1,12 @@
-# Creates and empty playlist
+#Creates and empty playlist
 playlist = []
 import random
+
+#Save playlist
+def save_playlist(filename):
+    with open(filename, "w") as file:
+        json.dump(playlist, file, indent=4)
+    print("Playlist saved.")
 
 #instructions to user/how-to message
 print("You're ready to start creating your music playlist!")
@@ -36,12 +42,12 @@ if user_input.startswith("add "):
     add_song(song)
     print(f'"{song}" added to playlist.')
 
-#delete song from playlist
+#Delete song from playlist
 def delete_song(song):
     if song in playlist:
         playlist.remove(song)
         
-# Test for delete_song
+#Test for delete_song
 def delete_song_test():
     playlist.clear()
     add_song("orion")
@@ -103,7 +109,7 @@ def display_playlist():
     # Megan Vuong suggested album cov
     # Megan Vuong suggested album cover jpeg displayed too
 
-# Landon Blain-Count # of songs
+#Count # of songs
 def count_songs():
     print(f"Total songs in playlist: {len(playlist)}")
 
