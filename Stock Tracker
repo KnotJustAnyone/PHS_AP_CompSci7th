@@ -1,10 +1,7 @@
-import json 
-import os 
 import requests
 import csv
 from io import StringIO
-
-PORTFOLIO_FILE = "portfolio.json"
+import os
 
 def get_stock_price(ticker):
     """
@@ -13,22 +10,17 @@ def get_stock_price(ticker):
     symbol = ticker.lower() + ".us"
     url = f"https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv"
 
-    # Requesting data
     response = requests.get(url)
     response.raise_for_status()
 
-    # Parsing data
-    csv_data = response.text
-    reader = csv.DictReader(StringIO(csv_data))
+    reader = csv.DictReader(StringIO(response.text))
     rows = list(reader)
 
-    # Checking if data is available
     if len(rows) == 0 or rows[0]["Close"] == "N/A":
         return None
 
     stock = rows[0]
 
-    # Returning data structured
     return {
         "ticker": ticker,
         "date": stock["Date"],
@@ -36,9 +28,28 @@ def get_stock_price(ticker):
         "volume": int(stock["Volume"])
     }
 
-searched_stocks = []
+# STEP 3: save ticker + shares to a text file
+def save_stock(ticker, shares):
+    with open("stocks.txt", "a") as file:
+        file.write(f"{ticker},{shares}\n")
 
-# Iteration (loop)
+# STEP 3: load ticker + shares when program starts
+def load_saved_stocks():
+    if not os.path.exists("stocks.txt"):
+        return []
+
+    stocks = []
+    with open("stocks.txt", "r") as file:
+        for line in file:
+            if line.strip():
+                ticker, shares = line.strip().split(",")
+                stocks.append((ticker, float(shares)))
+    return stocks
+
+# Load saved stocks (STEP 3)
+searched_stocks = load_saved_stocks()
+
+# Main loop
 while True:
     ticker = input("Enter a stock ticker (or type QUIT): ").upper()
 
@@ -50,13 +61,16 @@ while True:
     if stock_data is None:
         print("Invalid ticker or data unavailable.")
     else:
+        shares = float(input("How many shares? "))
+
         print("\nTicker:", stock_data["ticker"])
         print("Date:", stock_data["date"])
         print("Closing Price: $", stock_data["close"])
         print("Volume:", stock_data["volume"])
 
-        searched_stocks.append(ticker)
+        searched_stocks.append((ticker, shares))
+        save_stock(ticker, shares)
 
-print("\nStocks searched this session:")
-for stock in searched_stocks:
-    print("-", stock)
+print("\nStocks saved (with shares):")
+for stock, shares in searched_stocks:
+    print(f"- {stock}: {shares} shares")
