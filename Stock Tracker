@@ -1,7 +1,10 @@
+import json
+import os
 import requests
 import csv
 from io import StringIO
-import os
+
+PORTFOLIO_FILE = "portfolio.json"
 
 def get_stock_price(ticker):
     """
@@ -10,17 +13,21 @@ def get_stock_price(ticker):
     symbol = ticker.lower() + ".us"
     url = f"https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv"
 
+    # Requesting data
     response = requests.get(url)
     response.raise_for_status()
 
+    # Parsing data
     reader = csv.DictReader(StringIO(response.text))
     rows = list(reader)
 
+    # Checking if data is available
     if len(rows) == 0 or rows[0]["Close"] == "N/A":
         return None
 
     stock = rows[0]
 
+    # Returning data structured
     return {
         "ticker": ticker,
         "date": stock["Date"],
