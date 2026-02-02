@@ -60,6 +60,35 @@ class poker_table:
             for p in self.players:
                 self.stacks[p] = starting_stack
 
+        self.game_state = self.create_game_state()
+
+    def create_game_state(self):
+
+        # Button handling
+        if self.players:
+            button_index = 0
+            current_player_index = 1 if len(self.players) > 1 else 0
+        else:
+            button_index = None
+            current_player_index = None
+
+        game_state = {
+            "street": "preflop",      # preflop → flop → turn → river → showdown
+            "pot": 0,
+            "current_bet": 0,
+            "minimum_raise": self.big_blind,
+            "bets_this_round": {p: 0 for p in self.players},
+            "active_players": list(self.players),
+            "current_player_index": current_player_index,
+            "button_index": button_index,
+            "table_cards": [],
+            "action_log": [],         # e.g. [("Bob", "raise", 20)]
+            "all_in_players": set(),
+            "folded_players": set(),
+        }
+
+        return game_state
+
     def deal_hands(self): #Gives each player their initial two pocket cards
         for _ in range(2):
             for player in self.players:
