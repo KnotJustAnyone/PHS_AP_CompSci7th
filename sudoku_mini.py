@@ -14,6 +14,40 @@ class Sudoku4x4:
         # puzzle is supposed to be a list of lists with the numbers
         pass
 
+    def get_hints(self, row, col):
+        if self.board[row][col] != 0:
+            return []
+
+        possible = []
+
+        for num in range(1, 5):  
+            valid = True
+
+            for c in range(4):
+                if self.board[row][c] == num:
+                    valid = False
+                    break
+
+            if valid:
+                for r in range(4):
+                    if self.board[r][col] == num:
+                        valid = False
+                        break
+
+                box_row = (row // 2) * 2
+                box_col = (col // 2) * 2
+    
+                for r in range(box_row, box_row + 2):
+                    for c in range(box_col, box_col + 2):
+                        if self.board[r][c] == num:
+                            valid = False
+                            break
+                            
+                possible.append(num)
+
+        return possible
+
+    
     def test_load_puzzle(self, puzzle):
         game = Sudoku4x4()
         puzzle = [
@@ -77,8 +111,7 @@ class Sudoku4x4:
                 if num == 0 or not self.is_valid_move(row, col, num):
                     return False
         return True
-
-
+        
     def reset_board(self):
         # Clears the board or maybe resets it to the original puzzle
         pass
@@ -108,7 +141,37 @@ class Sudoku4x4:
                     return False
         return True
 
-def check_move_test(self):
+def check_win_test():
+    game = Sudoku4x4()
+
+    solved_puzzle = [
+        [1, 2, 3, 4],
+        [3, 4, 1, 2],
+        [2, 1, 4, 3],
+        [4, 3, 2, 1]
+    ]
+    game.board = solved_puzzle
+    assert game.check_win() == True
+
+    wrong_puzzle = [
+        [1, 1, 3, 4],
+        [3, 4, 1, 2],
+        [2, 1, 4, 3],
+        [4, 3, 2, 1]
+    ]
+    game.board = wrong_puzzle
+    assert game.check_win() == False
+
+    incomplete_puzzle = [
+        [1, 0, 3, 4],
+        [3, 4, 1, 2],
+        [2, 1, 4, 3],
+        [4, 3, 2, 1]
+    ]
+    game.board = incomplete_puzzle
+    assert game.check_win() == False
+
+def check_move_test():
     game = Sudoku4x4()
     for row in range(4):
         for col in range(4):
