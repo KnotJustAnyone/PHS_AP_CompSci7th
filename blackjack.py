@@ -351,6 +351,7 @@ class Dealer: #dealer properties
             player.bet = 0
             player.hasddown = False
 
+#Game playing: -----------------------------------------------------------------------------------------------
 def reset_game():
     global players
     while True:
@@ -398,8 +399,64 @@ def run_game():
     dealer.round()
     reset_game()
 
-#unhash to play game
-#run_game()
+def menu():
+    def delete_menu(num, slow=True):
+        for i in range(num):
+            print("\033[A\033[K", end='\r')
+            if slow == True:
+                time.sleep(0.025)
+
+    def wrong_num():
+        print("Use a correct number please.")
+        time.sleep(2)
+        delete_menu(2)
+
+    def menu_nav():
+        while True:
+            try:
+                menu_input = int(input().strip())
+                if menu_input in (1,2,3,4):
+                    break
+                else:
+                    wrong_num()
+            except:
+                wrong_num()
+        return menu_input
+
+    def main_menu():
+        global players
+        delete_menu(1000,False)
+        for i in mainmenu:
+            print(i)
+            time.sleep(0.5)
+        print("Use given numbers to navigate")
+        menu_input = menu_nav()
+        if menu_input == 1:
+            players.clear()
+            run_game()
+        if menu_input == 2:
+            delete_menu(7)
+            for i in loadmenu:
+                print(i)
+                time.sleep(0.5)
+            menu_nav()
+        if menu_input == 3:
+            delete_menu(7)
+            print("https://bicyclecards.com/how-to-play/blackjack")
+            while True:
+                exit = input("Type anything to go back to main menu")
+                if exit != "":
+                    break
+            main_menu()
+        if menu_input == 4:
+            quit()
+
+    mainmenu = ["BLACKJACK", "New Game - 1", "Load Save - 2", "Rules - 3", "Exit - 4"]
+    loadmenu = ["BLACKJACK SAVES","SAVE1 - 1", "SAVE2 - 2", "SAVE3 - 3", "Exit - 4"]
+
+    main_menu()
+
+menu()
 
 #Tests: -------------------------------------------------------------------------------------
 def test_player_init():
@@ -551,6 +608,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
