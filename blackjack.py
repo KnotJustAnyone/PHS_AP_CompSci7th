@@ -10,7 +10,7 @@ def randbotp():
 def getting_players(): #ask players for player/bot amount and names
     while True:
         try:
-            pnum = int(input("How many players are you adding?"))
+            pnum = int(input("How many players are you adding?\n"))
             break
         except ValueError:
             print("a number (don't use letters) please")
@@ -19,7 +19,7 @@ def getting_players(): #ask players for player/bot amount and names
         players.append(Player(name))
     while True:
         try:
-            bnum = int(input("How many bots do you want?"))
+            bnum = int(input("How many bots do you want?\n"))
             break
         except ValueError:
             print("a number (don't use letters) please")
@@ -78,7 +78,7 @@ class Player: #player properties
         print(f"{self.name} has ${self.money}.")
         while True:
             try:
-                bet = int(input(f"How much money would {self.name} like to bet? Betting is limited from $2-$500."))
+                bet = int(input(f"How much money would {self.name} like to bet? Betting is limited from $2-$500.\n"))
                 if bet >= 2 and bet <= self.money and bet <= 500:
                     self.money -= bet
                     self.bet = bet
@@ -98,7 +98,7 @@ class Player: #player properties
             print(f"\033[1m{deck.identify_card(card)}\033[0m.")
         print(f"Total: {self.player_value()}.")
         while True:
-            hitstand = input(f"{self.name}, would you like to hit or stand (h or s)?").strip().lower()
+            hitstand = input(f"{self.name}, would you like to hit or stand (h or s)?\n").strip().lower()
             if hitstand == "h":
                 self.newcard(1)
                 currenttot = self.player_value()
@@ -114,7 +114,7 @@ class Player: #player properties
         if len(self.hand) == 2 and self.hand[0][1] == self.hand[1][1]:
             if not self.hasddown:
                 while True:
-                    ifsplit = input(f"Would {self.name} like to split their hand? (y or n)? ").strip().lower()
+                    ifsplit = input(f"Would {self.name} like to split their hand? (y or n)?\n").strip().lower()
                     if ifsplit in ("y", "n"):
                         break
                     print("y or n please")
@@ -140,7 +140,7 @@ class Player: #player properties
         currenttot = self.player_value()
         if currenttot == 9 or currenttot == 10 or currenttot == 11:
             while True:
-                ifdouble = input(f"Would {self.name} like to double down? (y or n)?\nNote that you can no longer hit or stand if you do.").strip().lower()
+                ifdouble = input(f"Would {self.name} like to double down? (y or n)?\nNote that you can no longer hit or stand if you do.\n").strip().lower()
                 if ifdouble in ("y", "n"):
                     break
                 print("y or n please")
@@ -306,7 +306,7 @@ class Dealer: #dealer properties
                     ifins = "y"
                 else:
                     while True:
-                        ifins = input(f"Would {player.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.").strip().lower()
+                        ifins = input(f"Would {player.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.\n").strip().lower()
                         if ifins in ("y","n"):
                             break
                         print("y or n please")
@@ -396,10 +396,11 @@ def run_game():
     dealer.playerbets()
     dealer.deal1()
     dealer.round()
+    input("Enter any key to continue: ")
     reset_game()
 
 #unhash to play game
-#run_game()
+run_game()
 
 #Tests: -------------------------------------------------------------------------------------
 def test_player_init():
