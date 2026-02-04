@@ -1,4 +1,5 @@
 import random
+import time
 from deck_of_cards import Deck
 players = [] #players
 
@@ -608,6 +609,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
