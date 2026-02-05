@@ -59,7 +59,6 @@ class Player: #player properties
 
     def reset_player(self):
         self.hand = []
-        self.money = 1500
         self.bet = 0
         self.hasddown = False
     
@@ -356,7 +355,7 @@ class Dealer: #dealer properties
 def reset_game():
     global players
     while True:
-        reset = input(f'''Would you like to restart the game (y = reset, n = continue)?
+        reset = input(f'''Would you like to continue this game (y = continue, n = reset)?
 And with the same players (y or n)?
 Type them together, e.g. "yy" or "yn". 1st is restart, 2nd is players.
 Just type n if you do not want to restart:''').strip().lower()
@@ -364,6 +363,7 @@ Just type n if you do not want to restart:''').strip().lower()
             break
         print('Please type a valid answer. Valid: "yy", "yn","n".')
     if reset == "n":
+        players.clear()
         quit()
     elif reset == "yy":
         for player in players:
@@ -609,6 +609,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
