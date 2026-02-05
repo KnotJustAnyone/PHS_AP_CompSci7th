@@ -3,31 +3,6 @@ import time
 from deck_of_cards import Deck
 players = [] #players
 
-def randbotp():
-    personality = [1,2,3,4,5]
-    percentchance = [20,40,20,10,10]
-    return random.choices(personality, weights=percentchance)[0]
-
-def getting_players(): #ask players for player/bot amount and names
-    while True:
-        try:
-            pnum = int(input("How many players are you adding?"))
-            break
-        except ValueError:
-            print("a number (don't use letters) please")
-    for i in range(pnum):
-        name = input(f"Player {i + 1}'s name: ")
-        players.append(Player(name))
-    while True:
-        try:
-            bnum = int(input("How many bots do you want?"))
-            break
-        except ValueError:
-            print("a number (don't use letters) please")
-    for j in range(bnum):
-        players.append(Bot("Bot" + str(j), randbotp()))
-    print(f"{pnum} players were added:\n{[pl.name for pl in players]} \n{bnum} bots were also added.\n")
-
 def card_value(card): #handle 2-card code to get the value
     if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
         return 10
@@ -352,6 +327,31 @@ class Dealer: #dealer properties
             player.hasddown = False
 
 #Game playing: -----------------------------------------------------------------------------------------------
+def randbotp():
+    personality = [1,2,3,4,5]
+    percentchance = [20,40,20,10,10]
+    return random.choices(personality, weights=percentchance)[0]
+
+def getting_players(): #ask players for player/bot amount and names
+    while True:
+        try:
+            pnum = int(input("How many players are you adding?"))
+            break
+        except ValueError:
+            print("a number (don't use letters) please")
+    for i in range(pnum):
+        name = input(f"Player {i + 1}'s name: ")
+        players.append(Player(name))
+    while True:
+        try:
+            bnum = int(input("How many bots do you want?"))
+            break
+        except ValueError:
+            print("a number (don't use letters) please")
+    for j in range(bnum):
+        players.append(Bot("Bot" + str(j), randbotp()))
+    print(f"{pnum} players were added:\n{[pl.name for pl in players]} \n{bnum} bots were also added.\n")
+    
 def reset_game():
     global players
     while True:
@@ -435,13 +435,21 @@ def menu():
         if menu_input == 1:
             players.clear()
             run_game()
-        if menu_input == 2:
+        elif menu_input == 2:
             delete_menu(7)
             for i in loadmenu:
                 print(i)
                 time.sleep(0.5)
-            menu_nav()
-        if menu_input == 3:
+            load_input = menu_nav()
+            if load_input == 1:
+                pass
+            elif load_input == 2:
+                pass
+            elif load_input == 3:
+                pass
+            elif load_input == 4:
+                main_menu()
+        elif menu_input == 3:
             delete_menu(7)
             print("https://bicyclecards.com/how-to-play/blackjack")
             while True:
@@ -449,7 +457,7 @@ def menu():
                 if exit != "":
                     break
             main_menu()
-        if menu_input == 4:
+        elif menu_input == 4:
             quit()
 
     mainmenu = ["BLACKJACK", "New Game - 1", "Load Save - 2", "Rules - 3", "Exit - 4"]
@@ -609,6 +617,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
