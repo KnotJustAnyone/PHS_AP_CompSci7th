@@ -70,4 +70,3 @@ def addandlisttest():
     dog = to_do_list()
     dog.add_tasks("Do dishes")
     dog.list_tasks()
-addandlisttest()
