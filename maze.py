@@ -27,38 +27,39 @@ def print_maze():
                 line += ch
         print(line)
 
-# TEST
-# Capture what print_maze() prints
-saved_stdout = sys.stdout
-sys.stdout = io.StringIO()  # redirect print to a string
+# TEST ----
+def test_print():
+    # Capture what print_maze() prints
+    saved_stdout = sys.stdout
+    sys.stdout = io.StringIO()  # redirect print to a string
 
-print_maze()  # ✅ call the function
+    print_maze()  # ✅ call the function
 
-# Get the printed text
-output = sys.stdout.getvalue()
+    # Get the printed text
+    output = sys.stdout.getvalue()
 
-# Reset print back to normal
-sys.stdout = saved_stdout
+    # Reset print back to normal
+    sys.stdout = saved_stdout
 
-# Expected maze (with "P" instead of "S")
-expected = """########
-#P     #
-# ###  #
-#   #  #
-# ## #G#
-########
-"""
+    # Expected maze (with "P" instead of "S")
+    expected = """########
+    #P     #
+    # ###  #
+    #   #  #
+    # ## #G#
+    ########
+    """
 
-# Compare and print result
-if output == expected:
-    print("✅ Test passed! print_maze() shows the maze correctly.")
-else:
-    print("❌ Test failed! Output doesn’t match expected.")
-    print("Expected:")
-    print(expected)
-    print("Got:")
-    print(output)
-
+    # Compare and print result
+    if output == expected:
+        print("✅ Test passed! print_maze() shows the maze correctly.")
+    else:
+        print("❌ Test failed! Output doesn’t match expected.")
+        print("Expected:")
+        print(expected)
+        print("Got:")
+        print(output)
+#----
 while True:
     print_maze()
     move = input("Move (WASD): ").lower()
