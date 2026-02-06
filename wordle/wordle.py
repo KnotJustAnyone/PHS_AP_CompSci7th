@@ -1,7 +1,7 @@
 import random
 import datetime
 
-import urllib.request
+import requests
 import json
 
 Settings = {
@@ -15,25 +15,19 @@ Settings = {
 RANDOM_WORD_API = 'https://random-word-api.herokuapp.com/word'
 DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en/'
 
+def request_data(url):
+    headers = {
+        "User-Agent": "WordleBot/1.0",
+        "Accept": "application/json"
+    }
+    request = requests.get(url,headers=headers)
+    return request.json()
+
 class Color:
     GREEN = '\033[32m' 
     YELLOW = '\033[33m' 
     WHITE = '\033[37m'
     RESET = '\033[0m'
-
-def request_data(url):
-    try:
-        with urllib.request.urlopen(url) as response:
-            if response.getcode() == 200:
-                data = response.read()
-                json_data = json.loads(data.decode('utf-8'))
-                return json_data
-            else:
-                print("Endpoint returned code",response.getcode())
-                return None
-    except Exception as e:
-        print("Exception occurred while getting data",e)
-        return None
 
 class Wordle():
     def __init__(self,*,maxGuesses=6,daily=False,colorblind=False,wordLength=5,useDictionaryAPI=True):
