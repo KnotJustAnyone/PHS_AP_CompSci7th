@@ -1,3 +1,7 @@
+import io
+import sys
+
+# Maze setup
 import random
 
 def create_new_maze(width=9, height=7):
@@ -32,7 +36,7 @@ maze = [
     "########"
 ]
 
-# Player position
+# Find player position
 for y, row in enumerate(maze):
     if 'S' in row:
         player_x = row.index('S')
@@ -48,6 +52,39 @@ def print_maze():
                 line += ch
         print(line)
 
+# TEST ----
+def test_print():
+    # Capture what print_maze() prints
+    saved_stdout = sys.stdout
+    sys.stdout = io.StringIO()  # redirect print to a string
+
+    print_maze()  # ✅ call the function
+
+    # Get the printed text
+    output = sys.stdout.getvalue()
+
+    # Reset print back to normal
+    sys.stdout = saved_stdout
+
+    # Expected maze (with "P" instead of "S")
+    expected = """########
+    #P     #
+    # ###  #
+    #   #  #
+    # ## #G#
+    ########
+    """
+
+    # Compare and print result
+    if output == expected:
+        print("✅ Test passed! print_maze() shows the maze correctly.")
+    else:
+        print("❌ Test failed! Output doesn’t match expected.")
+        print("Expected:")
+        print(expected)
+        print("Got:")
+        print(output)
+#----
 while True:
     print_maze()
     move = input("Move (WASD): ").lower()
