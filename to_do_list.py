@@ -84,6 +84,11 @@ class to_do_list:
         def interval(self):
         # Choose the interval of repetition 
            return None
+
+def addandlisttest():
+    dog = to_do_list()
+    dog.add_tasks("Do dishes")
+    dog.list_tasks()
             
     def print_toDoList(self):
         printYN = input("Do you want to print your to do list?")
