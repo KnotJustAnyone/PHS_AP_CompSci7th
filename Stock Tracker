@@ -1,34 +1,26 @@
-import json 
-import os 
+import json
+import os
 import requests
 import csv
 from io import StringIO
 
 PORTFOLIO_FILE = "portfolio.json"
 
+
 def get_stock_price(ticker):
-    """
-    Fetch stock price data from Stooq (public, no API key)
-    """
     symbol = ticker.lower() + ".us"
     url = f"https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv"
 
-    # Requesting data
     response = requests.get(url)
     response.raise_for_status()
 
-    # Parsing data
-    csv_data = response.text
-    reader = csv.DictReader(StringIO(csv_data))
+    reader = csv.DictReader(StringIO(response.text))
     rows = list(reader)
 
-    # Checking if data is available
     if len(rows) == 0 or rows[0]["Close"] == "N/A":
         return None
 
     stock = rows[0]
-
-    # Returning data structured
     return {
         "ticker": ticker,
         "date": stock["Date"],
@@ -36,27 +28,69 @@ def get_stock_price(ticker):
         "volume": int(stock["Volume"])
     }
 
-searched_stocks = []
 
-# Iteration (loop)
+# load portfolio (NEW, minimal)
+portfolio = {}
+if os.path.exists(PORTFOLIO_FILE):
+    with open(PORTFOLIO_FILE, "r") as f:
+        portfolio = json.load(f)
+
+
+# main loop (still simple)
 while True:
-    ticker = input("Enter a stock ticker (or type QUIT): ").upper()
+    print("\n1 View price  2 Buy  3 Remove  4 Portfolio  5 Quit")
+    choice = input("Choose: ")
 
-    if ticker == "QUIT":
+    if choice == "5":
         break
 
-    stock_data = get_stock_price(ticker)
+    if choice == "1":
+        ticker = input("Enter ticker: ").upper()
+        stock_data = get_stock_price(ticker)
 
-    if stock_data is None:
-        print("Invalid ticker or data unavailable.")
-    else:
-        print("\nTicker:", stock_data["ticker"])
-        print("Date:", stock_data["date"])
-        print("Closing Price: $", stock_data["close"])
-        print("Volume:", stock_data["volume"])
+        if stock_data is None:
+            print("Invalid ticker or data unavailable.")
+        else:
+            print("\nTicker:", stock_data["ticker"])
+            print("Date:", stock_data["date"])
+            print("Closing Price: $", stock_data["close"])
+            print("Volume:", stock_data["volume"])
 
-        searched_stocks.append(ticker)
+    elif choice == "2":
+        ticker = input("Buy ticker: ").upper()
+        stock_data = get_stock_price(ticker)
 
-print("\nStocks searched this session:")
-for stock in searched_stocks:
-    print("-", stock)
+        if stock_data is None:
+            print("Invalid ticker.")
+        else:
+            shares = float(input("How many shares? "))
+            portfolio[ticker] = portfolio.get(ticker, 0) + shares
+            print(f"{ticker}: {portfolio[ticker]} shares")
+
+    elif choice == "3":
+        ticker = input("Remove ticker: ").upper()
+
+        if ticker not in portfolio:
+            print("Stock not in portfolio.")
+        else:
+            shares = float(input("Shares to remove: "))
+            portfolio[ticker] -= shares
+
+            if portfolio[ticker] <= 0:
+                del portfolio[ticker]
+                print(f"{ticker} removed.")
+            else:
+                print(f"{ticker}: {portfolio[ticker]} shares")
+
+    elif choice == "4":
+        if not portfolio:
+            print("Portfolio empty.")
+        else:
+            for t, s in portfolio.items():
+                print(f"{t}: {s} shares")
+
+    # save portfolio (NEW, minimal)
+    with open(PORTFOLIO_FILE, "w") as f:
+        json.dump(portfolio, f, indent=2)
+
+print("Goodbye")
