@@ -246,7 +246,7 @@ class Dealer: #dealer properties
             player.getbet()
     
     def dealershow(self): #dealer shows one card
-        print(f"The Dealer reveals a card: {deck.identify_card(self.dealerhand[0])}.")
+        print(f"The Dealer reveals a card: \033[1m{deck.identify_card(self.dealerhand[0])}\033[0m.")
     
     def round(self): #player: hit or stand, if over 21, bust
         for player in players:
@@ -618,3 +618,4 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
