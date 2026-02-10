@@ -12,6 +12,37 @@ Settings = {
     'useDictionaryAPI': True # If false, disables the check to see if you guessed a valid word. Doesn't disable the answer generator.
 }
 
+def change_setting(setting:str,description:str):
+    if not setting in Settings:
+        return
+    allowedType = type(Settings[setting])
+    print(f"Input desired value for the following setting: {setting}")
+    newValue = input(f"Description: {description}\nNew value:")
+    
+    if allowedType == bool:
+        if newValue.lower() == 'true':
+            newValue = True
+        elif newValue.lower() == 'false':
+            newValue = False
+        else:
+            print("Enter either 'true' or 'false'.")
+            change_setting(setting,description)
+            return
+    elif allowedType == int:
+        try:
+            newValue = int(newValue)
+        except:
+            print("Please enter a valid integer.")
+            change_setting(setting,description)
+            return
+    Settings[setting] = newValue
+
+change_setting('daily','Determines whether the game should choose a seed based off of the current day or not. ONLY WORKS WITH 5 LETTER ANSWERS')
+change_setting('maxGuesses','The maximum amount of times you can guess')
+change_setting('colorblind',"Use if you can't see the colors or are colorblind")
+change_setting('wordLength','The length of the answer. Values other than 5 use an API. Value must be >1 <16')
+change_setting('useDictionaryAPI','If false, disables valid word check for answers not length 5.')
+
 RANDOM_WORD_API = 'https://random-word-api.herokuapp.com/word'
 DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en/'
 
@@ -112,11 +143,11 @@ class Wordle():
                         self.useDictionaryAPI = False
                         self.guess()
                     return
-                
                 data[0] # Errors if the API returns a blank table instead of a definition
             except:
                 print("Could not find word in dictionary API")
                 self.guess()
+                return
         
         results = ['' for letter in self.answer]
         found_letters = []
