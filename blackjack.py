@@ -617,16 +617,3 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
-
-
-
-
-
-
-
-
-
-
-
-
-
