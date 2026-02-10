@@ -26,6 +26,14 @@ def save_tasks(tasks):
     with open(FILE_NAME, "w") as f:
         json.dump(tasks, f, indent=2)
 
+def show_task_counts(tasks):
+    total = len(tasks)
+    completed = sum(1 for task in tasks if task["completed"])
+    remaining = total - completed
+
+    print("\nTask Summary:")
+    print(f"Total: {total} | Completed: {completed} | Remaining: {remaining}")
+    
 def show_tasks(tasks):
     if not tasks:
         print("No tasks found.")
@@ -42,6 +50,7 @@ def main():
     tasks = load_tasks()
 
     while True:
+        show_task_counts(tasks)
         show_tasks(tasks)
 
         print("""
@@ -83,13 +92,6 @@ Options:
 
         else:
             print("Invalid option. Try again.")
-
-if __name__ == "__main__":
-    main()
-        tasks.append(task)
-
-    save_tasks(tasks)
-    print("\nTasks saved. Come back soon! You have to finish your work!")
 
 if __name__ == "__main__":
     main()
