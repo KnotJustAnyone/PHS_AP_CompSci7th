@@ -77,10 +77,11 @@ class Player: #player properties
             if hitstand == "h":
                 self.newcard(1)
                 currenttot = self.player_value()
-                print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
+                print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: \033[1m{currenttot}\033[0m.")
                 if currenttot >= 21:
                     break
             elif hitstand == "s":
+                print(f"{self.name} stands! Their total: \033[1m{self.player_value()}\033[0m.")
                 break
             else:
                 print('use "h" or "s" please')
@@ -124,7 +125,7 @@ class Player: #player properties
                     self.newcard(1)
                     self.money -= self.bet
                     self.bet = self.bet * 2
-                    print(f"{self.name} has doubled down! They get one card and cannot play anymore.")
+                    print(f"{self.name} has doubled down! They get one card and must stand.")
                     self.hasddown = True
                     return True
                 else:
@@ -176,12 +177,12 @@ class Bot(Player):
             if currenttot <= b_rand:
                 self.newcard(1)
                 ctot = self.player_value()
-                print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {ctot}.")
+                print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: \033[1m{ctot}\033[0m.")
                 if ctot >= 21:
                     break
             else:
                 ctot = self.player_value()
-                print(f"{self.name} stands!\nTheir total: {ctot}")
+                print(f"{self.name} stands!\nTheir total: \033[1m{ctot}\033[0m")
                 break
     
     def splitting(self, dealer):
@@ -200,6 +201,8 @@ class Bot(Player):
                         splitplayer.newcard(1)
                         players.append(splitplayer)
                         print(f"{self.name} has 2 hands.")
+                        print(f"{self.name}'s new hand: \033[1m{deck.identify_card(self.hand[0])}, {deck.identify_card(self.hand[1])}\033[0m.")
+                        print(f"{players[-1].name}'s new hand:\033[1m{deck.identify_card(players[-1].hand[0])}, {deck.identify_card(players[-1].hand[1])}\033[0m.")
                     else:
                         print(f"{self.name} doesn't have enough money to make a split! Currently, they have {self.money}.")
             else:
@@ -258,8 +261,8 @@ class Dealer: #dealer properties
         while self.dealer_value() < 17:
             new_cards = deck.deal(1)
             self.dealerhand += new_cards
-            print(f"Dealer hits: \033[1m{deck.identify_card(new_cards[0])}\033[0m, hand now: {self.dealer_value()}")
-        print(f"Dealer stands with {self.dealer_value()}")
+            print(f"Dealer hits: \033[1m{deck.identify_card(new_cards[0])}\033[0m, hand now: \033[1m{self.dealer_value()}\033[0m.")
+        print(f"Dealer stands with \033[1m{self.dealer_value()}\033[0m")
 
     def dealer_value(self): #dealer total value, will handle aces
         total = 0
@@ -304,24 +307,27 @@ class Dealer: #dealer properties
     def check(self): #see if anyone busts or wins or ties
         dealer = self.dealer_value()
         for player in players:
+            if player.hasddown == True:
+                print(f"{player.name} had doubled down, and their final card is...\n\033[1m{deck.identify_card(player.hand[-1])}\033[0m!")
+            print(f"The Dealer's hole card: \033[1m{deck.identify_card(self.dealerhand[1])}\033[0m")
             checks = player.player_value()
             if checks > 21:
-                print(f"{player.name} busts! You lose. Lost: ${player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"{player.name} busts! You lose. Lost: ${player.bet}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
             elif dealer > 21:
-                print(f"Dealer busts! {player.name} wins: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"Dealer busts! {player.name} wins: ${player.bet * 2}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
                 player.money += player.bet * 2
             elif (checks == 21 and len(player.hand) == 2) and (dealer != 21 or len(self.dealerhand) > 2):
-                print(f"{player.name} has BlackJack! Won: ${player.bet * 1.5}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"{player.name} has BlackJack! Won: ${player.bet * 1.5}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
                 player.money += player.bet * 1.5
             elif checks > dealer:
-                print(f"{player.name} wins! Won: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"{player.name} wins! Won: ${player.bet * 2}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
                 player.money += player.bet * 2
             elif (dealer == 21 and len(self.dealerhand) == 2) and (checks != 21 or len(player.hand) >2):
-                print(f"Dealer has BlackJack! {player.name} loses. Lost {player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"Dealer has BlackJack! {player.name} loses. Lost {player.bet}.\n Dealer value:, {player.name} value:\033[1m{checks}\033[0m.")
             elif checks < dealer:
-                print(f"Dealer wins! {player.name} loses. Lost: ${player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"Dealer wins! {player.name} loses. Lost: ${player.bet}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
             elif checks == dealer: #maybe add condition if double BlackJack, just to say they both had it, but doesn't really matter.
-                print(f"{player.name} ties with the Dealer. No loss/gain.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"{player.name} ties with the Dealer. No loss/gain.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
                 player.money += player.bet
             player.bet = 0
             player.hasddown = False
@@ -618,4 +624,3 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
-
