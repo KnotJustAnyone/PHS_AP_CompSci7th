@@ -1,31 +1,7 @@
 import random
+import time
 from deck_of_cards import Deck
 players = [] #players
-
-def randbotp():
-    personality = [1,2,3,4,5]
-    percentchance = [20,40,20,10,10]
-    return random.choices(personality, weights=percentchance)[0]
-
-def getting_players(): #ask players for player/bot amount and names
-    while True:
-        try:
-            pnum = int(input("How many players are you adding?"))
-            break
-        except ValueError:
-            print("a number (don't use letters) please")
-    for i in range(pnum):
-        name = input(f"Player {i + 1}'s name: ")
-        players.append(Player(name))
-    while True:
-        try:
-            bnum = int(input("How many bots do you want?"))
-            break
-        except ValueError:
-            print("a number (don't use letters) please")
-    for j in range(bnum):
-        players.append(Bot("Bot" + str(j), randbotp()))
-    print(f"{pnum} players were added:\n{[pl.name for pl in players]} \n{bnum} bots were also added.\n")
 
 def card_value(card): #handle 2-card code to get the value
     if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
@@ -58,7 +34,6 @@ class Player: #player properties
 
     def reset_player(self):
         self.hand = []
-        self.money = 1500
         self.bet = 0
         self.hasddown = False
     
@@ -78,7 +53,7 @@ class Player: #player properties
         print(f"{self.name} has ${self.money}.")
         while True:
             try:
-                bet = int(input(f"How much money would {self.name} like to bet? Betting is limited from $2-$500."))
+                bet = int(input(f"How much money would {self.name} like to bet? Betting is limited from $2-$500.\n"))
                 if bet >= 2 and bet <= self.money and bet <= 500:
                     self.money -= bet
                     self.bet = bet
@@ -98,14 +73,15 @@ class Player: #player properties
             print(f"\033[1m{deck.identify_card(card)}\033[0m.")
         print(f"Total: {self.player_value()}.")
         while True:
-            hitstand = input(f"{self.name}, would you like to hit or stand (h or s)?").strip().lower()
+            hitstand = input(f"{self.name}, would you like to hit or stand (h or s)?\n").strip().lower()
             if hitstand == "h":
                 self.newcard(1)
                 currenttot = self.player_value()
-                print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {currenttot}.")
+                print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: \033[1m{currenttot}\033[0m.")
                 if currenttot >= 21:
                     break
             elif hitstand == "s":
+                print(f"{self.name} stands! Their total: \033[1m{self.player_value()}\033[0m.")
                 break
             else:
                 print('use "h" or "s" please')
@@ -114,7 +90,7 @@ class Player: #player properties
         if len(self.hand) == 2 and self.hand[0][1] == self.hand[1][1]:
             if not self.hasddown:
                 while True:
-                    ifsplit = input(f"Would {self.name} like to split their hand? (y or n)? ").strip().lower()
+                    ifsplit = input(f"Would {self.name} like to split their hand? (y or n)?\n").strip().lower()
                     if ifsplit in ("y", "n"):
                         break
                     print("y or n please")
@@ -140,7 +116,7 @@ class Player: #player properties
         currenttot = self.player_value()
         if currenttot == 9 or currenttot == 10 or currenttot == 11:
             while True:
-                ifdouble = input(f"Would {self.name} like to double down? (y or n)?\nNote that you can no longer hit or stand if you do.").strip().lower()
+                ifdouble = input(f"Would {self.name} like to double down? (y or n)?\nNote that you can no longer hit or stand if you do.\n").strip().lower()
                 if ifdouble in ("y", "n"):
                     break
                 print("y or n please")
@@ -149,7 +125,7 @@ class Player: #player properties
                     self.newcard(1)
                     self.money -= self.bet
                     self.bet = self.bet * 2
-                    print(f"{self.name} has doubled down! They get one card and cannot play anymore.")
+                    print(f"{self.name} has doubled down! They get one card and must stand.")
                     self.hasddown = True
                     return True
                 else:
@@ -201,12 +177,12 @@ class Bot(Player):
             if currenttot <= b_rand:
                 self.newcard(1)
                 ctot = self.player_value()
-                print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: {ctot}.")
+                print(f"{self.name} has hit! Their card: \033[1m{deck.identify_card(self.hand[-1])}\033[0m.\nTheir total: \033[1m{ctot}\033[0m.")
                 if ctot >= 21:
                     break
             else:
                 ctot = self.player_value()
-                print(f"{self.name} stands!\nTheir total: {ctot}")
+                print(f"{self.name} stands!\nTheir total: \033[1m{ctot}\033[0m")
                 break
     
     def splitting(self, dealer):
@@ -225,6 +201,8 @@ class Bot(Player):
                         splitplayer.newcard(1)
                         players.append(splitplayer)
                         print(f"{self.name} has 2 hands.")
+                        print(f"{self.name}'s new hand: \033[1m{deck.identify_card(self.hand[0])}, {deck.identify_card(self.hand[1])}\033[0m.")
+                        print(f"{players[-1].name}'s new hand:\033[1m{deck.identify_card(players[-1].hand[0])}, {deck.identify_card(players[-1].hand[1])}\033[0m.")
                     else:
                         print(f"{self.name} doesn't have enough money to make a split! Currently, they have {self.money}.")
             else:
@@ -271,7 +249,7 @@ class Dealer: #dealer properties
             player.getbet()
     
     def dealershow(self): #dealer shows one card
-        print(f"The Dealer reveals a card: {deck.identify_card(self.dealerhand[0])}.")
+        print(f"The Dealer reveals a card: \033[1m{deck.identify_card(self.dealerhand[0])}\033[0m.")
     
     def round(self): #player: hit or stand, if over 21, bust
         for player in players:
@@ -283,8 +261,8 @@ class Dealer: #dealer properties
         while self.dealer_value() < 17:
             new_cards = deck.deal(1)
             self.dealerhand += new_cards
-            print(f"Dealer hits: \033[1m{deck.identify_card(new_cards[0])}\033[0m, hand now: {self.dealer_value()}")
-        print(f"Dealer stands with {self.dealer_value()}")
+            print(f"Dealer hits: \033[1m{deck.identify_card(new_cards[0])}\033[0m, hand now: \033[1m{self.dealer_value()}\033[0m.")
+        print(f"Dealer stands with \033[1m{self.dealer_value()}\033[0m")
 
     def dealer_value(self): #dealer total value, will handle aces
         total = 0
@@ -306,7 +284,7 @@ class Dealer: #dealer properties
                     ifins = "y"
                 else:
                     while True:
-                        ifins = input(f"Would {player.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.").strip().lower()
+                        ifins = input(f"Would {player.name} like insurance (y or n)?\nNote that this version of insurance will automatically take half your original bet.\n").strip().lower()
                         if ifins in ("y","n"):
                             break
                         print("y or n please")
@@ -329,32 +307,61 @@ class Dealer: #dealer properties
     def check(self): #see if anyone busts or wins or ties
         dealer = self.dealer_value()
         for player in players:
+            if player.hasddown == True:
+                print(f"{player.name} had doubled down, and their final card is...\n\033[1m{deck.identify_card(player.hand[-1])}\033[0m!")
+            print(f"The Dealer's hole card: \033[1m{deck.identify_card(self.dealerhand[1])}\033[0m")
             checks = player.player_value()
             if checks > 21:
-                print(f"{player.name} busts! You lose. Lost: ${player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"{player.name} busts! You lose. Lost: ${player.bet}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
             elif dealer > 21:
-                print(f"Dealer busts! {player.name} wins: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"Dealer busts! {player.name} wins: ${player.bet * 2}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
                 player.money += player.bet * 2
             elif (checks == 21 and len(player.hand) == 2) and (dealer != 21 or len(self.dealerhand) > 2):
-                print(f"{player.name} has BlackJack! Won: ${player.bet * 1.5}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"{player.name} has BlackJack! Won: ${player.bet * 1.5}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
                 player.money += player.bet * 1.5
             elif checks > dealer:
-                print(f"{player.name} wins! Won: ${player.bet * 2}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"{player.name} wins! Won: ${player.bet * 2}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
                 player.money += player.bet * 2
             elif (dealer == 21 and len(self.dealerhand) == 2) and (checks != 21 or len(player.hand) >2):
-                print(f"Dealer has BlackJack! {player.name} loses. Lost {player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"Dealer has BlackJack! {player.name} loses. Lost {player.bet}.\n Dealer value:, {player.name} value:\033[1m{checks}\033[0m.")
             elif checks < dealer:
-                print(f"Dealer wins! {player.name} loses. Lost: ${player.bet}.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"Dealer wins! {player.name} loses. Lost: ${player.bet}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
             elif checks == dealer: #maybe add condition if double BlackJack, just to say they both had it, but doesn't really matter.
-                print(f"{player.name} ties with the Dealer. No loss/gain.\n Dealer value:{dealer}, {player.name} value:{checks}.")
+                print(f"{player.name} ties with the Dealer. No loss/gain.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
                 player.money += player.bet
             player.bet = 0
             player.hasddown = False
 
+#Game playing: -----------------------------------------------------------------------------------------------
+def randbotp():
+    personality = [1,2,3,4,5]
+    percentchance = [20,40,20,10,10]
+    return random.choices(personality, weights=percentchance)[0]
+
+def getting_players(): #ask players for player/bot amount and names
+    while True:
+        try:
+            pnum = int(input("How many players are you adding?"))
+            break
+        except ValueError:
+            print("a number (don't use letters) please")
+    for i in range(pnum):
+        name = input(f"Player {i + 1}'s name: ")
+        players.append(Player(name))
+    while True:
+        try:
+            bnum = int(input("How many bots do you want?"))
+            break
+        except ValueError:
+            print("a number (don't use letters) please")
+    for j in range(bnum):
+        players.append(Bot("Bot" + str(j), randbotp()))
+    print(f"{pnum} players were added:\n{[pl.name for pl in players]} \n{bnum} bots were also added.\n")
+    
 def reset_game():
     global players
     while True:
-        reset = input(f'''Would you like to restart the game (y = reset, n = continue)?
+        reset = input(f'''Would you like to continue this game (y = continue, n = reset)?
 And with the same players (y or n)?
 Type them together, e.g. "yy" or "yn". 1st is restart, 2nd is players.
 Just type n if you do not want to restart:''').strip().lower()
@@ -362,6 +369,7 @@ Just type n if you do not want to restart:''').strip().lower()
             break
         print('Please type a valid answer. Valid: "yy", "yn","n".')
     if reset == "n":
+        players.clear()
         quit()
     elif reset == "yy":
         for player in players:
@@ -396,10 +404,75 @@ def run_game():
     dealer.playerbets()
     dealer.deal1()
     dealer.round()
+    input("Enter any key to continue: ")
     reset_game()
 
-#unhash to play game
-#run_game()
+def menu():
+    def delete_menu(num, slow=True):
+        for i in range(num):
+            print("\033[A\033[K", end='\r')
+            if slow == True:
+                time.sleep(0.025)
+
+    def wrong_num():
+        print("Use a correct number please.")
+        time.sleep(2)
+        delete_menu(2)
+
+    def menu_nav():
+        while True:
+            try:
+                menu_input = int(input().strip())
+                if menu_input in (1,2,3,4):
+                    break
+                else:
+                    wrong_num()
+            except:
+                wrong_num()
+        return menu_input
+
+    def main_menu():
+        global players
+        delete_menu(1000,False)
+        for i in mainmenu:
+            print(i)
+            time.sleep(0.5)
+        print("Use given numbers to navigate")
+        menu_input = menu_nav()
+        if menu_input == 1:
+            players.clear()
+            run_game()
+        elif menu_input == 2:
+            delete_menu(7)
+            for i in loadmenu:
+                print(i)
+                time.sleep(0.5)
+            load_input = menu_nav()
+            if load_input == 1:
+                pass
+            elif load_input == 2:
+                pass
+            elif load_input == 3:
+                pass
+            elif load_input == 4:
+                main_menu()
+        elif menu_input == 3:
+            delete_menu(7)
+            print("https://bicyclecards.com/how-to-play/blackjack")
+            while True:
+                exit = input("Type anything to go back to main menu")
+                if exit != "":
+                    break
+            main_menu()
+        elif menu_input == 4:
+            quit()
+
+    mainmenu = ["BLACKJACK", "New Game - 1", "Load Save - 2", "Rules - 3", "Exit - 4"]
+    loadmenu = ["BLACKJACK SAVES","SAVE1 - 1", "SAVE2 - 2", "SAVE3 - 3", "Exit - 4"]
+
+    main_menu()
+
+menu()
 
 #Tests: -------------------------------------------------------------------------------------
 def test_player_init():
@@ -551,12 +624,3 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
-
-
-
-
-
-
-
-
-
