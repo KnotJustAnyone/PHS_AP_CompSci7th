@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src ="main.js"></script>
+    
+  <meta charset="UTF-8">
+    
+  <title>2D Cube</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #eee;
+    }
+  </style>
+    
+<!--Sienna's buttton styling-->
+    
+    <style>
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: 2px solid black;
+      background: red;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #eee;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="cube" width="300" height="300"></canvas>
+
+<script>
+  const canvas = document.getElementById("cube");
+  const ctx = canvas.getContext("2d");
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "black";
+  ctx.fillStyle = "white";
+
+  // Front square
+  ctx.beginPath();
+  ctx.rect(100, 130, 80, 80);
+  ctx.fill();
+  ctx.stroke();
+
+  // Top face
+  ctx.beginPath();
+  ctx.moveTo(100, 130);
+  ctx.lineTo(140, 100);
+  ctx.lineTo(220, 100);
+  ctx.lineTo(180, 130);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Side face
+  ctx.beginPath();
+  ctx.moveTo(180, 130);
+  ctx.lineTo(220, 100);
+  ctx.lineTo(220, 180);
+  ctx.lineTo(180, 210);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  </script>
+
+    <button id="myButton">Gamble</button>
+
+<script>
+  document.getElementById("myButton").addEventListener("click", () => {
+    alert("Button clicked!");
+  });
+</script>
+  </body>
+  </html>
