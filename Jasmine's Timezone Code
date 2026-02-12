@@ -1,0 +1,41 @@
+import requests 
+
+def get_city_time(timezone): # procedural abstraction & timezone is a parameter
+    url = f"https://worldtimeapi.org/api/timezone/{timezone}"
+    response = requests.get(url)
+
+    if response.status_code != 200: # check if timezone is valid
+        return None, "Invalid time zone. Please try again."
+
+    data = response.json() 
+    datetime = data["datetime"] 
+
+    date = datetime[:10] 
+    time = datetime[11:19] 
+    hour = int(datetime[11:13]) 
+
+
+    if hour < 12:
+        message = "Good morning!"
+    elif hour < 18:
+        message = "Good afternoon!"
+    else:
+        message = "Good evening!"
+
+    return {"date": date, "time": time, "timezone": timezone}, message # results/return values
+
+
+
+timezone = input("Enter ANY valid time zone (example: America/New_York, Europe/London)(AlWAYS INPUT AS REGION/CITY, try more famous cities): ")
+
+
+time_data, greeting = get_city_time(timezone)
+
+
+if time_data is None:
+    print(greeting)
+else:
+    print(f"\nTime Zone: {time_data['timezone']}")
+    print(f"Date: {time_data['date']}")
+    print(f"Time: {time_data['time']}")
+    print(greeting)
