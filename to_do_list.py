@@ -79,6 +79,16 @@ class to_do_list:
         # Choose the interval of repetition 
            return None
 
+def load_todo_list(filename="todos.json"):
+    try:
+        with open(filename, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print("No existing to-do file found")
+        return []
+    except Exception as e:
+        print("Error loading to-do list")
+        return []
 import json
 
 def save_todo_list(todo_list, filename="todos.json"):
