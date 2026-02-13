@@ -109,7 +109,51 @@ def display_playlist():
     # Megan Vuong suggested album cov
     # Megan Vuong suggested album cover jpeg displayed too
 
-#Count # of songs
+def save_playlist(filename):
+    """Saves the current playlist to a JSON file."""
+    # Check if playlist is empty
+    if not playlist:
+        print("Cannot save: playlist is empty.")
+        return
+    
+    # Check if filename is provided
+    if not filename:
+        print("Error: filename is required.")
+        return
+    
+    # Ensure filename ends with .json extension
+    if not filename.endswith('.json'):
+        filename = filename + '.json'
+    
+    # Old code - commented out because songs are strings, not objects
+    # data = []
+    # # Convert each Song object to a dictionary
+    # for song in playlist:
+    #     song_dict = {
+    #         "title": song.title,
+    #         "artist": song.artist,
+    #         "album": song.album,
+    #         "cover_image": song.cover_image
+    #     }
+    #     data.append(song_dict)
+    
+    # New code - works with string songs
+    # Create a list to store the playlist data
+    data = []
+    for song in playlist:
+        # Since songs are strings, we'll save them directly
+        # Could be enhanced later to parse song strings if needed
+        data.append(song)
+    
+    # Write to JSON file with indentation for readability
+    try:
+        with open(filename, "w") as file:
+            json.dump(data, file, indent=4)
+        print(f"Playlist saved successfully to '{filename}'.")
+        print(f"Total songs saved: {len(data)}")
+    except Exception as e:
+        print(f"Error saving playlist: {e}")
+#Landon Blain-Count # of songs
 def count_songs():
     print(f"Total songs in playlist: {len(playlist)}")
 
