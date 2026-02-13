@@ -1,0 +1,76 @@
+import random
+import requests
+
+# GET RANDOM WORD FROM THE WEB
+
+def get_random_word(length=5):
+    url = f"https://random-word-api.herokuapp.com/word?length={length}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()[0]
+    else:
+        # fallback word if API fails
+        return "apple"
+
+# DICTIONARY CHECK FOR REAL WORD OR NOT
+
+def is_real_word(word):
+    url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
+    response = requests.get(url)
+    return response.status_code == 200
+
+# SETUP GAME
+
+WORD_LENGTH = 5
+MAX_GUESSES = 6
+
+secret_word = get_random_word(WORD_LENGTH)
+attempts = 0
+
+print("Welcome to Wordle (Web Edition)")
+print("Guess the 5-letter word!")
+
+# GAME LOOP
+
+while attempts < MAX_GUESSES:
+    guess = input(f"\nAttempt {attempts + 1}/{MAX_GUESSES}: ").lower()
+
+    # Validation
+    if len(guess) != WORD_LENGTH:
+        print("Word must be exactly 5 letters.")
+        continue
+
+    if not is_real_word(guess):
+        print("That is not a valid dictionary word.")
+        continue
+
+    attempts += 1
+    feedback = [""] * WORD_LENGTH
+    secret_letters = list(secret_word)
+
+    # Pass 1: correct letter & position
+    for i in range(WORD_LENGTH):
+        if guess[i] == secret_word[i]:
+            feedback[i] = "✓"
+            secret_letters[i] = None
+
+    # Pass 2: correct letter, wrong position
+    for i in range(WORD_LENGTH):
+        if feedback[i] == "":
+            if guess[i] in secret_letters:
+                feedback[i] = "~"
+                secret_letters[secret_letters.index(guess[i])] = None
+            else:
+                feedback[i] = "X"
+
+    # Display feedback
+    print("Feedback:")
+    for i in range(WORD_LENGTH):
+        print(f"{guess[i].upper()} : {feedback[i]}")
+
+    if guess == secret_word:
+        print("\nNice!!! You guessed the word correctly!")
+        break
+
+if guess != secret_word:
+    print(f"\nGame over :( The word was: {secret_word}")
