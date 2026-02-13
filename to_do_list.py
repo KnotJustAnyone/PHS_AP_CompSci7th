@@ -79,6 +79,15 @@ class to_do_list:
         # Choose the interval of repetition 
            return None
 
+import json
+
+def save_todo_list(todo_list, filename="todos.json"):
+    try:
+        with open(filename, "w") as file:
+            json.dump(todo_list, file, indent=4)
+        print("to do list saved")
+    except Exception as e:
+        print("error saving to do list")
 def addandlisttest():
     dog = to_do_list()
     dog.add_tasks("Do dishes")
