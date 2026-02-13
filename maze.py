@@ -85,6 +85,7 @@ def test_print():
         print("Got:")
         print(output)
 #----
+moves = 0
 while True:
     print_maze()
     move = input("Move (WASD): ").lower()
@@ -106,7 +107,7 @@ while True:
     # Check walls
     if maze[new_y][new_x] != '#':
         player_x, player_y = new_x, new_y
-
+        move += 1
 
     # Check goal
     if maze[player_y][player_x] == 'G':
@@ -123,4 +124,3 @@ def restart_game():
             player_x = row.index('S')
             player_y = y
     print("\nMaze restarted!\n")
-
