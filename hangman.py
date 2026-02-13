@@ -3,13 +3,13 @@
 #Class outline for a Word Guessing Game.
 # Aldo: It includes variables and functions but no actual working code yet.
 import random
-class WordGuessingGame(self):
+class WordGuessingGame:
 
     # Aldo: A list of possible words the game can choose from
     # A list of possible words the game can choose from.
     # This component is needed for the choose_word function to work.
     word_list = []
-    with open('Wordle/words.txt','r',encoding='utf-8') as f:
+    with open('wordle/words.txt','r',encoding='utf-8') as f:
         for line in f:
             word_list.append(line.strip())
 
@@ -113,10 +113,10 @@ class WordGuessingGame(self):
         return status
 
     def restart_game(self):
-		while True:
-			option = input ("Do you want to restart the game (y or n)?").strip().lower()
-			if option in ("y","n"):
-				break
+        while True:
+            option = input ("Do you want to restart the game (y or n)?").strip().lower()
+            if option in ("y","n"):
+                break
         if option == "y":
             self.secret_word = ""
             self.guessed_letters = []
@@ -141,14 +141,23 @@ def check_win(self):
 # RUN:
 def run_game():
     game = WordGuessingGame()
+	game.choose_word()
 
+	while True: # Loop in case of restarts
+		while True: # Main game loop
+			game.update_display() # Redundancy? Will need fixing upon function coding
+			game.show_status() # Redundancy? Will need fixing upon function coding
+			if game.game_over:
     while True: # Loop in case of restarts
         game.choose_word()
         
         while True: # Main game loop
-            game.update_display() # Redundancy? Will need fixing upon function coding
-            game.show_status() # Redundancy? Will need fixing upon function coding
-            if game.game_over():
+            print(game.show_status())
+
+            #ask player for a guess
+            guess = input("Enter a letter: ").strip().lower()
+            game.guess_letter(guess)
+            if game.game_over:
                 break
 
     # Restart?
@@ -160,6 +169,11 @@ def run_game():
         if ans == "y":
             game.restart_game()
         else:
-            quit()
+            break
 
 run_game()
+
+
+
+
+
