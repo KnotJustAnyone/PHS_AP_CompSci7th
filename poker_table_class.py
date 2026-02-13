@@ -2,7 +2,7 @@
 from deck_of_cards import Deck
 from collections import Counter
 from itertools import combinations
-
+                               
 class Player: #player properties
     def __init__(self, name, money=1500): #creating player, give money
         self.name = name #player name, may not use because they'll see each other's cards?
@@ -233,6 +233,45 @@ class poker_table:
         return bet #A number for the size of the bet
 
 #Tests ---------------------------------------------
+  def poker_table_init_test():
+      table = poker_table(["John", "Abigail", "Steve"], 10, [10,5,5], 
+                          (False, True, True), [h2,s7,d5], "John", "Abigail")
+
+      if table.players = ["John", "Abigail", "Steve"]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.pot = 10
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.bets = [10, 5, 5]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.deck = [False, True, True]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.table_cards = [h2, s7, d5]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.current_player = "John"
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.button_player = "Abigail"
+          print("test passed")
+      else: 
+          print("test failed")
+
 def test_best_hand():
     table = poker_table()
     hands = [
