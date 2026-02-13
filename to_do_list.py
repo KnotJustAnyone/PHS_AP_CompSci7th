@@ -18,9 +18,9 @@ class task:
     
 class to_do_list:
     def __init__(self):
-        self.list = [] #list of tasks. task is task = (string, boolean, int)
+        self.list = [] # List of tasks. task is task = (string, boolean, int)
 
-        #maybe add class for tasks with self.start day or self.repetition_interval
+        # Maybe add class for tasks with self.start day or self.repetition_interval
 
     def add_tasks(self,task_name): #lets user add tasks to list.  
         task1 = task(task_name, False, 0)
@@ -41,23 +41,18 @@ class to_do_list:
     def remove_tasks(self,task_name): #lets user remove tasks from list
         task_name = input ("Type in the task you want to remove: ")
 
-        for task in self.list:
-            if task[0] == task_name:
-                self.list.remove(task)
-                print("The task has been removed")
-                break
-        else:
-            print("A task has not been removed.")
-        
+    def sort_alphabetically(self): 
+        self.list.sort(key=lambda t: t[0])
+        print("Tasks sorted alphabetically.")
 
-    def check_tasks(self,task_name): #checks off completed tasks
+    def check_tasks(self,task_name): #Checks off completed tasks
         #returns True or False boolean
         return None
     
     def count_incomplete(self):
         return sum(1 for t in self.list if not t[1])
 
-    def repeated_tasks(self,task_name): #allows user to choose tasks to repeat
+    def repeated_tasks(self,task_name): # Allows user to choose tasks to repeat
          """
     Allows user to choose a task and assign a repetition interval.
     repetition_interval meanings:
@@ -81,8 +76,81 @@ class to_do_list:
 
 
         def interval(self):
-        #choose the interval of repetition 
+        # Choose the interval of repetition 
            return None
+
+def show_menu():
+    print("====== TO-DO LIST MENU ======")
+    print("1. View Tasks")
+    print("2. Add Task")
+    print("3. Remove Task")
+    print("4. Mark Task as Done")
+    print("5. Set Repeat Interval")
+    print("=============================")
+
+
+def main():
+    todo = ToDoList()
+
+    while True:
+        show_menu()
+        choice = input("Enter your choice 1-6").strip()
+
+        if choice == "1":
+            todo.show_tasks()
+
+        elif choice == "2":
+            name = input("Enter task name").strip()
+            if name:
+                todo.add_tasks(name)
+            else:
+                print("Task name cannot be empty")
+
+        elif choice == "3":
+            name = input("Enter task name to remove").strip()
+            todo.remove_tasks(name)
+
+        elif choice == "4":
+            name = input("Enter task name to mark as done").strip()
+            todo.check_tasks(name)
+
+        elif choice == "5":
+            name = input("Enter task name to repeat").strip()
+            interval = input("Enter repeat interval (in days)").strip()
+            if interval.isdigit():
+                todo.repeated_task(name, int(interval))
+            else:
+                print("Invalid interval")
+
+        else:
+            print("Invalid choice")
+
+
+if __name__ == "__main__":
+    main()
+def load_todo_list(filename="todos.json"):
+    try:
+        with open(filename, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print("No existing to-do file found")
+        return []
+    except Exception as e:
+        print("Error loading to-do list")
+        return []
+import json
+
+def save_todo_list(todo_list, filename="todos.json"):
+    try:
+        with open(filename, "w") as file:
+            json.dump(todo_list, file, indent=4)
+        print("to do list saved")
+    except Exception as e:
+        print("error saving to do list")
+def addandlisttest():
+    dog = to_do_list()
+    dog.add_tasks("Do dishes")
+    dog.list_tasks()
             
     def print_toDoList(self):
         printYN = input("Do you want to print your to do list?")
@@ -96,7 +164,7 @@ class to_do_list:
         self.list.clear()
         print("All tasks cleared.")
 
-#repeated_tasks_test("Clean Room")
+# Repeated_tasks_test("Clean Room")
                                 
     def random_task(self):
         incomplete_tasks = [task for task in self.list if not task[1]]
@@ -127,8 +195,8 @@ def removeTask_test():
     final_list = ["Do math homework", "walk the dog"]
 
     action = "remove"
-    remove_which_task  = 2 #remove wash dishes
-    a = int(remove_which_task) - 1 #making it work with the index number
+    remove_which_task  = 2 # Remove wash dishes
+    a = int(remove_which_task) - 1 # Making it work with the index number
     removing = taskList.pop(a)
 
     if removing == To_be_removed and taskList == final_list:
@@ -148,3 +216,42 @@ def repeated_tasks_test(task_name):
     print(f"Repeating task: {task_name}")
     for i in range(3):
         print(f"Task '{task_name}' repetition {i + 1}")
+        
+def check_task_test():
+    todo = ToDoList()
+
+    #some tasks
+    todo.add_task("do homework")
+    todo.add_task("clean room")
+    todo.add_task("seal the honmoon")
+
+    #Check an existing task
+    result1 = todo.check_task("Do laundry")
+    if result1 is True and todo.list[1][1] is True:
+        print("checked off existing task")
+    else:
+        print("failed")
+
+    #check a non-existent task
+    result2 = todo.check_task("workout")
+    if result2 is False:
+        print("Handled missing task correctly")
+    else:
+        print("failed")
+
+    #check if other tasks remain unchanged
+    if todo.list[0][1] is False and todo.list[2][1] is False:
+        print("other tasks unchanged")
+    else:
+        print("failed")
+
+    print("Final task list state:")
+    for task in todo.list:
+        print(task)
+    for task in self.list:
+        if task[0] == task_name:
+            self.list.remove(task)
+            print("The task has been removed")
+            break
+    else:
+        print("A task has not been removed.")

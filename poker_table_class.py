@@ -2,7 +2,7 @@
 from deck_of_cards import Deck
 from collections import Counter
 from itertools import combinations
-
+                               
 class Player: #player properties
     def __init__(self, name, money=1500): #creating player, give money
         self.name = name #player name, may not use because they'll see each other's cards?
@@ -59,6 +59,35 @@ class poker_table:
         if starting_stack is not None and self.players:
             for p in self.players:
                 self.stacks[p] = starting_stack
+
+        self.game_state = self.create_game_state()
+
+    def create_game_state(self):
+
+        # Button handling
+        if self.players:
+            button_index = 0
+            current_player_index = 1 if len(self.players) > 1 else 0
+        else:
+            button_index = None
+            current_player_index = None
+
+        game_state = {
+            "street": "preflop",      # preflop → flop → turn → river → showdown
+            "pot": 0,
+            "current_bet": 0,
+            "minimum_raise": self.big_blind,
+            "bets_this_round": {p: 0 for p in self.players},
+            "active_players": list(self.players),
+            "current_player_index": current_player_index,
+            "button_index": button_index,
+            "table_cards": [],
+            "action_log": [],         # e.g. [("Bob", "raise", 20)]
+            "all_in_players": set(),
+            "folded_players": set(),
+        }
+
+        return game_state
 
     def deal_hands(self): #Gives each player their initial two pocket cards
         for _ in range(2):
@@ -204,6 +233,45 @@ class poker_table:
         return bet #A number for the size of the bet
 
 #Tests ---------------------------------------------
+  def poker_table_init_test():
+      table = poker_table(["John", "Abigail", "Steve"], 10, [10,5,5], 
+                          (False, True, True), [h2,s7,d5], "John", "Abigail")
+
+      if table.players = ["John", "Abigail", "Steve"]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.pot = 10
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.bets = [10, 5, 5]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.deck = [False, True, True]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.table_cards = [h2, s7, d5]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.current_player = "John"
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.button_player = "Abigail"
+          print("test passed")
+      else: 
+          print("test failed")
+
 def test_best_hand():
     table = poker_table()
     hands = [
