@@ -18,13 +18,6 @@ class Player: #player properties
         self.hand = []
 
 class poker_table:
-    def __init__(self):
-        global Deck
-        self.players = [] #List of players, need a player class
-        self.pot = 0
-        self.bets = []
-        self.deck = Deck(False,True,True)
-        self.deck.shuffle()
     def __init__(self, players=None, small_blind=1, big_blind=2, ante=0,
                 button_index=0, max_players=9, starting_stack=None,
                 codes=True, return_not_print=True):
@@ -228,9 +221,46 @@ class poker_table:
         return None
 
     #Asks the player what they want to bet
-    def player_bet(self,player,game_state):
-        bet = 0
-        return bet #A number for the size of the bet
+  def player_bet(self, player, game_state):
+      pot_size = game_state.get("pot_size", 0)
+      current_bet = game_state.get("current_bet", 0)
+      player_chips = game_state.get("player_chips", 1000)
+
+      print(f"\n--- {player}'s turn ---")
+      print(f"Pot size: {pot_size}")
+      print(f"Current bet to call: {current_bet}")
+      print(f"You have {player_chips} chips.")
+
+      while True:
+          try:
+              # Ask user for their action
+              action = input("Do you want to fold, call, or raise? ").strip().lower()
+
+              if action == "fold":
+                  print(f"{player} folds.")
+                  return 0  
+                  # 0 means they folded
+
+              elif action == "call":
+                  print(f"{player} calls {current_bet}.")
+                  return current_bet
+
+              elif action == "raise":
+                  raise_amount = float(input("Enter your raise amount: "))
+                  total_bet = current_bet + raise_amount
+
+                  if total_bet > player_chips:
+                      print("You don't have enough chips for that bet. Try again.")
+                      continue
+
+                  print(f"{player} raises to {total_bet}.")
+                  return total_bet
+
+              else:
+                  print("Invalid action. Please type 'fold', 'call', or 'raise'.")
+
+          except ValueError:
+              print("Please enter a valid number for your raise.")
 
 #Tests ---------------------------------------------
   def poker_table_init_test():
@@ -336,6 +366,7 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+            
 def deal_hands_check():
     plyr = Player("Colin",1500)
     tbl = poker_table()
@@ -345,4 +376,3 @@ def deal_hands_check():
         print(plyr.hand)
     except:
         print("Something went Wrong")
-deal_hands_check()
