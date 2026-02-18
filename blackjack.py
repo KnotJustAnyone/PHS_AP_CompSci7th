@@ -25,6 +25,7 @@ class Player: #player properties
         self.bet = 0 #bet amount
         self.hasddown = False
         self.personality = 0
+        self.insbet = 0
     
     def newcard(self, count): #putting card in hand
         self.hand += deck.deal(count)
@@ -624,3 +625,4 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
