@@ -97,7 +97,7 @@ class Deck:
         if cards >= len(self.deck_current):
             cards = len(self.deck_current)
 
-        top_cards = list(deck_current[:cards])
+        top_cards = list(self.deck_current[:cards])
 
         if self.codes:
             output = top_cards
@@ -116,6 +116,16 @@ class Deck:
         self.deck_current = self.deck_full.copy()
         self.deck_dealt.clear()
 
+    def card_count_by_suit(self):
+        counts = {"Clubs": 0, "Hearts": 0, "Diamonds": 0, "Spades": 0, "Jokers": 0}
+        for c in self.deck_current:
+            if c == "jo":
+                counts["Jokers"] += 1
+            else:
+                suit = self.suits.get(c[0].lower(), "")
+                if suit:
+                    counts[suit] += 1
+        print("Remaining cards by suit:", counts)
 
 # Testing Area ------------------------------------------------------------------------------------------------------------------
 def test_peek(test_numb): #0 < Numb < 55, number of tests
@@ -124,7 +134,7 @@ def test_peek(test_numb): #0 < Numb < 55, number of tests
         if i < 1:
             continue
         deck.shuffle()
-        if deck.[:i] != deck.peek(i):
+        if deck.deck_current[:i] != deck.peek(i):
             print(f"Test failed at peek({i})")
         else:
             print(f"Test passed at peek({i})")
