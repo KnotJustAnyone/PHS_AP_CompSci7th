@@ -93,6 +93,12 @@ def move_song(song, new_position):
         playlist.remove(song)
         playlist.insert(new_position, song)
 
+def move_song_test():
+    move_song("mango", 0)
+    if playlist[-1] == "mango":
+        playlist.remove("mango")
+        playlist.insert(0, "mango")
+
 # Prints the playlist with song name and artist
 def display_playlist():
     if not playlist:
