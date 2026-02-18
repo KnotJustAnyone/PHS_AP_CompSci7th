@@ -1,5 +1,6 @@
 import random
 import time
+import pickle
 from deck_of_cards import Deck
 players = [] #players
 
@@ -255,6 +256,7 @@ class Dealer: #dealer properties
     def round(self): #player: hit or stand, if over 21, bust
         for player in players:
             player.playerround(self)
+        print(f"The Dealer's hole card: \033[1m{deck.identify_card(self.dealerhand[1])}\033[0m")
         self.dealerturn()
         self.check()
 
@@ -310,7 +312,6 @@ class Dealer: #dealer properties
         for player in players:
             if player.hasddown == True:
                 print(f"{player.name} had doubled down, and their final card is...\n\033[1m{deck.identify_card(player.hand[-1])}\033[0m!")
-            print(f"The Dealer's hole card: \033[1m{deck.identify_card(self.dealerhand[1])}\033[0m")
             checks = player.player_value()
             if checks > 21:
                 print(f"{player.name} busts! You lose. Lost: ${player.bet}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
@@ -370,8 +371,26 @@ Just type n if you do not want to restart:''').strip().lower()
             break
         print('Please type a valid answer. Valid: "yy", "yn","n".')
     if reset == "n":
-        players.clear()
-        quit()
+        while True:
+            save = input("Would you like to save your game (y or n)?\nSaved: players, money, wins.") #wins implemented later prob
+            if save in ("y","n")
+                break
+            print("y or n please")
+        if save == "y":
+            while True:
+                try:
+                    whichsave = int(input("Save in 1, 2, or 3?")) #will show what's in saves later once I figure that out
+                    if whichsave in (1,2,3):
+                        break
+                    else:
+                        print("Use a valid number please.")
+                except:
+                    print("Use a number.")
+            with open(f'load{whichsave}.pkl', 'wb') as f:
+                pickle.dump(players, f)
+        elif save == "n":   
+            players.clear()
+            quit()
     elif reset == "yy":
         for player in players:
             player.reset_player()
@@ -409,6 +428,7 @@ def run_game():
     reset_game()
 
 def menu():
+    global players
     def delete_menu(num, slow=True):
         for i in range(num):
             print("\033[A\033[K", end='\r')
@@ -449,12 +469,11 @@ def menu():
                 print(i)
                 time.sleep(0.5)
             load_input = menu_nav()
-            if load_input == 1:
-                pass
-            elif load_input == 2:
-                pass
-            elif load_input == 3:
-                pass
+            if load_input == 1 or load_input == 2 or load_input == 3:
+                with open(f'load{whichsave}.pkl', 'rb') as f:
+                    players = pickle.load(f)
+                print(f"Save {load_input} was loaded!")
+                run_game()
             elif load_input == 4:
                 main_menu()
         elif menu_input == 3:
@@ -625,4 +644,5 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
