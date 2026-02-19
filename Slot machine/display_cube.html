@@ -21,37 +21,27 @@
 <script>
   const canvas = document.getElementById("cube");
   const ctx = canvas.getContext("2d");
-
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "black";
+  
+  
   ctx.fillStyle = "white";
+  ctx.fillRect(0,150,100,100);
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(0,150,100,100);
 
-  // Front square
-  ctx.beginPath();
-  ctx.rect(100, 130, 80, 80);
-  ctx.fill();
-  ctx.stroke();
+  ctx.fillStyle = "white";
+  ctx.fillRect(100,150,100,100);
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(100,150,100,100);
 
-  // Top face
-  ctx.beginPath();
-  ctx.moveTo(100, 130);
-  ctx.lineTo(140, 100);
-  ctx.lineTo(220, 100);
-  ctx.lineTo(180, 130);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  // Side face
-  ctx.beginPath();
-  ctx.moveTo(180, 130);
-  ctx.lineTo(220, 100);
-  ctx.lineTo(220, 180);
-  ctx.lineTo(180, 210);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-  </script>
+  ctx.fillStyle = "white";
+  ctx.fillRect(200,150,100,100);
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(200,150,100,100);
+  
+</script>
   
   </body>
   </html>
