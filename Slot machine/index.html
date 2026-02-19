@@ -44,6 +44,30 @@
 <body>
 
 <canvas id="cube" width="300" height="300"></canvas>
+
+<script>
+  const canvas = document.getElementById("cube");
+  const ctx = canvas.getContext("2d");
+  
+  ctx.fillStyle = "white";
+  ctx.fillRect(0,150,100,100);
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(0,150,100,100);
+
+  ctx.fillStyle = "white";
+  ctx.fillRect(100,150,100,100);
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(100,150,100,100);
+
+  ctx.fillStyle = "white";
+  ctx.fillRect(200,150,100,100);
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(200,150,100,100);
+  
+</script>
     
 <!-- Sienna's button code -->
     <button id="myButton">Gamble</button>
