@@ -37,40 +37,11 @@
 
 <canvas id="cube" width="300" height="300"></canvas>
 
-<script>
-  const canvas = document.getElementById("cube");
-  const ctx = canvas.getContext("2d");
-
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "black";
-  ctx.fillStyle = "white";
-
-  // Front square
-  ctx.beginPath();
-  ctx.rect(100, 130, 80, 80);
-  ctx.fill();
-  ctx.stroke();
-
-  // Top face
-  ctx.beginPath();
-  ctx.moveTo(100, 130);
-  ctx.lineTo(140, 100);
-  ctx.lineTo(220, 100);
-  ctx.lineTo(180, 130);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  // Side face
-  ctx.beginPath();
-  ctx.moveTo(180, 130);
-  ctx.lineTo(220, 100);
-  ctx.lineTo(220, 180);
-  ctx.lineTo(180, 210);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-  </script>
+ function draw() {
+  rect(50, 150, 100, 100);
+  rect(150, 150, 100, 100);
+  rect(250, 150, 100, 100);
+}
     
 <!-- Sienna's button code -->
     <button id="myButton">Gamble</button>
