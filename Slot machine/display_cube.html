@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>2D Cube</title>
   
   <style>
+    .container{
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      
    .number-box {
      width: 100px;
      height: 100px;
@@ -12,25 +15,34 @@
      display: flex;
      align-items: center;
      justify-content: center;
-     font-size: 50px;
+     font-size: 36px;
      font-weight: bold;
      font-color: black;
-     margin-bottom: 10px;
    }
   </style>
 </head>
 <body>
 
-<div id="box" class="number-box"></div>
-<button onclick="generateNumber()">Gamble</button>
+<div class="container" id="container"></div>
+<button onclick="generateNumbers()">Gamble</button>
   
 <script>
-  function generateNumber(){
-    const randomNumber = Math.floor(Math.random() * 7) + 1;
-    document.getElementById("box").textContent = randomNumber;
-  }
+  function generateNumbers(){
+    const container = document.getElementById("container");
+    container.innerHTML = "";
 
-  generateNumber();
-  </script>
+    for (let i = 0; i < 3; i++){
+      const box = document.createElement("div");
+      box.className = "number-box";
+      
+    const randomNumber = Math.floor(Math.random() * 7) + 1;
+    box.textContent = randomNumber;
+
+    container.appendChild(box);
+   }
+  }   
+  generateNumbers();
+</script>
+  
 </body>
 </html>
