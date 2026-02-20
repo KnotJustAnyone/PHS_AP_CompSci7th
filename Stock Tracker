@@ -8,190 +8,177 @@ from datetime import datetime
 PORTFOLIO_FILE = "portfolio.json"
 HISTORY_FILE = "history.csv"
 
-
 def get_stock_price(ticker):
     symbol = ticker.lower() + ".us"
     url = f"https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv"
-
-    response = requests.get(url)
-    response.raise_for_status()
-
-    reader = csv.DictReader(StringIO(response.text))
-    rows = list(reader)
-
-    if len(rows) == 0 or rows[0]["Close"] == "N/A":
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        reader = csv.DictReader(StringIO(response.text))
+        rows = list(reader)
+        if len(rows) == 0 or rows[0]["Close"] == "N/A":
+            return None
+        stock = rows[0]
+        return {
+            "ticker": ticker,
+            "date": stock["Date"],
+            "close": float(stock["Close"]),
+            "volume": int(stock["Volume"])
+        }
+    except Exception:
         return None
 
-    stock = rows[0]
-    return {
-        "ticker": ticker,
-        "date": stock["Date"],
-        "close": float(stock["Close"]),
-        "volume": int(stock["Volume"])
-    }
+def load_data():
+    if os.path.exists(PORTFOLIO_FILE):
+        with open(PORTFOLIO_FILE, "r") as f:
+            return json.load(f)
+    return {"cash": 10000.0, "deposited": 10000.0, "holdings": {}}
 
+def save_data(data):
+    with open(PORTFOLIO_FILE, "w") as f:
+        json.dump(data, f, indent=2)
 
-def log_portfolio_value(total_value):
+def log_history(total_value):
     file_exists = os.path.exists(HISTORY_FILE)
-
     with open(HISTORY_FILE, "a", newline="") as f:
         writer = csv.writer(f)
-
         if not file_exists:
             writer.writerow(["timestamp", "total_value"])
+        writer.writerow([datetime.now().isoformat(timespec="seconds"), f"{total_value:.2f}"])
 
-        timestamp = datetime.now().isoformat(timespec="seconds")
-        writer.writerow([timestamp, f"{total_value:.2f}"])
-
-
-def view_growth():
-    if not os.path.exists(HISTORY_FILE):
-        print("No growth history yet. Use option 4 (Portfolio) to log snapshots.")
-        return
-
-    with open(HISTORY_FILE, "r", newline="") as f:
-        reader = csv.DictReader(f)
-        rows = list(reader)
-
-    if len(rows) == 0:
-        print("History file is empty.")
-        return
-
-    # Parse values
-    values = []
-    times = []
-    for r in rows:
-        try:
-            times.append(r["timestamp"])
-            values.append(float(r["total_value"]))
-        except (KeyError, ValueError, TypeError):
-            pass
-
-    if len(values) == 0:
-        print("No valid snapshots found in history.")
-        return
-
-    first_time = times[0]
-    first_value = values[0]
-
-    last_time = times[-1]
-    last_value = values[-1]
-
-    dollar_change = last_value - first_value
-
-    if first_value == 0:
-        percent_growth = None
+def show_portfolio(data):
+    print("\n--- Portfolio Summary ---")
+    stock_value = 0
+    if not data["holdings"]:
+        print("No stocks owned.")
     else:
-        percent_growth = (dollar_change / first_value) * 100
-
-    print("\n--- Growth Over Time ---")
-    print(f"First:  {first_time} | ${first_value:,.2f}")
-    print(f"Latest: {last_time} | ${last_value:,.2f}")
-    print(f"Change: ${dollar_change:,.2f}")
-
-    if percent_growth is None:
-        print("Percent Growth: N/A (first value was $0.00)")
-    else:
-        print(f"Percent Growth: {percent_growth:.2f}%")
-
-    # Change since previous snapshot (if possible)
-    if len(values) >= 2:
-        prev_time = times[-2]
-        prev_value = values[-2]
-        change_since_prev = last_value - prev_value
-
-        if prev_value == 0:
-            pct_since_prev = None
-        else:
-            pct_since_prev = (change_since_prev / prev_value) * 100
-
-        print("\n--- Since Previous Snapshot ---")
-        print(f"Previous: {prev_time} | ${prev_value:,.2f}")
-        print(f"Change:   ${change_since_prev:,.2f}")
-        if pct_since_prev is None:
-            print("Percent:  N/A (previous value was $0.00)")
-        else:
-            print(f"Percent:  {pct_since_prev:.2f}%")
-
-
-# load portfolio
-portfolio = {}
-if os.path.exists(PORTFOLIO_FILE):
-    with open(PORTFOLIO_FILE, "r") as f:
-        portfolio = json.load(f)
-
-
-# main loop
-while True:
-    print("\n1 View price  2 Buy  3 Remove  4 Portfolio  5 Quit  6 View Growth")
-    choice = input("Choose: ")
-
-    if choice == "5":
-        break
-
-    if choice == "1":
-        ticker = input("Enter ticker: ").upper()
-        stock_data = get_stock_price(ticker)
-
-        if stock_data is None:
-            print("Invalid ticker or data unavailable.")
-        else:
-            print("\nTicker:", stock_data["ticker"])
-            print("Date:", stock_data["date"])
-            print("Closing Price: $", stock_data["close"])
-            print("Volume:", stock_data["volume"])
-
-    elif choice == "2":
-        ticker = input("Buy ticker: ").upper()
-        stock_data = get_stock_price(ticker)
-
-        if stock_data is None:
-            print("Invalid ticker.")
-        else:
-            shares = float(input("How many shares? "))
-            portfolio[ticker] = portfolio.get(ticker, 0) + shares
-            print(f"{ticker}: {portfolio[ticker]} shares")
-
-    elif choice == "3":
-        ticker = input("Remove ticker: ").upper()
-
-        if ticker not in portfolio:
-            print("Stock not in portfolio.")
-        else:
-            shares = float(input("Shares to remove: "))
-            portfolio[ticker] -= shares
-
-            if portfolio[ticker] <= 0:
-                del portfolio[ticker]
-                print(f"{ticker} removed.")
+        for ticker, shares in data["holdings"].items():
+            price_data = get_stock_price(ticker)
+            if price_data:
+                val = price_data["close"] * shares
+                stock_value += val
+                print(f"- {ticker}: {shares} shares | Value: ${val:,.2f} (@ ${price_data['close']:,.2f})")
             else:
-                print(f"{ticker}: {portfolio[ticker]} shares")
+                print(f"- {ticker}: {shares} shares | (Price unavailable)")
+    
+    total_value = stock_value + data["cash"]
+    print(f"\nStock Value:    ${stock_value:,.2f}")
+    print(f"Cash Balance:   ${data['cash']:,.2f}")
+    print(f"Total Account:  ${total_value:,.2f}")
+    print(f"Total Invested: ${data['deposited']:,.2f}")
+    log_history(total_value)
+    return total_value
 
-    elif choice == "4":
-        if not portfolio:
-            print("Portfolio empty.")
-        else:
-            print("\n--- Portfolio Summary ---")
-            portfolio_total = 0
-            for ticker, shares in portfolio.items():
-                stock_data = get_stock_price(ticker)
-                if stock_data:
-                    value = stock_data["close"] * shares
-                    portfolio_total += value
-                    print(f"- {ticker}: {shares} shares | Value: ${value:,.2f}")
+def reports_menu(data):
+    while True:
+        print("\nReports Menu:")
+        print("1 Account Growth (total account value over time)")
+        print("2 Stock Performance (each stock's gain or loss)")
+        print("3 Money In / Out (deposits and withdrawals)")
+        print("4 Back")
+        choice = input("Choose: ")
+        
+        if choice == "4":
+            break
+        elif choice == "1":
+            if not os.path.exists(HISTORY_FILE):
+                print("No history yet.")
+                continue
+            with open(HISTORY_FILE, "r") as f:
+                reader = csv.DictReader(f)
+                rows = list(reader)
+            if not rows:
+                print("No history data.")
+                continue
+            first = float(rows[0]["total_value"])
+            last = float(rows[-1]["total_value"])
+            diff = last - first
+            pct = (diff / first * 100) if first != 0 else 0
+            print(f"\nFirst recorded: ${first:,.2f} ({rows[0]['timestamp']})")
+            print(f"Latest value:   ${last:,.2f} ({rows[-1]['timestamp']})")
+            print(f"Growth:         ${diff:,.2f} ({pct:.2f}%)")
+        elif choice == "2":
+            print("\nStock Performance (Current Price vs Purchase info would go here)")
+            print("Note: Tracking purchase price requires transaction history.")
+            for t, s in data["holdings"].items():
+                print(f"- {t}: {s} shares held")
+        elif choice == "3":
+            print(f"\nTotal Money Deposited: ${data['deposited']:,.2f}")
+            print(f"Current Cash Balance:  ${data['cash']:,.2f}")
+
+def main():
+    data = load_data()
+    # Ensure structure for migration
+    if "holdings" not in data:
+        data = {"cash": 0.0, "deposited": 0.0, "holdings": data}
+
+    while True:
+        print("\n--- Main Menu ---")
+        print("1 View Price  2 Buy  3 Sell  4 Portfolio  5 Cash (Dep/With)  6 Reports  7 Quit")
+        choice = input("Choose: ")
+
+        if choice == "7":
+            break
+        elif choice == "1":
+            ticker = input("Enter ticker: ").upper()
+            s = get_stock_price(ticker)
+            if s:
+                print(f"\n{s['ticker']} Price: ${s['close']:,.2f} (Vol: {s['volume']})")
+            else:
+                print("Ticker not found.")
+        elif choice == "2":
+            ticker = input("Buy ticker: ").upper()
+            s = get_stock_price(ticker)
+            if s:
+                shares = float(input("How many shares? "))
+                cost = s["close"] * shares
+                if data["cash"] >= cost:
+                    data["cash"] -= cost
+                    data["holdings"][ticker] = data["holdings"].get(ticker, 0) + shares
+                    print(f"Bought {shares} of {ticker} for ${cost:,.2f}")
                 else:
-                    print(f"- {ticker}: {shares} shares | (Price unavailable)")
+                    print(f"Insufficient cash! Need ${cost:,.2f}, have ${data['cash']:,.2f}")
+            else:
+                print("Invalid ticker.")
+        elif choice == "3":
+            ticker = input("Sell ticker: ").upper()
+            if ticker in data["holdings"]:
+                shares = float(input(f"Shares to sell (max {data['holdings'][ticker]}): "))
+                if shares <= data["holdings"][ticker]:
+                    s = get_stock_price(ticker)
+                    if s:
+                        revenue = s["close"] * shares
+                        data["cash"] += revenue
+                        data["holdings"][ticker] -= shares
+                        if data["holdings"][ticker] <= 0:
+                            del data["holdings"][ticker]
+                        print(f"Sold {shares} of {ticker} for ${revenue:,.2f}")
+                    else:
+                        print("Could not fetch price to sell.")
+                else:
+                    print("Not enough shares.")
+            else:
+                print("You don't own that stock.")
+        elif choice == "4":
+            show_portfolio(data)
+        elif choice == "5":
+            print(f"\nCurrent Cash: ${data['cash']:,.2f}")
+            sub = input("1 Deposit  2 Withdraw  3 Back: ")
+            if sub == "1":
+                amt = float(input("Amount to deposit: "))
+                data["cash"] += amt
+                data["deposited"] += amt
+            elif sub == "2":
+                amt = float(input("Amount to withdraw: "))
+                if data["cash"] >= amt:
+                    data["cash"] -= amt
+                    data["deposited"] -= amt # Track net money in
+                else:
+                    print("Insufficient cash.")
+        elif choice == "6":
+            reports_menu(data)
+        
+        save_data(data)
 
-            print(f"\nTotal Portfolio Value: ${portfolio_total:,.2f}")
-
-            # log growth snapshot
-            log_portfolio_value(portfolio_total)
-
-    elif choice == "6":
-        view_growth()
-
-    # save portfolio
-    with open(PORTFOLIO_FILE, "w") as f:
-        json.dump(portfolio, f, indent=2)
-
-print("Goodbye")
+if __name__ == "__main__":
+    main()
