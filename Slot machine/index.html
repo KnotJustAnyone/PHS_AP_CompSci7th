@@ -1,71 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src ="main.js"></script>
-    
-  <meta charset="UTF-8">
-    
-  <title>Slot Machine</title>
+  
   <style>
-    body {
-      margin: 0;
+    .container{
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #eee;
-    }
-  </style>
-    
-<!--Sienna's button styling, only between the style tags-->
-    
-    <style>
-    button {
-      padding: 12px 24px;
-      font-size: 16px;
-      border: 2px solid black;
-      background: red;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #eee;
-    }
+      gap: 15px;
+      margin-bottom: 15px;
+      
+   .number-box {
+     width: 100px;
+     height: 100px;
+     border: 3px solid black;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-size: 36px;
+     font-weight: bold;
+     font-color: black;
+   }
   </style>
 </head>
 <body>
 
-<canvas id="cube" width="300" height="300"></canvas>
-
-<script>
-  const canvas = document.getElementById("cube");
-  const ctx = canvas.getContext("2d");
+<div class="container" id="container"></div>
+<button onclick="generateNumbers()">Gamble</button>
   
-  ctx.fillStyle = "white";
-  ctx.fillRect(0,150,100,100);
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = 3;
-  ctx.strokeRect(0,150,100,100);
-
-  ctx.fillStyle = "white";
-  ctx.fillRect(100,150,100,100);
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = 3;
-  ctx.strokeRect(100,150,100,100);
-
-  ctx.fillStyle = "white";
-  ctx.fillRect(200,150,100,100);
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = 3;
-  ctx.strokeRect(200,150,100,100);
-  
-</script>
-    
-<!-- Sienna's button code -->
-    <button id="myButton">Gamble</button>
-
 <script>
-  document.getElementById("myButton").addEventListener("click", alert(generateRandomNumber));
+  function generateNumbers(){
+    const container = document.getElementById("container");
+    container.innerHTML = "";
+
+    for (let i = 0; i < 3; i++){
+      const box = document.createElement("div");
+      box.className = "number-box";
+      
+    const randomNumber = Math.floor(Math.random() * 7) + 1;
+    box.textContent = randomNumber;
+
+    container.appendChild(box);
+   }
+  }   
+  generateNumbers();
 </script>
-  </body>
-  </html>
+  
+</body>
+</html>
