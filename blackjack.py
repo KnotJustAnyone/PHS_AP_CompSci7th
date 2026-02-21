@@ -485,6 +485,7 @@ def menu():
                     break
             main_menu()
         elif menu_input == 4:
+            delete_menu(7)
             quit()
 
     mainmenu = ["BLACKJACK", "New Game - 1", "Load Save - 2", "Rules - 3", "Exit - 4"]
@@ -644,6 +645,7 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
 
