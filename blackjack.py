@@ -373,7 +373,7 @@ Just type n if you do not want to restart:''').strip().lower()
     if reset == "n":
         while True:
             save = input("Would you like to save your game (y or n)?\nSaved: players, money, wins.") #wins implemented later prob
-            if save in ("y","n")
+            if save in ("y","n"):
                 break
             print("y or n please")
         if save == "y":
@@ -644,5 +644,6 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
 
 
