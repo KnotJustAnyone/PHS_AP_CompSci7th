@@ -7,6 +7,14 @@ maze = [
     "########"
 ]
 
+def show_help():
+    print("\nControls:")
+    print("  W - move up")
+    print("  A - move left")
+    print("  S - move down")
+    print("  D - move right")
+    print("Reach 'G' to win!\n")
+
 # Player position
 for y, row in enumerate(maze):
     if 'S' in row:
@@ -52,11 +60,3 @@ while True:
         print_maze()
         print("You reached the goal! You win!")
         break
-
-def show_help():
-    print("\nControls:")
-    print("  W - move up")
-    print("  A - move left")
-    print("  S - move down")
-    print("  D - move right")
-    print("Reach 'G' to win!\n")
