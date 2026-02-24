@@ -36,6 +36,15 @@ maze = [
     "########"
 ]
 
+def show_help():
+    print("\nControls:")
+    print("  W - move up")
+    print("  A - move left")
+    print("  S - move down")
+    print("  D - move right")
+    print("Reach 'G' to win!\n")
+
+# Player position
 # Find player position
 for y, row in enumerate(maze):
     if 'S' in row:
@@ -51,6 +60,8 @@ def print_maze():
             else:
                 line += ch
         print(line)
+
+show_help()
 
 # TEST ----
 def test_print():
