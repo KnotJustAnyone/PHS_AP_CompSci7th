@@ -79,6 +79,15 @@ class to_do_list:
         # Choose the interval of repetition 
            return None
 
+    def search_task(self, keyword):
+        results = [t for t in self.tasks if keyword.lower() in t["name"].lower()]
+        if not results:
+            print(f"No tasks found containing '{keyword}'.")
+        else:
+            print(f"Tasks matching '{keyword}':")
+            for task in results:
+                status = "✅" if task["completed"] else "❌"
+                print(f"{status} {task['name']}")
 def show_menu():
     print("====== TO-DO LIST MENU ======")
     print("1. View Tasks")
