@@ -118,6 +118,8 @@ class Deck:
 
     #Only used in interfacing with user, should not be called with return_not_print = True
     def show_discard_pile(self):
+        if return_not_print:
+            return
         if not self.deck_dealt:
             print("No cards have been dealt yet.")
             return
