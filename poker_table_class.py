@@ -221,6 +221,10 @@ class poker_table:
         return None
 
     #Asks the player what they want to bet
+    def player_bet(self,player,game_state):
+        bet = 0
+        return bet #A number for the size of the bet
+
   def player_bet(self, player, game_state):
       pot_size = game_state.get("pot_size", 0)
       current_bet = game_state.get("current_bet", 0)
@@ -263,7 +267,20 @@ class poker_table:
               print("Please enter a valid number for your raise.")
 
 #Tests ---------------------------------------------
-  def poker_table_init_test():
+def test_remove_player():
+    table = poker_table()
+    player1 = Player("Sophia")
+    player2 = Player("Alvin")
+
+    table.players = [player1, player2]
+
+    table.remove_player(player2)
+
+    assert player2 not in table.players
+    assert player1 in table.players
+    assert len(table.players) == 1
+    
+def poker_table_init_test():
       table = poker_table(["John", "Abigail", "Steve"], 10, [10,5,5], 
                           (False, True, True), [h2,s7,d5], "John", "Abigail")
 
