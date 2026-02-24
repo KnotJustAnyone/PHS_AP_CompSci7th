@@ -116,6 +116,21 @@ class Deck:
         self.deck_current = self.deck_full.copy()
         self.deck_dealt.clear()
 
+    #Only used in interfacing with user, should not be called with return_not_print = True
+    def show_discard_pile(self):
+        if return_not_print:
+            return
+        if not self.deck_dealt:
+            print("No cards have been dealt yet.")
+            return
+        if self.codes:
+            output = self.deck_dealt
+        else:
+            output = [self.identify_card(c) for c in self.deck_dealt]
+        print("Dealt cards:", output)
+
+
+
     def card_count_by_suit(self):
         counts = {"Clubs": 0, "Hearts": 0, "Diamonds": 0, "Spades": 0, "Jokers": 0}
         for c in self.deck_current:
