@@ -1,0 +1,10 @@
+# Transaction Entry Program
+
+transaction = input("Enter transaction name: ")
+amount = input("Enter transaction amount: ")
+
+file = open("transactions.txt", "a")
+file.write(transaction + " - $" + amount + "\n")
+file.close()
+
+print("Transaction saved.")
