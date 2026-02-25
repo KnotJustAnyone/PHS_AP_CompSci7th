@@ -44,6 +44,31 @@ class WordGuessingGame:
 
         #Noah: Resets all variables to start a new game.
         return None
+        def start_game(self):
+        self.choose_word()
+        print("Welcome to the Word Guessing Game!")
+        print("The word has", len(self.secret_word), "letters.")
+
+        while not self.game_over:
+            print("\nWord:", self.display_word)
+            print("Guessed letters:", self.guessed_letters)
+
+            guess = input("Guess a letter: ")
+
+            if len(guess) != 1 or not guess.isalpha():
+                print("Please enter a single letter.")
+                continue
+
+            self.guess_letter(guess)
+
+            if self.display_word == self.secret_word:
+                print("\nYou guessed the word:", self.secret_word)
+                self.game_over = True
+
+            if self.tries_left <= 0:
+                print("\nOut of tries! The word was:", self.secret_word)
+                self.game_over = True
+
 
 # Step 2 (Test) - Noah:
 # Simple test to check if the choose_word function selects a word
@@ -59,3 +84,4 @@ def test_choose_word():
 # End of WordGuessingGame class
 
 test_choose_word()
+
