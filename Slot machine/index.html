@@ -17,7 +17,7 @@
      justify-content: center;
      font-size: 36px;
      font-weight: bold;
-     font-color: black;
+     color: black;
    }
   </style>
 </head>
@@ -31,19 +31,27 @@
     const container = document.getElementById("container");
     container.innerHTML = "";
 
+    // keep track of the numbers we generate so we can check for a win
+    const numbers = [];
+
     for (let i = 0; i < 3; i++){
       const box = document.createElement("div");
       box.className = "number-box";
       
-    const randomNumber = Math.floor(Math.random() * 7) + 1;
-    box.textContent = randomNumber;
+      const randomNumber = Math.floor(Math.random() * 7) + 1;
+      box.textContent = randomNumber;
+      numbers.push(randomNumber);
 
-    container.appendChild(box);
-   }
+      container.appendChild(box);
+    }
+
+    // after we've filled the three boxes, see if the player won
+    win(numbers);
   }
+
   function win(numbers) {
     if (numbers[0] === numbers[1] && numbers[1] === numbers[2]) {
-        alert('You win! All three numbers are the same!');
+        alert('🎉 You win! All three numbers are the same!');
     }
 }
   generateNumbers();
