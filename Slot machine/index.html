@@ -31,7 +31,7 @@
     const container = document.getElementById("container");
     container.innerHTML = "";
 
-    // keep track of the numbers we generate so we can check for a win
+    // array of numbers
     const numbers = [];
 
     for (let i = 0; i < 3; i++){
@@ -45,8 +45,10 @@
       container.appendChild(box);
     }
 
-    // after we've filled the three boxes, see if the player won
-    win(numbers);
+    // after displayed see if player won
+    setTimeout(() => {
+  win(numbers);
+}, 2000); // 2 seconds
   }
 
   function win(numbers) {
