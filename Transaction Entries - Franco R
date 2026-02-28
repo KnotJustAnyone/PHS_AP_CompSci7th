@@ -1,10 +1,33 @@
-# Transaction Entry Program
+while True:
+    print("\n1. Add Transaction")
+    print("2. View Transactions")
+    print("3. Exit")
 
-transaction = input("Enter transaction name: ")
-amount = input("Enter transaction amount: ")
+    choice = input("Choose an option: ")
 
-file = open("transactions.txt", "a")
-file.write(transaction + " - $" + amount + "\n")
-file.close()
+    if choice == "1":
+        name = input("Enter transaction name: ")
+        amount = input("Enter amount: ")
+        category = input("Enter category: ")
 
-print("Transaction saved.")
+        file = open("transactions.txt", "a")
+        file.write(name + " - $" + amount + " - " + category + "\n")
+        file.close()
+
+        print("Transaction saved.")
+
+    elif choice == "2":
+        print("\nTransactions:")
+        try:
+            file = open("transactions.txt", "r")
+            print(file.read())
+            file.close()
+        except:
+            print("No transactions yet.")
+
+    elif choice == "3":
+        print("Goodbye!")
+        break
+
+    else:
+        print("Invalid choice.")
