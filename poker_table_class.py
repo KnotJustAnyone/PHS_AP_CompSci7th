@@ -2,14 +2,15 @@
 from deck_of_cards import Deck
 from collections import Counter
 from itertools import combinations
-
+                               
 class Player: #player properties
-    def __init__(self,name,money=1500): #creating player, give money
+    def __init__(self, name, money=1500): #creating player, give money
         self.name = name #player name, may not use because they'll see each other's cards?
         self.hand = [] #hand of cards
         self.money = money #money amount
-        self.bet #Money in pot
+        self.bet = 0 #Money in pot
 
+        
     def newcard(self, count): #putting card in hand
         self.hand += Deck.deal(count)
         
@@ -17,17 +18,75 @@ class Player: #player properties
         self.hand = []
 
 class poker_table:
-    def __init__(self):
-        self.players = [] #List of players, need a player class
+    def __init__(self, players=None, small_blind=1, big_blind=2, ante=0,
+                button_index=0, max_players=9, starting_stack=None,
+                codes=True, return_not_print=True):
+        # Players and seating
+        self.players = list(players) if players else [] #List of players, need a player class
+        self.max_players = max_players
+
+        # Stakes
+        self.small_blind = small_blind
+        self.big_blind = big_blind if big_blind >= small_blind else small_blind * 2
+        self.ante = ante
+
+        # Pots and betting
         self.pot = 0
         self.bets = []
-        self.deck = Deck(False,True,True)
+
+        # Deck options
+        self.deck = Deck(False, codes, return_not_print, 1)
+
+        # Table and position
         self.table_cards = []
-        self.current_player = None
-        self.button_player = None
+        if self.players:
+            button_index = button_index % len(self.players)
+            self.button_player = self.players[button_index]
+            self.current_player = self.players[(button_index + 1) % len(self.players)]
+        else:
+            self.button_player = None
+            self.current_player = None
+
+        # Chip stacks (rudimentary: equal starting stack for each player if provided)
+        self.stacks = {}
+        if starting_stack is not None and self.players:
+            for p in self.players:
+                self.stacks[p] = starting_stack
+
+        self.game_state = self.create_game_state()
+
+    def create_game_state(self):
+
+        # Button handling
+        if self.players:
+            button_index = 0
+            current_player_index = 1 if len(self.players) > 1 else 0
+        else:
+            button_index = None
+            current_player_index = None
+
+        game_state = {
+            "street": "preflop",      # preflop → flop → turn → river → showdown
+            "pot": 0,
+            "current_bet": 0,
+            "minimum_raise": self.big_blind,
+            "bets_this_round": {p: 0 for p in self.players},
+            "active_players": list(self.players),
+            "current_player_index": current_player_index,
+            "button_index": button_index,
+            "table_cards": [],
+            "action_log": [],         # e.g. [("Bob", "raise", 20)]
+            "all_in_players": set(),
+            "folded_players": set(),
+        }
+
+        return game_state
 
     def deal_hands(self): #Gives each player their initial two pocket cards
-        return None
+        for _ in range(2):
+            for player in self.players:
+                ncard = self.deck.deal(1)
+                player.hand.append(ncard)
 
     def deal_table(self): #Adds cards to the table as needed
         return None
@@ -144,10 +203,29 @@ class poker_table:
         score = rank * (15**5) + tiebreaker
         return score
 
+class PokerGame:
+    def __init__(self):
+        self.players = []
+        self.max_players = 8
 
-    def add_player(self): #adds a new player at the table
-        return None
+    def add_player(self, name, chips=1000): #adds a new player to the game w/ chips
+        if len(self.players) >= self.max_players:
+            print("The table is full. Cannot add more players.")
+            return
 
+        for player in self.players:
+            if player["name"].lower() == name.lower():
+                print(f"Player '{name}' is already at the table.")
+                return
+
+        new_player = {
+            "name": name,
+            "chips": chips,
+            "hand": []
+        }
+        self.players.append(new_player)
+        print(f"Player '{name}' joined the game with {chips} chips.")
+        
     def remove_player(self,player): #removes a player
         self.players.remove(player)
 
@@ -227,7 +305,100 @@ class poker_table:
                 
         return bet #A number for the size of the bet
 
+  def player_bet(self, player, game_state):
+      pot_size = game_state.get("pot_size", 0)
+      current_bet = game_state.get("current_bet", 0)
+      player_chips = game_state.get("player_chips", 1000)
+
+      print(f"\n--- {player}'s turn ---")
+      print(f"Pot size: {pot_size}")
+      print(f"Current bet to call: {current_bet}")
+      print(f"You have {player_chips} chips.")
+
+      while True:
+          try:
+              # Ask user for their action
+              action = input("Do you want to fold, call, or raise? ").strip().lower()
+
+              if action == "fold":
+                  print(f"{player} folds.")
+                  return 0  
+                  # 0 means they folded
+
+              elif action == "call":
+                  print(f"{player} calls {current_bet}.")
+                  return current_bet
+
+              elif action == "raise":
+                  raise_amount = float(input("Enter your raise amount: "))
+                  total_bet = current_bet + raise_amount
+
+                  if total_bet > player_chips:
+                      print("You don't have enough chips for that bet. Try again.")
+                      continue
+
+                  print(f"{player} raises to {total_bet}.")
+                  return total_bet
+
+              else:
+                  print("Invalid action. Please type 'fold', 'call', or 'raise'.")
+
+          except ValueError:
+              print("Please enter a valid number for your raise.")
+
 #Tests ---------------------------------------------
+def test_remove_player():
+    table = poker_table()
+    player1 = Player("Sophia")
+    player2 = Player("Alvin")
+
+    table.players = [player1, player2]
+
+    table.remove_player(player2)
+
+    assert player2 not in table.players
+    assert player1 in table.players
+    assert len(table.players) == 1
+    
+def poker_table_init_test():
+      table = poker_table(["John", "Abigail", "Steve"], 10, [10,5,5], 
+                          (False, True, True), [h2,s7,d5], "John", "Abigail")
+
+      if table.players = ["John", "Abigail", "Steve"]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.pot = 10
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.bets = [10, 5, 5]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.deck = [False, True, True]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.table_cards = [h2, s7, d5]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.current_player = "John"
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.button_player = "Abigail"
+          print("test passed")
+      else: 
+          print("test failed")
+
 def test_best_hand():
     table = poker_table()
     hands = [
@@ -292,12 +463,13 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
-
-
-
-
-
-
-
-
-
+            
+def deal_hands_check():
+    plyr = Player("Colin",1500)
+    tbl = poker_table()
+    tbl.players.append(plyr)
+    tbl.deal_hands()
+    try:
+        print(plyr.hand)
+    except:
+        print("Something went Wrong")
