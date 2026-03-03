@@ -55,13 +55,13 @@
 
   function win(numbers) {
     if (numbers[0] === numbers[1] && numbers[1] === numbers[2]) {
-        alert('🎉 You win! All three numbers are the same!');
-      
       confetti({
-        particleCount: 150,
-        spread: 70,
+        particleCount: 200,
+        spread: 200,
         origin: { y: 0.6}
       });
+        alert('🎉 You win! All three numbers are the same!');
+      
     }
 }
   generateNumbers();
