@@ -1,62 +1,184 @@
-import json 
-import os 
+import json
+import os
 import requests
 import csv
 from io import StringIO
+from datetime import datetime
 
 PORTFOLIO_FILE = "portfolio.json"
+HISTORY_FILE = "history.csv"
 
 def get_stock_price(ticker):
-    """
-    Fetch stock price data from Stooq (public, no API key)
-    """
     symbol = ticker.lower() + ".us"
     url = f"https://stooq.com/q/l/?s={symbol}&f=sd2t2ohlcv&h&e=csv"
-
-    # Requesting data
-    response = requests.get(url)
-    response.raise_for_status()
-
-    # Parsing data
-    csv_data = response.text
-    reader = csv.DictReader(StringIO(csv_data))
-    rows = list(reader)
-
-    # Checking if data is available
-    if len(rows) == 0 or rows[0]["Close"] == "N/A":
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        reader = csv.DictReader(StringIO(response.text))
+        rows = list(reader)
+        if len(rows) == 0 or rows[0]["Close"] == "N/A":
+            return None
+        stock = rows[0]
+        return {
+            "ticker": ticker,
+            "date": stock["Date"],
+            "close": float(stock["Close"]),
+            "volume": int(stock["Volume"])
+        }
+    except Exception:
         return None
 
-    stock = rows[0]
+def load_data():
+    if os.path.exists(PORTFOLIO_FILE):
+        with open(PORTFOLIO_FILE, "r") as f:
+            return json.load(f)
+    return {"cash": 10000.0, "deposited": 10000.0, "holdings": {}}
 
-    # Returning data structured
-    return {
-        "ticker": ticker,
-        "date": stock["Date"],
-        "close": float(stock["Close"]),
-        "volume": int(stock["Volume"])
-    }
+def save_data(data):
+    with open(PORTFOLIO_FILE, "w") as f:
+        json.dump(data, f, indent=2)
 
-searched_stocks = []
+def log_history(total_value):
+    file_exists = os.path.exists(HISTORY_FILE)
+    with open(HISTORY_FILE, "a", newline="") as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(["timestamp", "total_value"])
+        writer.writerow([datetime.now().isoformat(timespec="seconds"), f"{total_value:.2f}"])
 
-# Iteration (loop)
-while True:
-    ticker = input("Enter a stock ticker (or type QUIT): ").upper()
-
-    if ticker == "QUIT":
-        break
-
-    stock_data = get_stock_price(ticker)
-
-    if stock_data is None:
-        print("Invalid ticker or data unavailable.")
+def show_portfolio(data):
+    print("\n--- Portfolio Summary ---")
+    stock_value = 0
+    if not data["holdings"]:
+        print("No stocks owned.")
     else:
-        print("\nTicker:", stock_data["ticker"])
-        print("Date:", stock_data["date"])
-        print("Closing Price: $", stock_data["close"])
-        print("Volume:", stock_data["volume"])
+        for ticker, shares in data["holdings"].items():
+            price_data = get_stock_price(ticker)
+            if price_data:
+                val = price_data["close"] * shares
+                stock_value += val
+                print(f"- {ticker}: {shares} shares | Value: ${val:,.2f} (@ ${price_data['close']:,.2f})")
+            else:
+                print(f"- {ticker}: {shares} shares | (Price unavailable)")
+    
+    total_value = stock_value + data["cash"]
+    print(f"\nStock Value:    ${stock_value:,.2f}")
+    print(f"Cash Balance:   ${data['cash']:,.2f}")
+    print(f"Total Account:  ${total_value:,.2f}")
+    print(f"Total Invested: ${data['deposited']:,.2f}")
+    log_history(total_value)
+    return total_value
 
-        searched_stocks.append(ticker)
+def reports_menu(data):
+    while True:
+        print("\nReports Menu:")
+        print("1 Account Growth (total account value over time)")
+        print("2 Stock Performance (each stock's gain or loss)")
+        print("3 Money In / Out (deposits and withdrawals)")
+        print("4 Back")
+        choice = input("Choose: ")
+        
+        if choice == "4":
+            break
+        elif choice == "1":
+            if not os.path.exists(HISTORY_FILE):
+                print("No history yet.")
+                continue
+            with open(HISTORY_FILE, "r") as f:
+                reader = csv.DictReader(f)
+                rows = list(reader)
+            if not rows:
+                print("No history data.")
+                continue
+            first = float(rows[0]["total_value"])
+            last = float(rows[-1]["total_value"])
+            diff = last - first
+            pct = (diff / first * 100) if first != 0 else 0
+            print(f"\nFirst recorded: ${first:,.2f} ({rows[0]['timestamp']})")
+            print(f"Latest value:   ${last:,.2f} ({rows[-1]['timestamp']})")
+            print(f"Growth:         ${diff:,.2f} ({pct:.2f}%)")
+        elif choice == "2":
+            print("\nStock Performance (Current Price vs Purchase info would go here)")
+            print("Note: Tracking purchase price requires transaction history.")
+            for t, s in data["holdings"].items():
+                print(f"- {t}: {s} shares held")
+        elif choice == "3":
+            print(f"\nTotal Money Deposited: ${data['deposited']:,.2f}")
+            print(f"Current Cash Balance:  ${data['cash']:,.2f}")
 
-print("\nStocks searched this session:")
-for stock in searched_stocks:
-    print("-", stock)
+def main():
+    data = load_data()
+    # Ensure structure for migration
+    if "holdings" not in data:
+        data = {"cash": 0.0, "deposited": 0.0, "holdings": data}
+
+    while True:
+        print("\n--- Main Menu ---")
+        print("1 View Price  2 Buy  3 Sell  4 Portfolio  5 Cash (Dep/With)  6 Reports  7 Quit")
+        choice = input("Choose: ")
+
+        if choice == "7":
+            break
+        elif choice == "1":
+            ticker = input("Enter ticker: ").upper()
+            s = get_stock_price(ticker)
+            if s:
+                print(f"\n{s['ticker']} Price: ${s['close']:,.2f} (Vol: {s['volume']})")
+            else:
+                print("Ticker not found.")
+        elif choice == "2":
+            ticker = input("Buy ticker: ").upper()
+            s = get_stock_price(ticker)
+            if s:
+                shares = float(input("How many shares? "))
+                cost = s["close"] * shares
+                if data["cash"] >= cost:
+                    data["cash"] -= cost
+                    data["holdings"][ticker] = data["holdings"].get(ticker, 0) + shares
+                    print(f"Bought {shares} of {ticker} for ${cost:,.2f}")
+                else:
+                    print(f"Insufficient cash! Need ${cost:,.2f}, have ${data['cash']:,.2f}")
+            else:
+                print("Invalid ticker.")
+        elif choice == "3":
+            ticker = input("Sell ticker: ").upper()
+            if ticker in data["holdings"]:
+                shares = float(input(f"Shares to sell (max {data['holdings'][ticker]}): "))
+                if shares <= data["holdings"][ticker]:
+                    s = get_stock_price(ticker)
+                    if s:
+                        revenue = s["close"] * shares
+                        data["cash"] += revenue
+                        data["holdings"][ticker] -= shares
+                        if data["holdings"][ticker] <= 0:
+                            del data["holdings"][ticker]
+                        print(f"Sold {shares} of {ticker} for ${revenue:,.2f}")
+                    else:
+                        print("Could not fetch price to sell.")
+                else:
+                    print("Not enough shares.")
+            else:
+                print("You don't own that stock.")
+        elif choice == "4":
+            show_portfolio(data)
+        elif choice == "5":
+            print(f"\nCurrent Cash: ${data['cash']:,.2f}")
+            sub = input("1 Deposit  2 Withdraw  3 Back: ")
+            if sub == "1":
+                amt = float(input("Amount to deposit: "))
+                data["cash"] += amt
+                data["deposited"] += amt
+            elif sub == "2":
+                amt = float(input("Amount to withdraw: "))
+                if data["cash"] >= amt:
+                    data["cash"] -= amt
+                    data["deposited"] -= amt # Track net money in
+                else:
+                    print("Insufficient cash.")
+        elif choice == "6":
+            reports_menu(data)
+        
+        save_data(data)
+
+if __name__ == "__main__":
+    main()

@@ -47,13 +47,7 @@ class to_do_list:
 
     def check_tasks(self,task_name): #Checks off completed tasks
         #returns True or False boolean
-        for task in self.list:
-            if task[0] == task_name:
-                self.list.remove(task)
-                print("The task has been removed")
-                break
-        else:
-            print("A task has not been removed.")
+        return None
     
     def count_incomplete(self):
         return sum(1 for t in self.list if not t[1])
@@ -84,6 +78,88 @@ class to_do_list:
         def interval(self):
         # Choose the interval of repetition 
            return None
+
+    def search_task(self, keyword):
+        results = [t for t in self.tasks if keyword.lower() in t["name"].lower()]
+        if not results:
+            print(f"No tasks found containing '{keyword}'.")
+        else:
+            print(f"Tasks matching '{keyword}':")
+            for task in results:
+                status = "✅" if task["completed"] else "❌"
+                print(f"{status} {task['name']}")
+def show_menu():
+    print("====== TO-DO LIST MENU ======")
+    print("1. View Tasks")
+    print("2. Add Task")
+    print("3. Remove Task")
+    print("4. Mark Task as Done")
+    print("5. Set Repeat Interval")
+    print("=============================")
+
+
+def main():
+    todo = ToDoList()
+
+    while True:
+        show_menu()
+        choice = input("Enter your choice 1-6").strip()
+
+        if choice == "1":
+            todo.show_tasks()
+
+        elif choice == "2":
+            name = input("Enter task name").strip()
+            if name:
+                todo.add_tasks(name)
+            else:
+                print("Task name cannot be empty")
+
+        elif choice == "3":
+            name = input("Enter task name to remove").strip()
+            todo.remove_tasks(name)
+
+        elif choice == "4":
+            name = input("Enter task name to mark as done").strip()
+            todo.check_tasks(name)
+
+        elif choice == "5":
+            name = input("Enter task name to repeat").strip()
+            interval = input("Enter repeat interval (in days)").strip()
+            if interval.isdigit():
+                todo.repeated_task(name, int(interval))
+            else:
+                print("Invalid interval")
+
+        else:
+            print("Invalid choice")
+
+
+if __name__ == "__main__":
+    main()
+def load_todo_list(filename="todos.json"):
+    try:
+        with open(filename, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print("No existing to-do file found")
+        return []
+    except Exception as e:
+        print("Error loading to-do list")
+        return []
+import json
+
+def save_todo_list(todo_list, filename="todos.json"):
+    try:
+        with open(filename, "w") as file:
+            json.dump(todo_list, file, indent=4)
+        print("to do list saved")
+    except Exception as e:
+        print("error saving to do list")
+def addandlisttest():
+    dog = to_do_list()
+    dog.add_tasks("Do dishes")
+    dog.list_tasks()
             
     def print_toDoList(self):
         printYN = input("Do you want to print your to do list?")
@@ -149,3 +225,42 @@ def repeated_tasks_test(task_name):
     print(f"Repeating task: {task_name}")
     for i in range(3):
         print(f"Task '{task_name}' repetition {i + 1}")
+        
+def check_task_test():
+    todo = ToDoList()
+
+    #some tasks
+    todo.add_task("do homework")
+    todo.add_task("clean room")
+    todo.add_task("seal the honmoon")
+
+    #Check an existing task
+    result1 = todo.check_task("Do laundry")
+    if result1 is True and todo.list[1][1] is True:
+        print("checked off existing task")
+    else:
+        print("failed")
+
+    #check a non-existent task
+    result2 = todo.check_task("workout")
+    if result2 is False:
+        print("Handled missing task correctly")
+    else:
+        print("failed")
+
+    #check if other tasks remain unchanged
+    if todo.list[0][1] is False and todo.list[2][1] is False:
+        print("other tasks unchanged")
+    else:
+        print("failed")
+
+    print("Final task list state:")
+    for task in todo.list:
+        print(task)
+    for task in self.list:
+        if task[0] == task_name:
+            self.list.remove(task)
+            print("The task has been removed")
+            break
+    else:
+        print("A task has not been removed.")

@@ -12,7 +12,18 @@ class Sudoku4x4:
     def load_puzzle(self, puzzle):
         # Loads a starting puzzle (4x4 grid with numbers and zeros)
         # puzzle is supposed to be a list of lists with the numbers
-        pass
+        self.board = puzzle
+
+    def test_load_puzzle(self, puzzle):
+        game = Sudoku4x4()
+        puzzle = [
+            [1, 2, 3, 4],
+            [4, 1, 2, 3],
+            [3, 4, 1, 2],
+            [2, 3, 4, 1]
+        ]
+        game.load_puzzle(puzzle)
+        assert game.board == puzzle
 
     def get_hints(self, row, col):
         if self.board[row][col] != 0:

@@ -14,9 +14,15 @@ def load_tasks():
                 if isinstance(task, str):
                     new_tasks.append({
                         "title": task,
-                        "completed": False
+                        "completed": False,
+                        # >>> ADDED FOR DUE DATE FEATURE
+                        "due_date": None
                     })
                 else:
+                    # >>> ADDED FOR DUE DATE FEATURE
+                    # Ensure old tasks without due_date get one
+                    if "due_date" not in task:
+                        task["due_date"] = None
                     new_tasks.append(task)
 
             return new_tasks
@@ -41,10 +47,13 @@ def show_tasks(tasks):
 
     print("\nYour current tasks:")
     for i, task in enumerate(tasks, 1):
+        # >>> MODIFIED FOR DUE DATE FEATURE
+        due_display = f"(Due: {task['due_date']})" if task.get("due_date") else ""
+
         if task["completed"]:
-            print(f"{i}. [✓ COMPLETED] {task['title']}")
+            print(f"{i}. [✓ COMPLETED] {task['title']} {due_display}")
         else:
-            print(f"{i}. [ ] {task['title']}")
+            print(f"{i}. [ ] {task['title']} {due_display}")
 
 def main():
     tasks = load_tasks()
@@ -66,9 +75,17 @@ Options:
         if choice == "1":
             title = input("Enter task: ").strip()
             if title:
+                
+                # >>> ADDED FOR DUE DATE FEATURE
+                due_date = input("Enter due date (YYYY-MM-DD) or leave blank: ").strip()
+                if not due_date:
+                    due_date = None
+
                 tasks.append({
                     "title": title,
-                    "completed": False
+                    "completed": False,
+                    # >>> ADDED FOR DUE DATE FEATURE
+                    "due_date": due_date
                 })
                 save_tasks(tasks)
 
@@ -95,4 +112,3 @@ Options:
 
 if __name__ == "__main__":
     main()
-

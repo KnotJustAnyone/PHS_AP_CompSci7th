@@ -2,7 +2,7 @@
 from deck_of_cards import Deck
 from collections import Counter
 from itertools import combinations
-
+                               
 class Player: #player properties
     def __init__(self, name, money=1500): #creating player, give money
         self.name = name #player name, may not use because they'll see each other's cards?
@@ -18,13 +18,6 @@ class Player: #player properties
         self.hand = []
 
 class poker_table:
-    def __init__(self):
-        global Deck
-        self.players = [] #List of players, need a player class
-        self.pot = 0
-        self.bets = []
-        self.deck = Deck(False,True,True)
-        self.deck.shuffle()
     def __init__(self, players=None, small_blind=1, big_blind=2, ante=0,
                 button_index=0, max_players=9, starting_stack=None,
                 codes=True, return_not_print=True):
@@ -59,6 +52,35 @@ class poker_table:
         if starting_stack is not None and self.players:
             for p in self.players:
                 self.stacks[p] = starting_stack
+
+        self.game_state = self.create_game_state()
+
+    def create_game_state(self):
+
+        # Button handling
+        if self.players:
+            button_index = 0
+            current_player_index = 1 if len(self.players) > 1 else 0
+        else:
+            button_index = None
+            current_player_index = None
+
+        game_state = {
+            "street": "preflop",      # preflop → flop → turn → river → showdown
+            "pot": 0,
+            "current_bet": 0,
+            "minimum_raise": self.big_blind,
+            "bets_this_round": {p: 0 for p in self.players},
+            "active_players": list(self.players),
+            "current_player_index": current_player_index,
+            "button_index": button_index,
+            "table_cards": [],
+            "action_log": [],         # e.g. [("Bob", "raise", 20)]
+            "all_in_players": set(),
+            "folded_players": set(),
+        }
+
+        return game_state
 
     def deal_hands(self): #Gives each player their initial two pocket cards
         for _ in range(2):
@@ -181,10 +203,29 @@ class poker_table:
         score = rank * (15**5) + tiebreaker
         return score
 
+class PokerGame:
+    def __init__(self):
+        self.players = []
+        self.max_players = 8
 
-    def add_player(self): #adds a new player at the table
-        return None
+    def add_player(self, name, chips=1000): #adds a new player to the game w/ chips
+        if len(self.players) >= self.max_players:
+            print("The table is full. Cannot add more players.")
+            return
 
+        for player in self.players:
+            if player["name"].lower() == name.lower():
+                print(f"Player '{name}' is already at the table.")
+                return
+
+        new_player = {
+            "name": name,
+            "chips": chips,
+            "hand": []
+        }
+        self.players.append(new_player)
+        print(f"Player '{name}' joined the game with {chips} chips.")
+        
     def remove_player(self,player): #removes a player
         self.players.remove(player)
 
@@ -200,10 +241,164 @@ class poker_table:
 
     #Asks the player what they want to bet
     def player_bet(self,player,game_state):
-        bet = 0
+        current_bet = game_state.get("current_bet", 0)
+        player_current_bet = game_state.get("player_bets", {}).get(player.name, 0)
+        to_call = current_bet - player_current_bet
+
+        print(f"\n--- {player.name}'s Turn ---")
+        print(f"Pot: {self.pot}")
+        print(f"Current Bet: {current_bet}")
+        print(f"Your Money: {player.money}")
+        print(f"Amount to Call: {to_call}")
+
+        # Get player's choice (for now input-based)
+        while True:
+            choice = input("Choose action (fold/check/call/raise): ").strip().lower()
+
+            # --- FOLD ---
+            if choice == "fold":
+                print(f"{player.name} folds.")
+                return ("fold", 0)
+
+            # --- CHECK ---
+            elif choice == "check":
+                if to_call > 0:
+                    print("You cannot check; there’s a bet to call.")
+                    continue
+                print(f"{player.name} checks.")
+                return ("check", 0)
+
+            # --- CALL ---
+            elif choice == "call":
+                if to_call <= 0:
+                    print("Nothing to call, choose check or raise.")
+                    continue
+                bet_amount = min(to_call, player.money)
+                player.money -= bet_amount
+                self.pot += bet_amount
+                game_state["player_bets"][player.name] = player_current_bet + bet_amount
+                print(f"{player.name} calls {bet_amount}.")
+                return ("call", bet_amount)
+
+            # --- RAISE ---
+            elif choice == "raise":
+                try:
+                    raise_amount = int(input("Enter raise amount (in addition to call): "))
+                except ValueError:
+                    print("Please enter a valid number.")
+                    continue
+
+                total_bet = to_call + raise_amount
+                if total_bet > player.money:
+                    print("Not enough money to raise that much.")
+                    continue
+
+                player.money -= total_bet
+                self.pot += total_bet
+                game_state["current_bet"] = player_current_bet + total_bet
+                game_state["player_bets"][player.name] = player_current_bet + total_bet
+                print(f"{player.name} raises to {game_state['current_bet']}.")
+                return ("raise", total_bet)
+
+            else:
+                print("Invalid choice. Please type: fold, check, call, or raise.")
+                
         return bet #A number for the size of the bet
 
+  def player_bet(self, player, game_state):
+      pot_size = game_state.get("pot_size", 0)
+      current_bet = game_state.get("current_bet", 0)
+      player_chips = game_state.get("player_chips", 1000)
+
+      print(f"\n--- {player}'s turn ---")
+      print(f"Pot size: {pot_size}")
+      print(f"Current bet to call: {current_bet}")
+      print(f"You have {player_chips} chips.")
+
+      while True:
+          try:
+              # Ask user for their action
+              action = input("Do you want to fold, call, or raise? ").strip().lower()
+
+              if action == "fold":
+                  print(f"{player} folds.")
+                  return 0  
+                  # 0 means they folded
+
+              elif action == "call":
+                  print(f"{player} calls {current_bet}.")
+                  return current_bet
+
+              elif action == "raise":
+                  raise_amount = float(input("Enter your raise amount: "))
+                  total_bet = current_bet + raise_amount
+
+                  if total_bet > player_chips:
+                      print("You don't have enough chips for that bet. Try again.")
+                      continue
+
+                  print(f"{player} raises to {total_bet}.")
+                  return total_bet
+
+              else:
+                  print("Invalid action. Please type 'fold', 'call', or 'raise'.")
+
+          except ValueError:
+              print("Please enter a valid number for your raise.")
+
 #Tests ---------------------------------------------
+def test_remove_player():
+    table = poker_table()
+    player1 = Player("Sophia")
+    player2 = Player("Alvin")
+
+    table.players = [player1, player2]
+
+    table.remove_player(player2)
+
+    assert player2 not in table.players
+    assert player1 in table.players
+    assert len(table.players) == 1
+    
+def poker_table_init_test():
+      table = poker_table(["John", "Abigail", "Steve"], 10, [10,5,5], 
+                          (False, True, True), [h2,s7,d5], "John", "Abigail")
+
+      if table.players = ["John", "Abigail", "Steve"]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.pot = 10
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.bets = [10, 5, 5]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.deck = [False, True, True]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.table_cards = [h2, s7, d5]
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.current_player = "John"
+          print("test passed")
+      else: 
+          print("test failed")
+
+      if table.button_player = "Abigail"
+          print("test passed")
+      else: 
+          print("test failed")
+
 def test_best_hand():
     table = poker_table()
     hands = [
@@ -268,6 +463,7 @@ def test_best_hand():
             print("There are duplicate cards.")
         else:
             print("It worked!!!")
+            
 def deal_hands_check():
     plyr = Player("Colin",1500)
     tbl = poker_table()
@@ -277,4 +473,3 @@ def deal_hands_check():
         print(plyr.hand)
     except:
         print("Something went Wrong")
-deal_hands_check()
