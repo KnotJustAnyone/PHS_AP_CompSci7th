@@ -15,5 +15,3 @@ elif option == "B":
 
 else:
     print("Error: Insert only A or B")
-
-
