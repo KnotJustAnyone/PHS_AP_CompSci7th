@@ -1,5 +1,6 @@
 import random
 import time
+import pickle
 from deck_of_cards import Deck
 players = [] #players
 
@@ -19,6 +20,7 @@ deck.shuffle()
 
 class Player: #player properties
     def __init__(self,name,money=1500): #creating player, give money
+        self.wins = 0
         self.name = name #player name, may not use because they'll see each other's cards?
         self.hand = [] #hand of cards
         self.money = money #money amount
@@ -255,6 +257,7 @@ class Dealer: #dealer properties
     def round(self): #player: hit or stand, if over 21, bust
         for player in players:
             player.playerround(self)
+        print(f"The Dealer's hole card: \033[1m{deck.identify_card(self.dealerhand[1])}\033[0m")
         self.dealerturn()
         self.check()
 
@@ -277,9 +280,21 @@ class Dealer: #dealer properties
                         break
         return total
 
+'''
+Joshua Chen developed function
+If the dealer's show card is an ace, insurance is triggered, and loops through all players.
+- if the player is a bot, it will check it's personality and give it insurance or not accordingly
+- if it's an actual player, it asks for an input whether or not they want insurance
+If yes, then it checks if the player has enough money. 
+- If not, stop them from using insurance
+- If so, set an insurance bet and subtract it from the player's money
+Then check if the dealer has Blackjack
+- If so, return all insurance bests * 2
+- If not, insurance bets are lost
+'''
     def insurance(self):
         if card_value(self.dealerhand[0]) == 11:
-            for player in self.players:
+            for player in self.players: #list of players
                 if (player.personality == 1) or \
                 (player.personality == 4 and random.randint(1,2) == 1):
                     ifins = "y"
@@ -303,25 +318,26 @@ class Dealer: #dealer properties
                 else:
                     print("Dealer does NOT have Blackjack, all insurance is lost.")
                     player.insbet = 0
-        
     
     def check(self): #see if anyone busts or wins or ties
         dealer = self.dealer_value()
         for player in players:
             if player.hasddown == True:
                 print(f"{player.name} had doubled down, and their final card is...\n\033[1m{deck.identify_card(player.hand[-1])}\033[0m!")
-            print(f"The Dealer's hole card: \033[1m{deck.identify_card(self.dealerhand[1])}\033[0m")
             checks = player.player_value()
             if checks > 21:
                 print(f"{player.name} busts! You lose. Lost: ${player.bet}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
             elif dealer > 21:
                 print(f"Dealer busts! {player.name} wins: ${player.bet * 2}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
+                player.wins += 1
                 player.money += player.bet * 2
             elif (checks == 21 and len(player.hand) == 2) and (dealer != 21 or len(self.dealerhand) > 2):
                 print(f"{player.name} has BlackJack! Won: ${player.bet * 1.5}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
+                player.wins += 1
                 player.money += player.bet * 1.5
             elif checks > dealer:
                 print(f"{player.name} wins! Won: ${player.bet * 2}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
+                player.wins += 1
                 player.money += player.bet * 2
             elif (dealer == 21 and len(self.dealerhand) == 2) and (checks != 21 or len(player.hand) >2):
                 print(f"Dealer has BlackJack! {player.name} loses. Lost {player.bet}.\n Dealer value:, {player.name} value:\033[1m{checks}\033[0m.")
@@ -329,6 +345,7 @@ class Dealer: #dealer properties
                 print(f"Dealer wins! {player.name} loses. Lost: ${player.bet}.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
             elif checks == dealer: #maybe add condition if double BlackJack, just to say they both had it, but doesn't really matter.
                 print(f"{player.name} ties with the Dealer. No loss/gain.\n Dealer value:\033[1m{dealer}\033[0m, {player.name} value:\033[1m{checks}\033[0m.")
+                player.wins += 0.5
                 player.money += player.bet
             player.bet = 0
             player.hasddown = False
@@ -370,8 +387,30 @@ Just type n if you do not want to restart:''').strip().lower()
             break
         print('Please type a valid answer. Valid: "yy", "yn","n".')
     if reset == "n":
-        players.clear()
-        quit()
+        while True:
+            save = input("Would you like to save your game (y or n)?\nSaved: players, money, wins.\nThis will save:") 
+            for player in players:
+                print(f"{player.name}: ${player.money}, {player.wins} wins.")
+            if save in ("y","n"):
+                break
+            print("y or n please")
+        if save == "y":
+            while True:
+                try:
+                    whichsave = int(input("Save in 1, 2, or 3?")) #will show what's in saves later once I figure that out
+                    if whichsave in (1,2,3):
+                        break
+                    else:
+                        print("Use a valid number please.")
+                except:
+                    print("Use a number.")
+            with open(f'load{whichsave}.pkl', 'wb') as f:
+                pickle.dump(players, f)
+            players.clear()
+            quit()
+        elif save == "n":   
+            players.clear()
+            quit()
     elif reset == "yy":
         for player in players:
             player.reset_player()
@@ -381,8 +420,7 @@ Just type n if you do not want to restart:''').strip().lower()
             player.reset_player()
         while True:
             try:
-                for player in players:
-                    print(player.name)
+                print(player.name for player in players)
                 remove_players = int(input(f"""Who would you like to remove?
 Assume the 1st player (top) is numbered 1, the 2nd 2, etc.
 If you are removing multiple players, type it with commas inbetween.
@@ -409,6 +447,7 @@ def run_game():
     reset_game()
 
 def menu():
+    global players
     def delete_menu(num, slow=True):
         for i in range(num):
             print("\033[A\033[K", end='\r')
@@ -432,6 +471,23 @@ def menu():
                 wrong_num()
         return menu_input
 
+    def loading_menu():
+        for i in loadmenu:
+            print(f"{i}\nSaved:")
+            with open(f'load{i}.pkl', 'rb') as f:
+                players = pickle.load(f)
+            for player in players:
+                print(f"\\t- {player.name}: ${player.money}, {player.wins} wins.")
+            time.sleep(0.5)
+        load_input = menu_nav()
+        if load_input == 1 or load_input == 2 or load_input == 3:
+            with open(f'load{load_input}.pkl', 'rb') as f:
+                players = pickle.load(f)
+            print(f"Save {load_input} was loaded!")
+            run_game()
+        elif load_input == 4:
+            main_menu()
+        
     def main_menu():
         global players
         delete_menu(1000,False)
@@ -445,18 +501,7 @@ def menu():
             run_game()
         elif menu_input == 2:
             delete_menu(7)
-            for i in loadmenu:
-                print(i)
-                time.sleep(0.5)
-            load_input = menu_nav()
-            if load_input == 1:
-                pass
-            elif load_input == 2:
-                pass
-            elif load_input == 3:
-                pass
-            elif load_input == 4:
-                main_menu()
+            loading_menu()
         elif menu_input == 3:
             delete_menu(7)
             print("https://bicyclecards.com/how-to-play/blackjack")
@@ -466,6 +511,7 @@ def menu():
                     break
             main_menu()
         elif menu_input == 4:
+            delete_menu(7)
             quit()
 
     mainmenu = ["BLACKJACK", "New Game - 1", "Load Save - 2", "Rules - 3", "Exit - 4"]
@@ -625,4 +671,9 @@ def test_deal1():
     if not errorOccurred:
         print("dealer.deal1 passed all tests")  
     players.clear()
+
+
+
+
+
 
