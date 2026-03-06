@@ -17,9 +17,11 @@
      justify-content: center;
      font-size: 36px;
      font-weight: bold;
-     font-color: black;
+     color: black;
    }
   </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
@@ -31,16 +33,37 @@
     const container = document.getElementById("container");
     container.innerHTML = "";
 
+    // array of numbers
+    const numbers = [];
+
     for (let i = 0; i < 3; i++){
       const box = document.createElement("div");
       box.className = "number-box";
       
-    const randomNumber = Math.floor(Math.random() * 7) + 1;
-    box.textContent = randomNumber;
+      const randomNumber = Math.floor(Math.random() * 7) + 1;
+      box.textContent = randomNumber;
+      numbers.push(randomNumber);
 
-    container.appendChild(box);
-   }
-  }   
+      container.appendChild(box);
+    }
+
+    // after displayed see if player won
+    setTimeout(() => {
+  win(numbers);
+}, 2000); // 2 seconds
+  }
+
+  function win(numbers) {
+    if (numbers[0] === numbers[1] && numbers[1] === numbers[2]) {
+      confetti({
+        particleCount: 5000,
+        spread: 1000,
+        origin: { y: 0.6}
+      });
+        alert('🎉 You win! All three numbers are the same!');
+      
+    }
+}
   generateNumbers();
 </script>
   
