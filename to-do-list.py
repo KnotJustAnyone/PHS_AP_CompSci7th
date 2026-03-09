@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 
 FILE_NAME = "tasks.json"
 
@@ -7,30 +8,34 @@ def load_tasks():
     if os.path.exists(FILE_NAME):
         with open(FILE_NAME, "r") as f:
             tasks = json.load(f)
-
-            # Convert old string tasks to new format
             new_tasks = []
             for task in tasks:
                 if isinstance(task, str):
                     new_tasks.append({
                         "title": task,
                         "completed": False,
-                        # >>> ADDED FOR DUE DATE FEATURE
                         "due_date": None
                     })
                 else:
-                    # >>> ADDED FOR DUE DATE FEATURE
-                    # Ensure old tasks without due_date get one
                     if "due_date" not in task:
                         task["due_date"] = None
                     new_tasks.append(task)
-
             return new_tasks
     return []
 
 def save_tasks(tasks):
     with open(FILE_NAME, "w") as f:
         json.dump(tasks, f, indent=2)
+
+def validate_due_date(due_date):
+    """Return the date string if valid format, otherwise keep as entered"""
+    if not due_date:
+        return None
+    try:
+        datetime.strptime(due_date, "%Y-%m-%d")
+        return due_date
+    except ValueError:
+        return due_date  # **allow other strings**
 
 def show_task_counts(tasks):
     total = len(tasks)
@@ -39,21 +44,34 @@ def show_task_counts(tasks):
 
     print("\nTask Summary:")
     print(f"Total: {total} | Completed: {completed} | Remaining: {remaining}")
-    
+
+    # **Bold Addition: Enhanced Celebration**
+    if total > 0 and remaining == 0:
+        print("\n" + "="*40)
+        print("🎉🎉🎉 CONGRATULATIONS! 🎉🎉🎉")
+        print("You completed all your tasks! 🎯")
+        print("="*40 + "\n")
+
 def show_tasks(tasks):
     if not tasks:
         print("No tasks found.")
         return
 
     print("\nYour current tasks:")
+    today = datetime.today().date()  # **Bold Addition: get today's date for overdue check**
     for i, task in enumerate(tasks, 1):
-        # >>> MODIFIED FOR DUE DATE FEATURE
         due_display = f"(Due: {task['due_date']})" if task.get("due_date") else ""
-
-        if task["completed"]:
-            print(f"{i}. [✓ COMPLETED] {task['title']} {due_display}")
-        else:
-            print(f"{i}. [ ] {task['title']} {due_display}")
+        overdue_display = ""  # **Bold Addition: for overdue warning**
+        # **Bold Addition: check overdue**
+        if task.get("due_date"):
+            try:
+                due_date_obj = datetime.strptime(task['due_date'], "%Y-%m-%d").date()
+                if not task["completed"] and due_date_obj < today:
+                    overdue_display = "⚠️ OVERDUE"
+            except ValueError:
+                pass  # allow free text
+        status = "[✓ COMPLETED]" if task["completed"] else "[ ]"
+        print(f"{i}. {status} {task['title']} {due_display} {overdue_display}")
 
 def main():
     tasks = load_tasks()
@@ -75,16 +93,12 @@ Options:
         if choice == "1":
             title = input("Enter task: ").strip()
             if title:
-                
-                # >>> ADDED FOR DUE DATE FEATURE
                 due_date = input("Enter due date (YYYY-MM-DD) or leave blank: ").strip()
-                if not due_date:
-                    due_date = None
+                due_date = validate_due_date(due_date)
 
                 tasks.append({
                     "title": title,
                     "completed": False,
-                    # >>> ADDED FOR DUE DATE FEATURE
                     "due_date": due_date
                 })
                 save_tasks(tasks)
