@@ -3,22 +3,53 @@
 <head>
   
   <style>
-    .container{
+    /* center everything in the viewport */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+
+    .container {
       display: flex;
       gap: 15px;
       margin-bottom: 15px;
-      
-   .number-box {
-     width: 100px;
-     height: 100px;
-     border: 3px solid black;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     font-size: 36px;
-     font-weight: bold;
-     color: black;
-   }
+    }
+
+    .number-box {
+      width: 100px;
+      height: 100px;
+      border: 3px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 600px;
+      /* keep box static; animation will apply to inner digit */
+    }
+
+    .digit {
+      font-size: 36px;
+      font-weight: bold;
+      color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* flipping animation now for the digit element only */
+    .spin {
+      animation: flip 0.5s ease-out;
+    }
+
+    @keyframes flip {
+      from { transform: rotateX(0deg); }
+      to   { transform: rotateX(360deg); }
+    }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -33,24 +64,32 @@
     const container = document.getElementById("container");
     container.innerHTML = "";
 
-    // array of numbers
-    const numbers = [];
+    // determine final results before revealing (like a slot machine)
+    const finalNumbers = Array.from({length: 3}, () => Math.floor(Math.random() * 7) + 1);
 
-    for (let i = 0; i < 3; i++){
+    finalNumbers.forEach((num, index) => {
       const box = document.createElement("div");
       box.className = "number-box";
-      
-      const randomNumber = Math.floor(Math.random() * 7) + 1;
-      box.textContent = randomNumber;
-      numbers.push(randomNumber);
-
+      const digit = document.createElement('span');
+      digit.className = 'digit';
+      box.appendChild(digit);
       container.appendChild(box);
-    }
 
-    // after displayed see if player won
-    setTimeout(() => {
-  win(numbers);
-}, 2000); // 2 seconds
+      // spin effect: rapidly change the digit text only
+      const interval = setInterval(() => {
+        digit.textContent = Math.floor(Math.random() * 7) + 1;
+      }, 50);
+
+      // after a short duration, stop spinning and show the final number
+      setTimeout(() => {
+        clearInterval(interval);
+        digit.textContent = num;
+        // when the last box is done, check win condition
+        if (index === finalNumbers.length - 1) {
+          setTimeout(() => win(finalNumbers), 200);
+        }
+      }, 500 + index * 150); // stagger slightly for a cascading effect
+    });
   }
 
   function win(numbers) {
@@ -60,6 +99,7 @@
         spread: 1000,
         origin: { y: 0.6}
       });
+        
         alert('🎉 You win! All three numbers are the same!');
       
     }
@@ -69,3 +109,4 @@
   
 </body>
 </html>
+
