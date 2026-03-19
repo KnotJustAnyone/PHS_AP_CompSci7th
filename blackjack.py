@@ -349,7 +349,7 @@ class Dealer: #dealer properties
                 player.money += player.bet
             player.bet = 0
             player.hasddown = False
-            for player in players;
+            for player in players:
                 print(f"{player.name} has ${player.money} total.")
 
 #Game playing: -----------------------------------------------------------------------------------------------
