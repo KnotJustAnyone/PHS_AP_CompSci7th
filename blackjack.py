@@ -280,18 +280,18 @@ class Dealer: #dealer properties
                         break
         return total
 
-'''
-Joshua Chen developed function
-If the dealer's show card is an ace, insurance is triggered, and loops through all players.
-- if the player is a bot, it will check it's personality and give it insurance or not accordingly
-- if it's an actual player, it asks for an input whether or not they want insurance
-If yes, then it checks if the player has enough money. 
-- If not, stop them from using insurance
-- If so, set an insurance bet and subtract it from the player's money
-Then check if the dealer has Blackjack
-- If so, return all insurance bests * 2
-- If not, insurance bets are lost
-'''
+
+#Joshua Chen developed function
+#If the dealer's show card is an ace, insurance is triggered, and loops through all players.
+#- if the player is a bot, it will check it's personality and give it insurance or not accordingly
+#- if it's an actual player, it asks for an input whether or not they want insurance
+#If yes, then it checks if the player has enough money. 
+#- If not, stop them from using insurance
+#- If so, set an insurance bet and subtract it from the player's money
+#Then check if the dealer has Blackjack
+#- If so, return all insurance bests * 2
+#- If not, insurance bets are lost
+
     def insurance(self):
         if card_value(self.dealerhand[0]) == 11:
             for player in self.players: #list of players
@@ -349,6 +349,8 @@ Then check if the dealer has Blackjack
                 player.money += player.bet
             player.bet = 0
             player.hasddown = False
+            for player in players;
+                print(f"{player.name} has ${player.money} total.")
 
 #Game playing: -----------------------------------------------------------------------------------------------
 def randbotp():
