@@ -4,6 +4,8 @@ import datetime
 import requests
 import json
 
+# Code line added by Aiden Serr
+# Allows a function to loop through and check and set keys inside easily.
 Settings = {
     'daily': False, # Determines whether the game should choose a seed based off of the current day or not
     'maxGuesses': 6,
@@ -11,10 +13,26 @@ Settings = {
     'wordLength': 6, # Anything other than 5 uses an API, max of 15, min of 2
     'useDictionaryAPI': True # If false, disables the check to see if you guessed a valid word. Doesn't disable the answer generator.
 }
-
-def change_setting(setting:str,description:str):
-    if not setting in Settings:
+'''
+Aiden Serr developed function
+Takes in two strings (setting and description). 
+The first one is the name of a setting in the Settings array, 
+    the second one is a description to display.
+It takes a user inputted string and sets the setting defined by the
+    setting variable to the value given by the user.
+This function does not return, instead it modifies a global variable (Settings).
+'''
+def change_setting(setting:str,description:str) -> None:
+    # The algorithm will loop through the Settings dictionary and will only continue the rest of the function if the setting defined by the string exists.
+    found = False
+    for key in Settings:
+        if key == setting:
+            found = True
+            break
+    if not found:
         return
+    del found
+
     allowedType = type(Settings[setting])
     print(f"Input desired value for the following setting: {setting}")
     newValue = input(f"Description: {description}\nNew value:")
