@@ -377,6 +377,8 @@ def getting_players(): #ask players for player/bot amount and names
     for j in range(bnum):
         players.append(Bot("Bot" + str(j), randbotp()))
     print(f"{pnum} players were added:\n{[pl.name for pl in players]} \n{bnum} bots were also added.\n")
+    for i in 10000:
+        print("\033[A\033[K", end='\r')
     
 def reset_game():
     global players
@@ -416,6 +418,8 @@ Just type n if you do not want to restart:''').strip().lower()
     elif reset == "yy":
         for player in players:
             player.reset_player()
+        for i in 10000:
+            print("\033[A\033[K", end='\r')
         run_game()
     elif reset == "yn":
         for player in players:
@@ -435,6 +439,8 @@ EX: 1,2,6,8""").strip())
                 print("Please enter an integer (whole number).")
         remove_players = remove_players.split(",")
         players = [plr for plr in players if plr not in remove_players]
+        for i in 10000:
+            print("\033[A\033[K", end='\r')
         getting_players()
         run_game()
         
