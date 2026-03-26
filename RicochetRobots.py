@@ -2,7 +2,16 @@
 There are a collection of robots on a board with squares and walls.
 The robots can be moved, but when moved they will continue until stopped by hitting a wall.
 The goal is to move the robots to a target location in the fewest number of stops.
+
+#######
+#  |  |  Maze format
+#--####
 '''
+class richocet_board:
+
+    def __init__(self):
+        pass
+        
 
 def menu():
     choice = None
