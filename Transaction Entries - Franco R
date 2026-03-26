@@ -1,10 +1,49 @@
-# Transaction Entry Program
+import datetime
 
-transaction = input("Enter transaction name: ")
-amount = input("Enter transaction amount: ")
+categories = ["Utilities", "Groceries", "Shopping", "Food", "Transportation"]
 
-file = open("transactions.txt", "a")
-file.write(transaction + " - $" + amount + "\n")
-file.close()
+while True:
+    print("\n1. Add Transaction")
+    print("2. View Transactions")
+    print("3. Exit")
 
-print("Transaction saved.")
+    choice = input("Choose an option: ")
+
+    if choice == "1":
+        name = input("Enter transaction name: ")
+        amount = input("Enter amount: ")
+
+        print("\nChoose a category:")
+        for i in range(len(categories)):
+            print(f"{i + 1}. {categories[i]}")
+
+        cat_choice = int(input("Enter category number: "))
+        
+        if 1 <= cat_choice <= len(categories):
+            category = categories[cat_choice - 1]
+        else:
+            print("Invalid category. Defaulting to 'Other'.")
+            category = "Other"
+
+        # Get current date and time
+        date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        with open("transactions.txt", "a") as file:
+            file.write(f"{date_time} | {name} - ${amount} - {category}\n")
+
+        print("Transaction saved.")
+
+    elif choice == "2":
+        print("\nTransactions:")
+        try:
+            with open("transactions.txt", "r") as file:
+                print(file.read())
+        except:
+            print("No transactions yet.")
+
+    elif choice == "3":
+        print("Goodbye!")
+        break
+
+    else:
+        print("Invalid choice.")
