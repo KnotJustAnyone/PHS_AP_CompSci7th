@@ -12,14 +12,26 @@ class ricochet_board:
     vline = ['|']
     hline = ['--']
     cross = ['+']
+    display_board = None
     board = None
+    barriers = None
 
     def __init__(self):
         Wall_line = '#'*65
         Space_line = '#'+("   |")*15+'   #'
         Grid_line = '#'+'---+'*15+'---#'
-        self.board = [Wall_line]+[Space_line,Grid_line]*15+[Space_line,Wall_line]
-        
+        self.display_board = [Wall_line]+[Space_line,Grid_line]*15+[Space_line,Wall_line]
+        self.board = [[None for _ in range(16)] for _ in range(16)]
+        for i in range(2):
+            for j in range(2):
+                self.block_space(self,7+i,7+j)
+
+    def block_space(self,y,x):
+        self.board[y][x] = '#'
+        for i in range(4):
+            for j in range(4):
+                self.display_board[3*y+i][3*x+j] = '#'
+
     def print_board(self):
         for row in self.board:
             print(row)
