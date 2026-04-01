@@ -12,7 +12,7 @@ class ricochet_board:
     vline = ['|']
     hline = ['--']
     cross = ['+']
-    display_board = None
+    display_board = None #Display needs to be made on the fly
     board = None
     barriers = None
 
@@ -24,7 +24,7 @@ class ricochet_board:
         self.board = [[None for _ in range(16)] for _ in range(16)]
         for i in range(2):
             for j in range(2):
-                self.block_space(self,7+i,7+j)
+                self.block_space(7+i,7+j)
 
     def block_space(self,y,x):
         self.board[y][x] = '#'
