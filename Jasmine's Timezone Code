@@ -1,4 +1,5 @@
 import requests
+import difflib
 
 def get_all_timezones(): #procedural abstraction
     url = "https://timeapi.io/api/TimeZone/AvailableTimeZones"
@@ -19,6 +20,8 @@ def get_city_time(timezone): #procedural abstraction & parameter
 
     return response.json() #result
 
+def suggest_timezones(use_input, timezone_list):
+    return difflib.get_close_matches(use_input, timezone_list, n=5, cutoff=0.3)
 
 all_timezones = get_all_timezones() #function call
 
@@ -33,6 +36,16 @@ while True:
 
     if timezone not in all_timezones:
         print("Invalid time zone.")
+
+        suggestions = suggest_timezones(timezone, all_timezones)
+
+       if suggestions:
+            print("Did you mean:")
+            for s in suggestions:
+                print("-", s)
+        else:
+            print("No similar time zones found.")
+
         continue
     
     time_data = get_city_time(timezone) 
