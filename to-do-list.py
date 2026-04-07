@@ -30,7 +30,19 @@ def load_tasks():
 
 def save_tasks(tasks):
     with open(FILE_NAME, "w") as f:
-        json.dump(tasks, f, indent=2)
+        json.dump(tasks, f, indent=2)\
+        
+#Code line added by Angelleen
+'''
+Angelleen developed function
+Takes in a list of tasks, where each task is a dictionary containing:
+  "title" which is a string representing the task name,
+  "completed" which is a boolean representing whether the task is finished,
+  "due_date" which is a string or None representing the due date of the task.
+
+It prints the total number of tasks, how many are completed,
+and how many are remaining.
+'''
 
 def show_task_counts(tasks):
     total = len(tasks)
@@ -75,7 +87,7 @@ Options:
         if choice == "1":
             title = input("Enter task: ").strip()
             if title:
-                
+                  
                 # >>> ADDED FOR DUE DATE FEATURE
                 due_date = input("Enter due date (YYYY-MM-DD) or leave blank: ").strip()
                 if not due_date:
