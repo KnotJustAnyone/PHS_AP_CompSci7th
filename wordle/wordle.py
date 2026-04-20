@@ -4,7 +4,7 @@ import datetime
 import requests
 import json
 
-# Code line added by Aiden Serr
+# Code line added by submitting student
 # Allows a function to loop through and check and set keys inside easily.
 Settings = {
     'daily': False, # Determines whether the game should choose a seed based off of the current day or not
@@ -14,7 +14,7 @@ Settings = {
     'useDictionaryAPI': True # If false, disables the check to see if you guessed a valid word. Doesn't disable the answer generator.
 }
 '''
-Aiden Serr developed function
+Submitting student developed function
 Takes in two strings (setting and description). 
 The first one is the name of a setting in the Settings array, 
     the second one is a description to display.
