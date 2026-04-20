@@ -7,11 +7,11 @@ import json
 # Code line added by submitting student
 # Allows a function to loop through and check and set keys inside easily.
 Settings = {
-    'daily': False, # Determines whether the game should choose a seed based off of the current day or not
+    'daily': False, 
     'maxGuesses': 6,
-    'colorblind': False, # If true, prints direct results instead of colored text
-    'wordLength': 6, # Anything other than 5 uses an API, max of 15, min of 2
-    'useDictionaryAPI': True # If false, disables the check to see if you guessed a valid word. Doesn't disable the answer generator.
+    'colorblind': False, 
+    'wordLength': 6, 
+    'useDictionaryAPI': True 
 }
 
 def change_setting(setting:str,description:str) -> None:
