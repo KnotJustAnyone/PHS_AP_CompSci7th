@@ -2,7 +2,7 @@ import random
 import time
 import pickle
 from deck_of_cards import Deck
-players = [] #players
+players = [] 
 
 def card_value(card): #handle 2-card code to get the value
     if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
