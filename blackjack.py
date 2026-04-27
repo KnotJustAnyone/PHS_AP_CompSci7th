@@ -229,10 +229,10 @@ class Bot(Player):
             return False
         return False
                     
-class Dealer: #dealer properties
-    def __init__(self, players): #creating dealer + what its actions will be
-        self.players = players #taking players
-        self.dealerhand = [] #dealer's hand of cards
+class Dealer: 
+    def __init__(self, players): 
+        self.players = players 
+        self.dealerhand = [] 
 
     def deal1(self): 
         if len(deck.deck_current) < ((len(players) + 1) * 8): 
@@ -344,7 +344,7 @@ def randbotp():
     percentchance = [20,40,20,10,10]
     return random.choices(personality, weights=percentchance)[0]
 
-def getting_players(): #ask players for player/bot amount and names
+def getting_players():
     while True:
         try:
             pnum = int(input("How many players are you adding?"))
