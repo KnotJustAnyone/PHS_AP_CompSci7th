@@ -2,7 +2,7 @@ import random
 import time
 import pickle
 from deck_of_cards import Deck
-players = [] #players
+players = [] 
 
 def card_value(card): #handle 2-card code to get the value
     if card[1] == "0" or card[1] == "j" or card[1] == "q" or card[1] == "k":
@@ -229,21 +229,21 @@ class Bot(Player):
             return False
         return False
                     
-class Dealer: #dealer properties
-    def __init__(self, players): #creating dealer + what its actions will be
-        self.players = players #taking players
-        self.dealerhand = [] #dealer's hand of cards
+class Dealer: 
+    def __init__(self, players): 
+        self.players = players 
+        self.dealerhand = [] 
 
-    def deal1(self): #first deal for all players
-        if len(deck.deck_current) < ((len(players) + 1) * 8): # Ensure enough cards in deck to deal
+    def deal1(self): 
+        if len(deck.deck_current) < ((len(players) + 1) * 8): 
             deck.shuffle()
         for player in self.players:
             player.newcard(2)
             print(f"{player.name}'s cards: \033[1m{deck.identify_card(player.hand[0])}, {deck.identify_card(player.hand[1])}\033[0m")
         self.dealerhand = deck.deal(2)
         self.dealershow()
+        self.insurance()
         for player in self.players:
-            self.insurance()
             player.doubledown()
             player.splitting(self)
 
@@ -280,21 +280,9 @@ class Dealer: #dealer properties
                         break
         return total
 
-'''
-Joshua Chen developed function
-If the dealer's show card is an ace, insurance is triggered, and loops through all players.
-- if the player is a bot, it will check it's personality and give it insurance or not accordingly
-- if it's an actual player, it asks for an input whether or not they want insurance
-If yes, then it checks if the player has enough money. 
-- If not, stop them from using insurance
-- If so, set an insurance bet and subtract it from the player's money
-Then check if the dealer has Blackjack
-- If so, return all insurance bests * 2
-- If not, insurance bets are lost
-'''
     def insurance(self):
         if card_value(self.dealerhand[0]) == 11:
-            for player in self.players: #list of players
+            for player in self.players: 
                 if (player.personality == 1) or \
                 (player.personality == 4 and random.randint(1,2) == 1):
                     ifins = "y"
@@ -356,7 +344,7 @@ def randbotp():
     percentchance = [20,40,20,10,10]
     return random.choices(personality, weights=percentchance)[0]
 
-def getting_players(): #ask players for player/bot amount and names
+def getting_players():
     while True:
         try:
             pnum = int(input("How many players are you adding?"))
