@@ -222,6 +222,9 @@ def shuffle_playlist_test():
 
     print("Final shuffled playlist:", playlist)
 
+def sort_playlist():
+    for 
+
 #user input for shuffle
 if user_input == "shuffle":
     shuffle_playlist()
