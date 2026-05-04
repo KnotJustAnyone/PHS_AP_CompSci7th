@@ -4,8 +4,9 @@ categories = ["Utilities", "Groceries", "Shopping", "Food", "Transportation"]
 
 while True:
     print("\n1. Add Transaction")
-    print("2. View Transactions")
-    print("3. Exit")
+    print("2. View All Transactions")
+    print("3. View Transactions by Category")
+    print("4. Exit")
 
     choice = input("Choose an option: ")
 
@@ -25,7 +26,6 @@ while True:
             print("Invalid category. Defaulting to 'Other'.")
             category = "Other"
 
-        # Get current date and time
         date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         with open("transactions.txt", "a") as file:
@@ -41,7 +41,32 @@ while True:
         except:
             print("No transactions yet.")
 
-    elif choice == "3":
+    elif choice == "3":  # NEW FEATURE
+        print("\nChoose a category to view:")
+        for i in range(len(categories)):
+            print(f"{i + 1}. {categories[i]}")
+
+        cat_choice = int(input("Enter category number: "))
+
+        if 1 <= cat_choice <= len(categories):
+            selected_category = categories[cat_choice - 1]
+            print(f"\nTransactions for {selected_category}:")
+
+            try:
+                with open("transactions.txt", "r") as file:
+                    found = False
+                    for line in file:
+                        if selected_category in line:
+                            print(line.strip())
+                            found = True
+                    if not found:
+                        print("No transactions in this category.")
+            except:
+                print("No transactions yet.")
+        else:
+            print("Invalid category.")
+
+    elif choice == "4":
         print("Goodbye!")
         break
 
