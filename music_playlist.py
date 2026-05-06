@@ -8,15 +8,6 @@ def save_playlist(filename):
         json.dump(playlist, file, indent=4)
     print("Playlist saved.")
 
-#instructions to user/how-to message
-print("You're ready to start creating your music playlist!")
-print("To add a song, type: add <songname>")
-print("To delete a song, type: delete <songname>")
-print("To shuffle the playlist, type: shuffle")
-
-#creates a variable that stores the user's input
-user_input = input()
-
 #add song to playlist
 def add_song(song):
     playlist.append(song)
@@ -35,12 +26,6 @@ def add_song_test():
 
     else:
         print("test failed")
-
-#user input to add song
-if user_input.startswith("add "):
-    song = user_input[4:]  # everything after "add "
-    add_song(song)
-    print(f'"{song}" added to playlist.')
 
 #Delete song from playlist
 def delete_song(song):
@@ -80,12 +65,6 @@ def delete_song_test():
         print("playlist not empty (fail)")
 
     print("Final playlist state:", playlist)
-
-#user input to delete song
-if user_input.startswith("delete "):
-    song = user_input[7:]
-    delete_song(song)
-    print(f'"{song}" removed from playlist.')
 
 #reorder songs in playlist
 def move_song(song, new_position):
@@ -222,9 +201,50 @@ def shuffle_playlist_test():
 
     print("Final shuffled playlist:", playlist)
 
-def sort_playlist():
-    for 
 
-#user input for shuffle
-if user_input == "shuffle":
-    shuffle_playlist()
+
+#This is the student developed portion of the code
+def sort_playlist():
+   n = len(playlist)
+   for i in range(n):
+       for j in range(0, n - i - 1):
+            if playlist[j] > playlist[j + 1]:
+                playlist[j], playlist[j + 1] = playlist[j + 1], playlist[j]
+#Student developed portion of code ends here.
+
+
+
+def main_menu():
+    user_input = None
+    while user_input != 'exit':
+        #instructions to user/how-to message
+        print("You're ready to start creating your music playlist!")
+        print("To add a song, type: add <songname>")
+        print("To delete a song, type: delete <songname>")
+        print("To display the playlist, type: show")
+        print("To shuffle the playlist, type: shuffle")
+        print("To sort the playlist in alphabetical order, type: sort")
+        print("To exit, type exit")
+
+        #creates a variable that stores the user's input
+        user_input = input()
+        #user input to add song
+        if user_input.startswith("add "):
+            song = user_input[4:]  # everything after "add "
+            add_song(song)
+            print(f'"{song}" added to playlist.')
+        #user input to delete song
+        if user_input.startswith("delete "):
+            song = user_input[7:]
+            delete_song(song)
+            print(f'"{song}" removed from playlist.')
+        if user_input.startswith("sort "):
+            sort_playlist()
+            print(playlist)
+
+
+        #user input for shuffle
+        #if user_input == "shuffle":
+            #shuffle_playlist()
+
+main_menu()
